@@ -27,7 +27,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
   filename      = "lambda.zip"
   function_name = "beaniebooserverlambda"
   role          = "${aws_iam_role.iam_for_lambda.arn}"
-  handler       = "api/app/serverlambda.handler"
+  handler       = "serverlambda.handler"
   source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
 
   runtime = "nodejs8.10"
@@ -41,7 +41,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir = "../app"
+  source_dir = "../api/app"
   output_path = "lambda.zip"
 }
 
