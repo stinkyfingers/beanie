@@ -14,11 +14,13 @@ jobs:
       uses: ./.github/actions/yarn
       with:
         cmd: 'install'
+        dir: 'api'
     - name: build step
       id: build
       uses: ./.github/actions/yarn
       with:
         cmd: 'build'
+        dir: 'api'
 
     - name: print
       run: ls
