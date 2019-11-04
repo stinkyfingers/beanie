@@ -22,8 +22,7 @@ jobs:
         cmd: 'build'
         dir: 'api'
 
-    - name: print
-      run: ls
+    - run: npm run zip
 
     # - name: s3 sync
     #   id: s3
