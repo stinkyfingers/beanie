@@ -1,0 +1,7 @@
+terraform/.terraform*
+key/*
+node_modules/*
+scripts/*
+
+yarn-error.log
+yarn.lock

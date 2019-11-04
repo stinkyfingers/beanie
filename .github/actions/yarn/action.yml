@@ -1,0 +1,11 @@
+name: 'yarn'
+description: yarns
+inputs:
+  cmd:
+    description: 'yarn <command>'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.cmd }}
