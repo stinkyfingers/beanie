@@ -35,7 +35,7 @@ jobs:
     #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # if: github.ref == 'refs/heads/master'
-    - uses: hashicorp/terraform-github-actions/init@v0.5.2
+    - uses: hashicorp/terraform-github-actions/init@v0.4.6
       env:
         TF_ACTION_WORKING_DIR: './api/terraform'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # if: github.ref == 'refs/heads/master'
-    - uses: hashicorp/terraform-github-actions/apply@v0.5.2
+    - uses: hashicorp/terraform-github-actions/apply@v0.4.6
       env:
         TF_ACTION_WORKING_DIR: './api/terraform'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
