@@ -8,7 +8,7 @@
     "master": "NODE_ENV=local node ./scripts/masterlist",
     "scrape": "node ./scripts/scrape",
     "start": "NODE_ENV=local node ./app/app",
-    "zip": "zip -r lambda.zip api/app node_modules/"
+    "zip": "zip -r lambda.zip api/app/ node_modules/"
   },
   "dependencies": {
     "aws-sdk": "^2.559.0",
