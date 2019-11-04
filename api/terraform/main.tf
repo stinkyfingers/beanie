@@ -27,7 +27,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
   filename      = "lambda.zip"
   function_name = "beaniebooserverlambda"
   role          = "${aws_iam_role.iam_for_lambda.arn}"
-  handler       = "api/serverlambda.handler"
+  handler       = "api/app/serverlambda.handler"
   source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
 
   runtime = "nodejs8.10"
