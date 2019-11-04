@@ -27,7 +27,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
   filename      = "lambda.zip"
   function_name = "beaniebooserverlambda"
   role          = "${aws_iam_role.iam_for_lambda.arn}"
-  handler       = "serverlambda.handler"
+  handler       = "app/serverlambda.handler"
   source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
 
   runtime = "nodejs8.10"
@@ -41,7 +41,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir = "../app"
+  source_dir = "../api"
   output_path = "lambda.zip"
 }
 
@@ -153,17 +153,17 @@ resource "aws_dynamodb_table" "beanieboos" {
 
 
 # SSM
-resource "aws_ssm_parameter" "public" {
-  name = "/beanieboo/publickey"
-  type = "SecureString"
-  value = "${var.public_key}"
-}
-
-resource "aws_ssm_parameter" "private" {
-  name = "/beanieboo/privatekey"
-  type = "SecureString"
-  value = "${var.private_key}"
-}
+# resource "aws_ssm_parameter" "public" {
+#   name = "/beanieboo/publickey"
+#   type = "SecureString"
+#   value = "${var.public_key}"
+# }
+#
+# resource "aws_ssm_parameter" "private" {
+#   name = "/beanieboo/privatekey"
+#   type = "SecureString"
+#   value = "${var.private_key}"
+# }
 
 # ALB
 resource "aws_lb_target_group" "beanieboo_server_lambda" {
