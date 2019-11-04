@@ -41,7 +41,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir = "../api/app"
+  source_dir = "../app"
   output_path = "lambda.zip"
 }
 
