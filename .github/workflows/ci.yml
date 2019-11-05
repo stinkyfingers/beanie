@@ -22,7 +22,7 @@ jobs:
         cmd: 'build'
         dir: 'api'
 
-    - run: cd api && npm run zip
+    - run: cd app/api && npm run zip
 
     # - name: s3 sync
     #   id: s3
