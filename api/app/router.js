@@ -188,6 +188,7 @@ router.get('/beanie/:name', auth, async (req, res, next) => {
 });
 
 router.get('*', (req, res) => {
+  console.log('NOP')
   console.log('req', req.originalUrl, req.url)
   res.send('I catch everything')
 });
