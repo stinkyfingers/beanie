@@ -12,7 +12,6 @@ const Beanie = require('./models/beanie');
 const router = express.Router();
 // strips the /flashcards route set up for the target group
 const stripServer = (req, res, next) => {
-  console.log('URL', req.originalUrl)
   req.url = req.originalUrl.replace('/beanieboo', '');
   next();
 }
@@ -189,7 +188,7 @@ router.get('/beanie/:name', auth, async (req, res, next) => {
 });
 
 router.get('*', (req, res) => {
-  console.log('req', req.originalUrl)
+  console.log('req', req.originalUrl, req.url)
   res.send('I catch everything')
 });
 
