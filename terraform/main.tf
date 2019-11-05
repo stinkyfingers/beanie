@@ -201,15 +201,15 @@ terraform {
   }
 }
 
-# data "terraform_remote_state" "beaniebooserver" {
-#   backend = "s3"
-#   config = {
-#     bucket  = "remotebackend"
-#     key     = "beaniebooserver/terraform.tfstate"
-#     region  = "us-west-1"
-#     profile = "jds"
-#   }
-# }
+data "terraform_remote_state" "beaniebooserver" {
+  backend = "s3"
+  config = {
+    bucket  = "remotebackend"
+    key     = "beaniebooserver/terraform.tfstate"
+    region  = "us-west-1"
+    profile = "jds"
+  }
+}
 
 data "terraform_remote_state" "stinkyfingers" {
   backend = "s3"
