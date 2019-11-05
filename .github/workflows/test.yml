@@ -1,0 +1,31 @@
+name: TEST
+on:
+  push:
+    branches:
+      - master
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1.0.0
+    - name: install step
+      id: install
+      uses: ./.github/actions/yarn
+      with:
+        cmd: 'install'
+        dir: 'api/app'
+
+    - uses: hashicorp/terraform-github-actions/init@v0.4.6
+      env:
+        TF_ACTION_WORKING_DIR: './terraform'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - uses: hashicorp/terraform-github-actions/apply@v0.4.6
+      env:
+        TF_ACTION_WORKING_DIR: './terraform'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
