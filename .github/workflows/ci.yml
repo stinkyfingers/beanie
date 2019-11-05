@@ -15,12 +15,12 @@ jobs:
       with:
         cmd: 'install'
         dir: 'api/app'
-    # - name: build step
-    #   id: build
-    #   uses: ./.github/actions/yarn
-    #   with:
-    #     cmd: 'build'
-    #     dir: 'api'
+    - name: build step
+      id: build
+      uses: ./.github/actions/yarn
+      with:
+        cmd: 'build'
+        dir: 'api'
 
     # - run: cd api/app && npm run zip
 
