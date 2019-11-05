@@ -151,7 +151,6 @@ resource "aws_dynamodb_table" "beanieboos" {
   }
 }
 
-
 # SSM
 # resource "aws_ssm_parameter" "public" {
 #   name = "/beanieboo/publickey"
