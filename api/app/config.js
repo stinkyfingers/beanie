@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 const getPrivateKey = () => {
   return new Promise((res, rej) => {
     if (process.env.NODE_ENV === 'local') {
-       res(fs.readFileSync('./app/key/private.pem'));
+       res(fs.readFileSync('../../key/private.pem'));
        return;
     }
     if (process.env.NODE_ENV === 'fakelive') {
@@ -33,7 +33,7 @@ const getPrivateKey = () => {
 const getPublicKey = () => {
   return new Promise((res, rej) => {
     if (process.env.NODE_ENV === 'local') {
-       res(fs.readFileSync('./app/key/public.pem'));
+       res(fs.readFileSync('../../key/public.pem'));
        return;
     }
     if (process.env.NODE_ENV === 'fakelive') {

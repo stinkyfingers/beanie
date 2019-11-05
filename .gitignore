@@ -2,6 +2,7 @@ terraform/.terraform*
 key/*
 api/node_modules/*
 scripts/*
+node_modules/
 
 yarn-error.log
 yarn.lock
