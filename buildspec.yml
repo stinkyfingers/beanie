@@ -9,15 +9,16 @@ phases:
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
       - apt-get update -y
       - apt-get install -y yarn
-  pre_build:
-    commands:
-      - yarn install
+  # pre_build:
+  #   commands:
+  #     - yarn install
   build:
     commands:
+      - cd api/app && yarn install
       - zip -r lambda.zip ./api/app
   post_build:
     commands:
-      - aws lambda update-function-code --profile jds --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
+      - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
 #   build:
 #     commands:
 #       - yarn build
