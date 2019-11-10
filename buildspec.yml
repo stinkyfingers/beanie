@@ -19,7 +19,8 @@ phases:
       - cd ../../app && yarn install && yarn build
   post_build:
     commands:
-      - cd ../../api/app
+      - pwd
+      - cd api/app
       - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
       - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
       - cd ../../app
