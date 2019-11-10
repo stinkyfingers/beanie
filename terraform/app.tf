@@ -1,5 +1,5 @@
 # s3
-resource "aws_s3_bucket" "app" {
+resource "aws_s3_bucket" "beanie" {
   bucket = "beanies.john-shenk.com"
   acl = "private"
   website {
