@@ -3,6 +3,8 @@ key/*
 api/node_modules/*
 scripts/*
 node_modules/
+*lambda.zip
+.github.bak
 
 yarn-error.log
 yarn.lock

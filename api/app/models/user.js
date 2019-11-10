@@ -28,7 +28,7 @@ module.exports = class User {
       Key: {
         'username': {S: this.username}
       },
-      ProjectionExpression: 'username,password,beanieboos'
+      ProjectionExpression: 'username,password,beanies,wantlist'
     }
     return new Promise((res, rej) => {
       ddb.getItem(params, async(err, data) => {

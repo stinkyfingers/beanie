@@ -79,15 +79,30 @@ router.post('/login', async (req, res, next) => {
       algorithm: 'RS256'
     };
     const token = await jwt.sign(JSON.stringify(user), privateKey, options);
-    const loginResp = {
-      token: token,
-      username: user.username,
-      admin: user.admin
-    }
-    res.json(loginResp);
+    res.json({...user, token});
   }).catch((err) => {
     res.error('error getting private key: ', err)
   })
+});
+
+router.post('/user/beanies', auth, async (req, res, next) => {
+  const user = new User(req.body.username)
+  user.beanies = req.body.beanies;
+  try {
+    res.json(await user.updateBeanies());
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/user/wantlist', auth, async (req, res, next) => {
+  const user = new User(req.body.username)
+  user.wantlist = req.body.wantlist;
+  try {
+    res.json(await user.updateWantlist());
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get('/user/:username', auth, async (req, res, next) => {
@@ -107,6 +122,8 @@ router.post('/user', async (req, res, next) => {
     next(err);
   }
 });
+
+
 
 router.post('/beanies', auth, async (req, res, next) => {
   if (!req.user.admin) {

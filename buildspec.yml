@@ -16,9 +16,17 @@ phases:
     commands:
       - cd api/app && yarn install
       - zip -r lambda.zip .
+      - cd ../../app && yarn install && yarn build
   post_build:
     commands:
+      - cd api/app
       - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
+      - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
+      - cd ../../app
+      - aws s3 sync build s3://beanie.john-shenk.com
+
+# TODO terraform
+
 #   build:
 #     commands:
 #       - yarn build

@@ -1,0 +1,16 @@
+div.all {
+  display: flex;
+}
+
+div.beanie {
+  width: 45%;
+}
+
+div.beanies {
+  width: 50%;
+}
+
+tr.beanie:hover {
+  cursor: pointer;
+  background-color: #ccc;
+}

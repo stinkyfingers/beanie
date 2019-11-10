@@ -151,18 +151,6 @@ resource "aws_dynamodb_table" "beanieboos" {
   }
 }
 
-# SSM
-# resource "aws_ssm_parameter" "public" {
-#   name = "/beanieboo/publickey"
-#   type = "SecureString"
-#   value = "${var.public_key}"
-# }
-#
-# resource "aws_ssm_parameter" "private" {
-#   name = "/beanieboo/privatekey"
-#   type = "SecureString"
-#   value = "${var.private_key}"
-# }
 
 # ALB
 resource "aws_lb_target_group" "beanieboo_server_lambda" {
