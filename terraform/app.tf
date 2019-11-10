@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "beanie" {
               "AWS": "${aws_cloudfront_origin_access_identity.beanie.iam_arn}"
           },
           "Action": "s3:GetObject",
-          "Resource": "arn:aws:s3:::beanie.john-shenk.com/*"
+          "Resource": "arn:aws:s3:::beanies.john-shenk.com/*"
       }
   ]
 }
