@@ -44,6 +44,7 @@ passport.deserializeUser(function(user, done) {
 
 passport.use('authStrategy', strat);
 router.use(cors())
+router.options('*', cors())
 router.use(passport.initialize());
 router.use(passport.session());
 router.use(bodyParser.urlencoded({ extended: true }));
