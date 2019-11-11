@@ -82,90 +82,15 @@ resource "aws_cloudfront_distribution" "beanie" {
       ssl_support_method             = "sni-only"
   }
 }
-#
-#
-# resource "aws_iam_role" "beanie" {
-#   name = "beanie_build_role"
-#
-#   assume_role_policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect": "Allow",
-#       "Principal": {
-#         "Service": "codebuild.amazonaws.com"
-#       },
-#       "Action": "sts:AssumeRole"
-#     }
-#   ]
-# }
-# EOF
-# }
-#
-# resource "aws_iam_role_policy" "beanie" {
-#   name = "beanie_build_policy"
-#   role = "${aws_iam_role.beanie.id}"
-#
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect":"Allow",
-#       "Action": [
-#         "s3:Get*",
-#         "s3:List*"
-#       ],
-#       "Resource": [
-#         "${aws_s3_bucket.beanie.arn}",
-#         "${aws_s3_bucket.beanie.arn}/index.html"
-#       ]
-#     },
-#     {
-#       "Effect": "Allow",
-#       "Action": [
-#         "codebuild:BatchGetBuilds",
-#         "codebuild:StartBuild"
-#       ],
-#       "Resource": "*"
-#     },
-#     {
-#       "Effect": "Allow",
-#       "Action": [
-#         "s3:*"
-#       ],
-#       "Resource": [
-#         "${aws_s3_bucket.beanie.arn}",
-#         "${aws_s3_bucket.beanie.arn}/*"
-#       ]
-#     },
-#     {
-#       "Effect": "Allow",
-#       "Action": [
-#         "codebuild:*"
-#       ],
-#       "Resource": "*"
-#     },{
-#       "Effect": "Allow",
-#       "Resource": [
-#         "*"
-#       ],
-#       "Action": [
-#         "logs:CreateLogGroup",
-#         "logs:CreateLogStream",
-#         "logs:PutLogEvents"
-#       ]
-#     },{
-#       "Effect": "Allow",
-#       "Action": [
-#         "cloudfront:CreateInvalidation",
-#         "cloudfront:GetInvalidation",
-#         "cloudfront:ListInvalidations"
-#       ],
-#       "Resource": "*"
-#     }
-#   ]
-# }
-# EOF
-# }
+
+resource "aws_route53_record" "beaniee" {
+  zone_id = "Z3P68RXJ4VECYX"
+  name    = "beanie.john-shenk.com"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_cloudfront_distribution.beanie.domain_name}"
+    zone_id                = "Z2FDTNDATAQYW2"
+    evaluate_target_health = false
+  }
+}
