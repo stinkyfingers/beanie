@@ -23,7 +23,7 @@ phases:
       - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
       - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
       - cd ../../app
-      - aws s3 sync build s3://beanie.john-shenk.com
+      - aws s3 sync build s3://beanies.john-shenk.com
 
 # TODO terraform
 
