@@ -88,6 +88,7 @@ module.exports = class Beanie {
           rej('data is null');
           return;
         }
+        console.log('data', data)
         try {
           let beanies = [];
           await data.Items.forEach((item) => {
@@ -96,6 +97,7 @@ module.exports = class Beanie {
           });
           res(beanies);
         } catch (err) {
+          console.log('all() error: ', err)
           rej(err);
         }
       });

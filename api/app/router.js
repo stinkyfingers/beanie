@@ -184,21 +184,22 @@ router.put('/beanies', auth, async (req, res, next) => {
   }
 });
 
-router.get('/beanies', auth, async (req, res, next) => {
+router.get('/beanie/:name', auth, async (req, res, next) => {
   try {
-    const beanies = await Beanie.all();
-    res.json(beanies);
+    const beanie = new Beanie(req.params.name);
+    const b = await beanie.get()
+    res.json(b);
   } catch (err) {
     console.warn(err);
     next(err);
   }
 });
 
-router.get('/beanie/:name', auth, async (req, res, next) => {
+router.get('/beanies', auth, async (req, res, next) => {
   try {
-    const beanie = new Beanie(req.params.name);
-    const b = await beanie.get()
-    res.json(b);
+    const beanies = await Beanie.all();
+    console.log('router', beanies)
+    res.json(beanies);
   } catch (err) {
     console.warn(err);
     next(err);

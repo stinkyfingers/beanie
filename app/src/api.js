@@ -42,7 +42,6 @@ export const updateWantList = async (user) => {
       }
     });
     const u = await resp.json();
-    console.log()
     if (u.error) return {error: u.error};
     return u;
   } catch (err) {
@@ -61,7 +60,6 @@ export const updateMyBeanies = async (user) => {
       }
     });
     const u = await resp.json();
-    console.log()
     if (u.error) return {error: u.error};
     return u;
   } catch (err) {
