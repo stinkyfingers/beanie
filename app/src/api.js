@@ -1,7 +1,6 @@
 // const host = 'https://server.john-shenk.com/beanieboo'
 // const host = 'http://localhost:3001'
-import { apiHost } from './config';
-console.log(process.env.NODE_ENV)
+import { apiHost } from './config'
 
 export const login = async (user) => {
   try {

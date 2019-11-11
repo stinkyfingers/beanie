@@ -59,8 +59,7 @@ resource "aws_iam_role_policy" "build" {
     {
       "Effect":"Allow",
       "Action": [
-        "s3:Get*",
-        "s3:List*"
+        "s3:*"
       ],
       "Resource": [
         "${aws_s3_bucket.beanie.arn}",
