@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import UserContext from '../UserContext';
 import Beanies from './Beanies';
 import { updateWantList, updateMyBeanies } from '../api';
+import '../css/user.css';
 
 const User = () => {
   const userState = React.useContext(UserContext);
@@ -46,12 +47,12 @@ const User = () => {
     if (!beanies) return;
     const rows = [];
     for (const beanie of beanies) {
-      rows.push(<tr key={beanie} onClick={() => rmFunc(beanie)}><td>{beanie}</td></tr>)
+      rows.push(<tr key={beanie}><td>{beanie}</td><td><button className='delete' onClick={() => rmFunc(beanie)}>Remove</button></td></tr>)
     }
     return (
       <table className='mylist'>
         <thead>
-          <tr><td>{want ? 'Want List' : 'My Beanies'}</td></tr>
+          <tr className='tableHeader'><td colSpan='2'>{want ? 'Want List' : 'My Beanies'}</td></tr>
         </thead>
         <tbody>{rows}</tbody>
       </table>
@@ -91,11 +92,14 @@ const User = () => {
   }
 
   return (
-    <div>
+    <div className='user'>
       <h3>Username {userState.user ? userState.user.username : null}</h3>
       <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
-      {renderMyList(want ? userState.user.wantlist : userState.user.beanies, want ? handleRemoveFromWantList : handleRemoveFromMyBeanies)}
-      <Beanies setBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies}/>
+
+      <div className='lists'>
+        {renderMyList(want ? userState.user.wantlist : userState.user.beanies, want ? handleRemoveFromWantList : handleRemoveFromMyBeanies)}
+        <Beanies setBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies}/>
+      </div>
     </div>
   );
 }

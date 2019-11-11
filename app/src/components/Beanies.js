@@ -27,10 +27,11 @@ const Beanies = ({setBeanie}) => {
     let out = [];
     beanies.map((beanie) => {
       return out.push(
-      <tr key={beanie.name} className='beanie' onClick={() => setBeanie(beanie)}>
+      <tr key={beanie.name}>
         <td>{beanie.name}</td>
         <td>{beanie.family}</td>
         <td>{beanie.animal}</td>
+        <td><button className='add' onClick={() => setBeanie(beanie)}>Add</button></td>
       </tr>);
     })
     return out;
@@ -39,10 +40,11 @@ const Beanies = ({setBeanie}) => {
     <div className='beanies'>
       <table className='beanies'>
         <thead>
-          <tr>
+          <tr className='tableHeader'>
             <td>Name</td>
             <td>Family</td>
             <td>Animal</td>
+            <td />
           </tr>
         </thead>
         <tbody>

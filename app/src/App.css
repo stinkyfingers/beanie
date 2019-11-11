@@ -16,3 +16,17 @@
 .App-link {
   color: #09d3ac;
 }
+
+button.delete {
+  background-color: #f66;
+}
+
+button.add {
+  background-color: #6f6;
+}
+
+button {
+  border: none;
+  border-radius: 2px;
+  padding: .8em;
+}

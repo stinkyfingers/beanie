@@ -2,10 +2,6 @@
 resource "aws_s3_bucket" "beanie" {
   bucket = "beanies.john-shenk.com"
   acl = "private"
-  website {
-   index_document = "index.html"
-   error_document = "index.html"
-  }
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -22,6 +18,12 @@ resource "aws_s3_bucket" "beanie" {
   ]
 }
 EOF
+}
+
+resource "aws_s3_bucket_public_access_block" "beanie" {
+  bucket = "${aws_s3_bucket.beanie.id}"
+  block_public_acls   = true
+  block_public_policy = true
 }
 
 resource "aws_cloudfront_origin_access_identity" "beanie" {
@@ -43,6 +45,7 @@ resource "aws_cloudfront_distribution" "beanie" {
 
   enabled             = true
   is_ipv6_enabled     = true
+  default_root_object = "index.html"
 
   aliases = ["beanies.john-shenk.com"]
 
@@ -76,7 +79,7 @@ resource "aws_cloudfront_distribution" "beanie" {
 }
 
   viewer_certificate {
-      acm_certificate_arn            = "arn:aws:acm:us-east-1:671958020402:certificate/12541448-a658-4e4f-b4d1-4e5e10c0d5fb"
+      acm_certificate_arn            = "arn:aws:acm:us-east-1:671958020402:certificate/daa73cdf-03b5-4f60-b416-71fe22a4523e"
       cloudfront_default_certificate = false
       minimum_protocol_version       = "TLSv1.1_2016"
       ssl_support_method             = "sni-only"
