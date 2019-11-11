@@ -1,0 +1,17 @@
+div.lists {
+  display: flex;
+}
+
+.mylist {
+  width: 35%;
+  background-color: #eee;
+}
+
+.tableHeader {
+  font-size: 1.4em;
+}
+
+.tableHeader > td {
+  border-bottom: 1px solid black;
+
+}
