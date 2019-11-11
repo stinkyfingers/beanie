@@ -55,6 +55,17 @@ resource "aws_iam_role_policy" "build" {
       "Resource": [
         "${aws_lambda_function.beanieboo_server_lambda.arn}"
       ]
+    },
+    {
+      "Effect":"Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.beanie.arn}",
+        "${aws_s3_bucket.beanie.arn}/*"
+      ]
     }
   ]
 }
