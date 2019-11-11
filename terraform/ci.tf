@@ -65,6 +65,15 @@ resource "aws_iam_role_policy" "build" {
         "${aws_s3_bucket.beanie.arn}",
         "${aws_s3_bucket.beanie.arn}/*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:CreateInvalidation"
+      ],
+      "Resource": [
+        "${aws_cloudfront_distribution.beanie.arn}"
+      ]
     }
   ]
 }

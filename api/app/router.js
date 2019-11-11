@@ -198,7 +198,6 @@ router.get('/beanie/:name', auth, async (req, res, next) => {
 router.get('/beanies', auth, async (req, res, next) => {
   try {
     const beanies = await Beanie.all();
-    console.log('router', beanies)
     res.json(beanies);
   } catch (err) {
     console.warn(err);
