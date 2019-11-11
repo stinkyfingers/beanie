@@ -25,7 +25,7 @@ EOF
 }
 
 resource "aws_cloudfront_origin_access_identity" "beanie" {
-  comment = "beanie.john-shenk.com identity"
+  comment = "beanies.john-shenk.com identity"
 }
 
 locals {
@@ -44,7 +44,7 @@ resource "aws_cloudfront_distribution" "beanie" {
   enabled             = true
   is_ipv6_enabled     = true
 
-  aliases = ["beanie.john-shenk.com"]
+  aliases = ["beanies.john-shenk.com"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -83,9 +83,9 @@ resource "aws_cloudfront_distribution" "beanie" {
   }
 }
 
-resource "aws_route53_record" "beaniee" {
+resource "aws_route53_record" "beanie" {
   zone_id = "Z3P68RXJ4VECYX"
-  name    = "beanie.john-shenk.com"
+  name    = "beanies.john-shenk.com"
   type    = "A"
 
   alias {
