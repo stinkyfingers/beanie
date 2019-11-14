@@ -2,9 +2,15 @@ div.lists {
   display: flex;
 }
 
-.mylist {
-  width: 35%;
+.userData {
+  width: 25%;
   background-color: #eee;
+}
+.beanie {
+  width: 25%;
+}
+.mylist {
+  width: 100%;
 }
 
 .tableHeader {
@@ -13,5 +19,4 @@ div.lists {
 
 .tableHeader > td {
   border-bottom: 1px solid black;
-
 }

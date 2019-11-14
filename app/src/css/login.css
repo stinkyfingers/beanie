@@ -1,0 +1,11 @@
+div.login {
+  text-align: right;
+}
+
+input.login {
+  width: 10em;
+}
+
+label.login{
+  display: inline-block
+}

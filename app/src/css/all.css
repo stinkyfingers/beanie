@@ -3,11 +3,10 @@ div.all {
 }
 
 div.beanie {
-  width: 45%;
 }
 
 div.beanies {
-  width: 50%;
+  max-width: 50%;
 }
 
 tr.beanie:hover {

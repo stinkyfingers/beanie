@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import UserContext from '../UserContext';
 import Beanies from './Beanies';
+import Beanie from './Beanie';
 import { updateWantList, updateMyBeanies } from '../api';
 import '../css/user.css';
 
@@ -8,6 +9,7 @@ const User = () => {
   const userState = React.useContext(UserContext);
 
   const [want, setShowWant] = useState(false);
+  const [beanie, setBeanie] = useState(null);
 
 
   if (!userState || !userState.user) return null;
@@ -93,12 +95,15 @@ const User = () => {
 
   return (
     <div className='user'>
-      <h3>Username {userState.user ? userState.user.username : null}</h3>
-      <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
-
       <div className='lists'>
-        {renderMyList(want ? userState.user.wantlist : userState.user.beanies, want ? handleRemoveFromWantList : handleRemoveFromMyBeanies)}
-        <Beanies setBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies}/>
+        <div className='userData'>
+          <h3>Username {userState.user ? userState.user.username : null}</h3>
+          <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
+          {renderMyList(want ? userState.user.wantlist : userState.user.beanies, want ? handleRemoveFromWantList : handleRemoveFromMyBeanies)}
+        </div>
+
+        {beanie ? <Beanie beanie={beanie} /> : null}
+        <Beanies showBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie}/>
       </div>
     </div>
   );

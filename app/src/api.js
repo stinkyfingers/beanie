@@ -17,9 +17,38 @@ export const login = async (user) => {
   }
 };
 
+export const register = async (user) => {
+  try {
+    const resp = await fetch(`${apiHost}/user`, {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {'Content-Type': 'application/json'}
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};
+
 export const all = async (token) => {
   try {
     const resp = await fetch(`${apiHost}/beanies`, {
+      method: 'GET',
+      headers: {'token': token}
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};
+
+export const getFamily = async (token, family) => {
+  try {
+    const resp = await fetch(`${apiHost}/beanies/${family}`, {
       method: 'GET',
       headers: {'token': token}
     });
@@ -57,6 +86,41 @@ export const updateMyBeanies = async (user) => {
       headers: {
         'Content-Type': 'application/json',
         'token': user.token
+      }
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};
+
+export const get = async (token, name) => {
+  try {
+    const resp = await fetch(`${apiHost}/beanie/${name}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      }
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};
+
+export const upsert = async (token, beanie) => {
+  try {
+    const resp = await fetch(`${apiHost}/beanie`, {
+      method: 'POST',
+      body: JSON.stringify(beanie),
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
       }
     });
     const u = await resp.json();

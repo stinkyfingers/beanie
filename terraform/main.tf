@@ -133,7 +133,9 @@ EOF
 # DB
 resource "aws_dynamodb_table" "users" {
   name = "beaniebooUsers"
-  billing_mode = "PAY_PER_REQUEST"
+  billing_mode = "PROVISIONED"
+  write_capacity = 5
+  read_capacity = 5
   hash_key = "username"
   attribute {
     name = "username"
@@ -143,11 +145,24 @@ resource "aws_dynamodb_table" "users" {
 
 resource "aws_dynamodb_table" "beanieboos" {
   name = "beanieboos"
-  billing_mode = "PAY_PER_REQUEST"
+  billing_mode = "PROVISIONED"
+  write_capacity = 5
+  read_capacity = 5
   hash_key = "name"
   attribute {
     name = "name"
     type = "S"
+  }
+  attribute {
+    name = "family"
+    type = "S"
+  }
+  global_secondary_index {
+    name = "family"
+    hash_key = "family"
+    write_capacity = 5
+    read_capacity = 5
+    projection_type = "KEYS_ONLY"
   }
 }
 

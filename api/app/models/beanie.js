@@ -53,7 +53,7 @@ module.exports = class Beanie {
       TableName: tableName,
       Key: {
         'name': {S: this.name}
-      },
+      }
     }
     return new Promise((res, rej) => {
       ddb.getItem(params, async(err, data) => {
@@ -66,8 +66,7 @@ module.exports = class Beanie {
         }
         try {
           const u = AWS.DynamoDB.Converter.unmarshall(data.Item)
-          this.name = u.name;
-          res(this);
+          res(u);
         } catch (err) {
           rej(err);
         }
@@ -78,9 +77,53 @@ module.exports = class Beanie {
   static async all() {
     const params = {
       TableName: tableName,
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#family': 'family',
+        '#animal': 'animal',
+      },
+      ProjectionExpression: '#name,#family,#animal'
     }
     return new Promise((res, rej) => {
       ddb.scan(params, async(err, data) => {
+        if (err) {
+          rej(err);
+        }
+        if (!data) {
+          rej('data is null');
+          return;
+        }
+        try {
+          let beanies = [];
+          await data.Items.forEach((item) => {
+            const b = AWS.DynamoDB.Converter.unmarshall(item);
+            beanies.push(b);;
+          });
+          res(beanies);
+        } catch (err) {
+          console.log('all() error: ', err)
+          rej(err);
+        }
+      });
+    });
+  }
+
+  static async family(family) {
+    const params = {
+      TableName: tableName,
+      IndexName: 'family',
+      ExpressionAttributeNames: {
+        '#family': 'family',
+      },
+      ExpressionAttributeValues: {
+        ':family': {
+          S: family
+        }
+      },
+      KeyConditionExpression: `#family = :family`,
+    }
+    return new Promise((res, rej) => {
+      ddb.query(params, async(err, data) => {
         if (err) {
           rej(err);
         }

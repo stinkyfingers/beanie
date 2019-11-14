@@ -1,37 +1,20 @@
-import React, {useEffect, useState, useContext} from 'react';
-import UserContext from '../UserContext';
-import { all } from '../api';
+import React, { useContext} from 'react';
+import BeanieContext from '../BeanieContext';
 
-const Beanies = ({setBeanie}) => {
-  const userState = useContext(UserContext);
-  const [beanies, setBeanies] = useState([]);
-
-  useEffect(() => {
-    const allBeanies = async () => {
-      try {
-        const b = await all(userState.user.token);
-        if (b.error) {
-          console.warn(b.error) // TODO
-          return;
-        }
-        setBeanies(b);
-      } catch (err) {
-        console.log(err)// TODO
-      }
-    }
-    allBeanies()
-
-  }, [beanies, userState.user.token]);
+const Beanies = ({addBeanie, setBeanie}) => {
+  const beanieState = useContext(BeanieContext);
 
   const renderBeanies = () => {
     let out = [];
-    beanies.map((beanie) => {
+    if (!beanieState.beanies) return out;
+    beanieState.beanies.map((beanie) => {
       return out.push(
       <tr key={beanie.name}>
         <td>{beanie.name}</td>
         <td>{beanie.family}</td>
         <td>{beanie.animal}</td>
-        <td><button className='add' onClick={() => setBeanie(beanie)}>Add</button></td>
+        <td><button className='add' onClick={() => addBeanie(beanie)}>Add</button></td>
+        <td><button className='show' onClick={() => setBeanie(beanie)}>Show</button></td>
       </tr>);
     })
     return out;
@@ -44,6 +27,7 @@ const Beanies = ({setBeanie}) => {
             <td>Name</td>
             <td>Family</td>
             <td>Animal</td>
+            <td />
             <td />
           </tr>
         </thead>

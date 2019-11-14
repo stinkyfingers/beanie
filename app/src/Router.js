@@ -7,10 +7,11 @@ import {
 import User from './components/User';
 import All from './components/All';
 
+// Removed from App for now - seems redundant
 export const Nav = () =>
   <div>
     <nav>
-      <Link to='/user'>User</Link>
+      <Link to='/'>User</Link>
     </nav>
     <nav>
       <Link to='/beanies'>Beanies</Link>
@@ -19,10 +20,10 @@ export const Nav = () =>
 
 export const Router = () =>
   <Switch>
-    <Route path="/user">
-      <User />
-    </Route>
     <Route path="/beanies">
       <All />
+    </Route>
+    <Route path="/">
+      <User />
     </Route>
   </Switch>;

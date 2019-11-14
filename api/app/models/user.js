@@ -2,6 +2,7 @@ const AWS = require('aws-sdk');
 const config = require('../config');
 const crypto = require('crypto');
 const converter = AWS.DynamoDB.Converter;
+const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 
 const region = 'us-west-1';
@@ -95,18 +96,27 @@ module.exports = class User {
       TableName: tableName,
       Item: {
         'username': { S: this.username },
-        'password': { B: encPassword }
+        'password': { B: encPassword },
+        'email': { S: this.email }
       },
       ConditionExpression: 'attribute_not_exists(username)'
     }
-
     return new Promise((res, rej) => {
       ddb.putItem(params, (err, data) => {
         if (err) {
           rej(err);
           return;
         }
-        res(AWS.DynamoDB.Converter.unmarshall(data.Item));
+        config.getPrivateKey()
+        .then(async(privateKey) => {
+          const options = {
+            algorithm: 'RS256'
+          };
+          const token = await jwt.sign(JSON.stringify({username: this.username, email: this.email, beanies: [], wantlist: []}), privateKey, options);
+          res({...this, token, password: null});
+        }).catch((err) => {
+          rej(err);
+        });
       });
     });
   }

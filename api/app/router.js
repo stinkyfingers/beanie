@@ -117,6 +117,7 @@ router.get('/user/:username', auth, async (req, res, next) => {
 
 router.post('/user', async (req, res, next) => {
   const user = new User(req.body.username, req.body.password);
+  user.email = req.body.email;
   try {
     res.json(await user.create());
   } catch (err) {
@@ -195,6 +196,16 @@ router.get('/beanie/:name', auth, async (req, res, next) => {
   }
 });
 
+router.get('/beanies/:family', auth, async (req, res, next) => {
+  try {
+    const beanies = await Beanie.family(req.params.family);
+    res.json(beanies);
+  } catch (err) {
+    console.warn(err);
+    next(err);
+  }
+});
+
 router.get('/beanies', auth, async (req, res, next) => {
   try {
     const beanies = await Beanie.all();
@@ -205,10 +216,32 @@ router.get('/beanies', auth, async (req, res, next) => {
   }
 });
 
+router.post('/beanie', auth, async (req, res, next) => {
+  // TODO - a better way
+  const beanie = new Beanie()
+  beanie.name = req.body.name,
+  beanie.image = req.body.image,
+  beanie.family = req.body.family,
+  beanie.number = req.body.number,
+  beanie.variety = req.body.variety,
+  beanie.animal = req.body.animal,
+  beanie.exclusiveTo = req.body.exclusiveTo,
+  beanie.birthday = req.body.birthday,
+  beanie.introDate = req.body.introDate,
+  beanie.retireDate = req.body.retireDate,
+  beanie.height = req.body.height,
+  beanie.length = req.body.length,
+  beanie.st = req.body.st,
+  beanie.tt = req.body.tt
+  try {
+    res.json(await beanie.upsert());
+  } catch (err) {
+    console.warn(err);
+    next(err);
+  }
+});
+
 router.get('*', (req, res) => {
-  console.log('NOP')
-  console.log('NOP')
-  console.log('req', req.originalUrl,'...', req.url)
   res.send('I catch everything')
 });
 
