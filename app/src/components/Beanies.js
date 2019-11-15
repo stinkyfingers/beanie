@@ -1,5 +1,6 @@
 import React, { useContext} from 'react';
 import BeanieContext from '../BeanieContext';
+import '../css/beanies.css';
 
 const Beanies = ({addBeanie, setBeanie}) => {
   const beanieState = useContext(BeanieContext);
@@ -7,7 +8,10 @@ const Beanies = ({addBeanie, setBeanie}) => {
   const renderBeanies = () => {
     let out = [];
     if (!beanieState.beanies) return out;
-    beanieState.beanies.map((beanie) => {
+    const sorted = beanieState.beanies.sort((a, b) => {
+      return a.name < b.name ? -1 : 1;
+    });
+    sorted.map((beanie) => {
       return out.push(
       <tr key={beanie.name}>
         <td>{beanie.name}</td>

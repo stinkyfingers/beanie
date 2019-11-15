@@ -29,7 +29,7 @@ module.exports = class User {
       Key: {
         'username': {S: this.username}
       },
-      ProjectionExpression: 'username,password,beanies,wantlist'
+      ProjectionExpression: 'username,password,beanies,wantlist,admin'
     }
     return new Promise((res, rej) => {
       ddb.getItem(params, async(err, data) => {
@@ -46,6 +46,7 @@ module.exports = class User {
           const dec = crypto.privateDecrypt(key.toString(), buf)
           this.beanies = _.get(u.beanies, 'values', []);
           this.wantlist = _.get(u.wantlist, 'values', []);
+          this.admin = u.admin;
           if (this.password = dec.toString()) {
             res(this)
           }
@@ -63,7 +64,7 @@ module.exports = class User {
       Key: {
         'username': {S: this.username}
       },
-      ProjectionExpression: 'username,beanies,wantlist'
+      ProjectionExpression: 'username,beanies,wantlist,admin'
     }
     return new Promise((res, rej) => {
       ddb.getItem(params, async(err, data) => {

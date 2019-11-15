@@ -5,7 +5,7 @@ import '../css/beanie.css';
 
 const Beanie = ({beanie}) => {
   const userState = useContext(UserContext);
-  const disabled = userState.user.isAdmin ? false : true; 
+  const disabled = userState.user.admin ? false : true; 
   const [beanieValue, setBeanieValue] = useState(beanie);
   const token = userState.user.token;
 

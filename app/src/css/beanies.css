@@ -1,0 +1,4 @@
+div.beanies {
+  overflow-y: scroll;
+  max-height: 45em;
+}
