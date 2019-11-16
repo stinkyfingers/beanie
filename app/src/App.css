@@ -1,16 +1,23 @@
 .App {
   text-align: center;
+  font-family: "Roboto", "Arial", "Garamond"
+
 }
 
 .App-header {
-  background-color: #333;
+  background-color: #eee;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #528;
 }
 .name {
   width: 80%;
+  font-size: 2em;
+}
+.name>h1 {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .nav {
   width: 20%;
@@ -37,8 +44,8 @@ button.add {
 }
 
 button.login {
-  background-color: #eee;
-  color: #333;
+  background-color: #333;
+  color: #eee;
 }
 
 button {

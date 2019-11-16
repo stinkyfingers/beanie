@@ -162,7 +162,8 @@ resource "aws_dynamodb_table" "beanieboos" {
     hash_key = "family"
     write_capacity = 5
     read_capacity = 5
-    projection_type = "KEYS_ONLY"
+    projection_type = "INCLUDE"
+    non_key_attributes = ["animal"]
   }
 }
 

@@ -125,7 +125,14 @@ router.post('/user', async (req, res, next) => {
   }
 });
 
-
+router.put('/password', async (req, res, next) => {
+  const user = new User(req.body.username, '');
+  try {
+    res.json(await user.resetPassword());
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.post('/beanies', auth, async (req, res, next) => {
   if (!req.user.admin) {

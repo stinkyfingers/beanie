@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom'
 import User from './components/User';
 import All from './components/All';
+import Password from './components/Password';
 
 // Removed from App for now - seems redundant
 export const Nav = () =>
@@ -22,6 +23,9 @@ export const Router = () =>
   <Switch>
     <Route path="/beanies">
       <All />
+    </Route>
+    <Route path="/password">
+      <Password />
     </Route>
     <Route path="/">
       <User />

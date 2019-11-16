@@ -2,8 +2,9 @@ var expect  = require('chai').expect;
 var Beanie = require('./beanie');
 
 
-describe.only('Beanie', () => {
+describe('Beanie', () => {
   const beanie = new Beanie('bobby')
+  beanie.family = 'Test'
 
   it('creates', async() => {
     const b = await beanie.create();
@@ -18,7 +19,7 @@ describe.only('Beanie', () => {
   it('gets', async() => {
     const b = await beanie.get();
     expect(b.name).to.equal('bobby');
-    expect(b.image).to.equal('/image');
+    // expect(b.image).to.equal('/image');
   });
 
   it('deletes', async() => {

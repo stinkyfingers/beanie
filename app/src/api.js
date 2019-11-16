@@ -130,3 +130,20 @@ export const upsert = async (token, beanie) => {
     return {error: err};
   }
 };
+
+export const resetPassword = async (user) => {
+  try {
+    const resp = await fetch(`${apiHost}/password`, {
+      method: 'PUT',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};

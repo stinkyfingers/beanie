@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import UserContext from '../UserContext';
 import { login, register } from '../api';
 import '../css/login.css';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const userState = useContext(UserContext);
@@ -45,6 +46,7 @@ const Login = () => {
       <div>
         <button className='login' onClick={handleClick}>{buttonText}</button>
       </div>
+      <Link to='/password'>Forgot Password</Link>
     </div>
   );
 

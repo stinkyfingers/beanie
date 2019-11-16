@@ -113,7 +113,9 @@ module.exports = class Beanie {
       TableName: tableName,
       IndexName: 'family',
       ExpressionAttributeNames: {
+        '#name': 'name',
         '#family': 'family',
+        '#animal': 'animal',
       },
       ExpressionAttributeValues: {
         ':family': {
@@ -121,6 +123,7 @@ module.exports = class Beanie {
         }
       },
       KeyConditionExpression: `#family = :family`,
+      ProjectionExpression: '#name,#family,#animal'
     }
     return new Promise((res, rej) => {
       ddb.query(params, async(err, data) => {

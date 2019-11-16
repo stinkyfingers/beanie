@@ -59,5 +59,25 @@ const getPublicKey = () => {
   });
 }
 
+const getEmailPassword = () => {
+  return new Promise((res, rej) => {
+    const ssm = new AWS.SSM();
+    const params = {
+      Name: '/global/emailPassword',
+      WithDecryption: false
+    };
+    ssm.getParameter(params, (err, data) => {
+      if (err) {
+        rej(err);
+        return;
+      }
+      if (!data || !data.Parameter || !data.Parameter.Value) {
+        rej('data is null');
+        return;
+      }
+      res(data.Parameter.Value);
+    });
+  });
+}
 
-module.exports = { getPrivateKey, getPublicKey };
+module.exports = { getPrivateKey, getPublicKey, getEmailPassword };
