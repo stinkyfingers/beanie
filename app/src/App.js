@@ -8,7 +8,7 @@ import { getFamily } from './api';
 import './App.css';
 
 function App() {
-  const [family, setFamily] = useState('Beanie Babies 2.0')
+  const [family, setFamily] = useState(localStorage.getItem('family') || 'Beanie Babies');
 
   const useUser = () => {
      const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
@@ -43,7 +43,7 @@ function App() {
 
   const renderFamilies = () => (
     <div className='families'>
-      <select value={family} onChange={(e) => setFamily(e.target.value)}>
+      <select value={family} onChange={(e) => {localStorage.setItem('family', e.target.value); setFamily(e.target.value)}}>
         <option value='Beanie Babies'>Beanie Babies</option>
         <option value='Beanie Babies 2.0'>Beanies 2.0</option>
         <option value='Beanie Boos'>Beanie Boos</option>

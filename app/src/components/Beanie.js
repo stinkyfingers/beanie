@@ -1,16 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from '../UserContext';
+import BeanieContext from '../BeanieContext';
 import { get, upsert } from '../api';
 import '../css/beanie.css';
 
 const Beanie = ({beanie}) => {
   const userState = useContext(UserContext);
+  const beanieState = useContext(BeanieContext);
   const disabled = userState.user.admin ? false : true;
   const [beanieValue, setBeanieValue] = useState(beanie);
   const token = userState.user.token;
 
   useEffect(() => {
-    if (!beanie) return;
+    if (!beanie || beanie.isNew) return;
     const getBeanie = async() => {
       try {
         const b = await get(token, beanie.name);
@@ -51,11 +53,17 @@ const Beanie = ({beanie}) => {
   const submit = async() => {
     try {
       await upsert(userState.user.token, beanieValue);
+      if (beanieValue.isNew) {
+        beanieValue.isNew = null;
+        const updatedBeanies = beanieState.beanies;
+        updatedBeanies.push(beanieValue);
+        beanieState.setBeanies(updatedBeanies);
+      }
     } catch (err) {
       console.warn(err) // TODO
     }
   };
-
+console.log(beanieValue)
   return (
     <div className='beanie'>
       <label htmlFor='name'>Name:</label>
@@ -94,7 +102,7 @@ const Beanie = ({beanie}) => {
 
       <label htmlFor='image'>Image URL:</label>
       <input type='text' name='image' defaultValue={beanieValue.image || ''} disabled={disabled} onChange={handleChange} />
-      
+
       <div className='image'>
         <img src={beanieValue.image} alt={beanieValue.name}/>
       </div>

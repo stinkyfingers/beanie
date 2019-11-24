@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import UserContext from '../UserContext';
+import BeanieContext from '../BeanieContext';
 import Beanies from './Beanies';
 import Beanie from './Beanie';
 import { updateWantList, updateMyBeanies } from '../api';
@@ -7,6 +8,7 @@ import '../css/user.css';
 
 const User = () => {
   const userState = React.useContext(UserContext);
+  const beanieState = useContext(BeanieContext);
 
   const [want, setShowWant] = useState(false);
   const [beanie, setBeanie] = useState(null);
@@ -77,7 +79,7 @@ const User = () => {
     }
   }
 
-  const addBeanieToMyBeanies= async(beanie) => {
+  const addBeanieToMyBeanies = async(beanie) => {
     const user = userState.user;
     if (!user.beanies) {
       user.beanies = [];
@@ -103,7 +105,7 @@ const User = () => {
         </div>
 
         {beanie ? <Beanie beanie={beanie} /> : null}
-        <Beanies addBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie}/>
+        <Beanies addBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie} />
       </div>
     </div>
   );

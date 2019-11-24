@@ -248,6 +248,17 @@ router.post('/beanie', auth, async (req, res, next) => {
   }
 });
 
+
+router.delete('/beanie/:name', auth, async (req, res, next) => {
+  const beanie = new Beanie(name = req.params.name);
+  try {
+    beanie.delete();
+  } catch (err) {
+    console.warn(err);
+    next(err);
+  }
+});
+
 router.get('*', (req, res) => {
   res.send('I catch everything')
 });

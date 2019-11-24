@@ -131,6 +131,23 @@ export const upsert = async (token, beanie) => {
   }
 };
 
+export const deleteBeanie = async (token, name) => {
+  try {
+    const resp = await fetch(`${apiHost}/beanie/${name}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      }
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};
+
 export const resetPassword = async (user) => {
   try {
     const resp = await fetch(`${apiHost}/password`, {
