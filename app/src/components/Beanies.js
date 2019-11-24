@@ -25,6 +25,7 @@ const Beanies = ({addBeanie, setBeanie}) => {
   }
   return(
     <div className='beanies'>
+      <div className='newBeanie'><button onClick={() => setBeanie({})}>New Beanie</button></div>
       <table className='beanies'>
         <thead>
           <tr className='tableHeader'>
