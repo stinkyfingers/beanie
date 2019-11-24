@@ -20,3 +20,7 @@ div.lists {
 .tableHeader > td {
   border-bottom: 1px solid black;
 }
+.show:hover {
+  cursor: pointer;
+  background-color: #444;
+}

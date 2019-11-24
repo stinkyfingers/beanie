@@ -50,7 +50,14 @@ const User = () => {
     if (!beanies) return;
     const rows = [];
     for (const beanie of beanies) {
-      rows.push(<tr key={beanie}><td>{beanie}</td><td><button className='delete' onClick={() => rmFunc(beanie)}>Remove</button></td></tr>)
+      rows.push(
+        <tr key={beanie}>
+          <td className='show' onClick={(e) => setBeanie({name: beanie})}>{beanie}</td>
+          <td>
+            <button className='delete' onClick={() => rmFunc(beanie)}>Remove</button>
+          </td>
+        </tr>
+      );
     }
     return (
       <table className='mylist'>
