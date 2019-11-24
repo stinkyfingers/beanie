@@ -12,7 +12,7 @@ const Beanie = ({beanie}) => {
   const token = userState.user.token;
 
   useEffect(() => {
-    if (!beanie || beanie.isNew) return;
+    if (!beanie) return;
     const getBeanie = async() => {
       try {
         const b = await get(token, beanie.name);
@@ -63,7 +63,7 @@ const Beanie = ({beanie}) => {
       console.warn(err) // TODO
     }
   };
-console.log(beanieValue)
+
   return (
     <div className='beanie'>
       <label htmlFor='name'>Name:</label>

@@ -13,7 +13,6 @@ const User = () => {
   const [want, setShowWant] = useState(false);
   const [beanie, setBeanie] = useState(null);
 
-
   if (!userState || !userState.user) return null;
 
 
