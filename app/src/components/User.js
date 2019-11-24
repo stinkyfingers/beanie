@@ -103,7 +103,7 @@ const User = () => {
         </div>
 
         {beanie ? <Beanie beanie={beanie} /> : null}
-        <Beanies showBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie}/>
+        <Beanies addBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie}/>
       </div>
     </div>
   );
