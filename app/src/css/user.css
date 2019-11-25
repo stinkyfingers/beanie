@@ -3,8 +3,8 @@ div.lists {
 }
 
 .userData {
-  width: 25%;
   background-color: #eee;
+  overflow: scroll;
 }
 .beanie {
   width: 25%;
@@ -23,4 +23,10 @@ div.lists {
 .show:hover {
   cursor: pointer;
   background-color: #444;
+}
+
+@media screen and (max-width: 600px) {
+  .userData {
+    min-width: 35%;
+  }
 }

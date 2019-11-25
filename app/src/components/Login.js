@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
 import UserContext from '../UserContext';
+import FamilyContext from '../FamilyContext';
 import { login, register } from '../api';
 import '../css/login.css';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
   const userState = useContext(UserContext);
+  const familyState = useContext(FamilyContext);
   const [isNew, setNew] = useState(false);
   const [user, setUser] = useState(null);
   const buttonText = isNew ? 'Create User' : 'Log In';
@@ -18,6 +20,7 @@ const Login = () => {
         return;
       }
       userState.setUser(u);
+      familyState.setFamily(localStorage.getItem('family') || 'Beanie Babies');
     } catch (err) {
       console.warn(err) // TODO
     }

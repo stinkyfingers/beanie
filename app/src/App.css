@@ -12,7 +12,7 @@
   color: #528;
 }
 .name {
-  width: 80%;
+  max-width: 80%;
   font-size: 2em;
 }
 .name>h1 {
@@ -68,4 +68,14 @@ button {
 
 button:hover {
   cursor: pointer;
+}
+
+
+@media screen and (max-width: 600px) {
+  .families>select {
+    font-size: 1em;
+  }
+  .name {
+    font-size: 1em;;
+  }
 }

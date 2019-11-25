@@ -110,8 +110,10 @@ const User = () => {
           {renderMyList(want ? userState.user.wantlist : userState.user.beanies, want ? handleRemoveFromWantList : handleRemoveFromMyBeanies)}
         </div>
 
+        <div className='all'>
         {beanie ? <Beanie beanie={beanie} /> : null}
         <Beanies addBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie} />
+        </div>
       </div>
     </div>
   );

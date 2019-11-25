@@ -2,3 +2,14 @@ div.beanies {
   overflow-y: scroll;
   max-height: 45em;
 }
+
+div.all {
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 600px) {
+  div.all {
+    flex-direction: column;
+  }
+}
