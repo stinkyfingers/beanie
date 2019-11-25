@@ -47,6 +47,7 @@ function App() {
         <option value='Beanie Babies'>Beanie Babies</option>
         <option value='Beanie Babies 2.0'>Beanies 2.0</option>
         <option value='Beanie Boos'>Beanie Boos</option>
+        <option value='Beanie Fashion'>Beanie Fashion</option>
       </select>
     </div>
   );
