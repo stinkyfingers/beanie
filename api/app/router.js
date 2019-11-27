@@ -115,6 +115,16 @@ router.get('/user/:username', auth, async (req, res, next) => {
   }
 });
 
+router.get('/users', auth, async (req, res, next) => {
+
+  try {
+    const users = await User.all()
+    res.json(users);
+  } catch(err) {
+    next(err);
+  }
+});
+
 router.post('/user', async (req, res, next) => {
   const user = new User(req.body.username, req.body.password);
   user.email = req.body.email;

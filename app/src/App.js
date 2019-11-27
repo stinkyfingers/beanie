@@ -3,7 +3,7 @@ import Login from './components/Login';
 import UserContext from './UserContext';
 import BeanieContext from './BeanieContext';
 import FamilyContext from './FamilyContext';
-import { Router } from './Router';
+import { Router, Nav } from './Router';
 import { BrowserRouter } from 'react-router-dom';
 import { getFamily } from './api';
 import './App.css';
@@ -67,8 +67,9 @@ function App() {
                 {renderFamilies()}
                 <div className='name'>
                   <h1>Beanie Central</h1>
+                  <Nav />
                 </div>
-                <div className='nav'>
+                <div className='login'>
                   <Login />
                 </div>
               </header>

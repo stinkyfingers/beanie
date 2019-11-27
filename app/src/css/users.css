@@ -1,0 +1,7 @@
+.allUsers {
+  list-style-type: none;
+}
+.allUsers > li:hover {
+  background-color: #eee;
+  cursor: pointer;
+}

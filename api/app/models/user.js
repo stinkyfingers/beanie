@@ -91,6 +91,33 @@ module.exports = class User {
     });
   };
 
+  static async all() {
+    const params = {
+      TableName: tableName,
+      ProjectionExpression: 'username,beanies,wantlist'
+    }
+    return new Promise((res, rej) => {
+      ddb.scan(params, async(err, data) => {
+        if (err) {
+          rej(err);
+        }
+        if (!data) {
+          rej('data is null');
+          return;
+        }
+        try {
+          let users = [];
+          for (const item of data.Items) {
+            users.push(AWS.DynamoDB.Converter.unmarshall(item));
+          }
+          res(users);
+        } catch (err) {
+          rej(err);
+        }
+      });
+    });
+  };
+
   async create() {
     const buffer = Buffer.from(this.password);
     const key = await config.getPublicKey()
@@ -237,8 +264,6 @@ module.exports = class User {
   };
 
   async mailPassword() {
-    console.log('...', this)
-
     const emailPassword = await config.getEmailPassword();
     const transporter = nodemailer.createTransport({
       service: 'gmail',

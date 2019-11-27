@@ -32,6 +32,20 @@ export const register = async (user) => {
   }
 };
 
+export const users = async (token) => {
+  try {
+    const resp = await fetch(`${apiHost}/users`, {
+      method: 'GET',
+      headers: {'token': token}
+    });
+    const u = await resp.json();
+    if (u.error) return {error: u.error};
+    return u;
+  } catch (err) {
+    return {error: err};
+  }
+};
+
 export const all = async (token) => {
   try {
     const resp = await fetch(`${apiHost}/beanies`, {
