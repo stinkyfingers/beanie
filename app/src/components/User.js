@@ -1,14 +1,13 @@
 import React, {useState, useContext} from 'react';
 import UserContext from '../UserContext';
-import BeanieContext from '../BeanieContext';
 import Beanies from './Beanies';
 import Beanie from './Beanie';
+import UserList from './UserList';
 import { updateWantList, updateMyBeanies } from '../api';
 import '../css/user.css';
 
 const User = () => {
-  const userState = React.useContext(UserContext);
-  const beanieState = useContext(BeanieContext);
+  const userState = useContext(UserContext);
 
   const [want, setShowWant] = useState(false);
   const [beanie, setBeanie] = useState(null);
@@ -44,29 +43,6 @@ const User = () => {
     } catch (err) {
       console.warn(err)
     }
-  }
-
-  const renderMyList = (beanies, rmFunc) => {
-    if (!beanies) return;
-    const rows = [];
-    for (const beanie of beanies) {
-      rows.push(
-        <tr key={beanie}>
-          <td className='show' onClick={(e) => setBeanie({name: beanie})}>{beanie}</td>
-          <td>
-            <button className='delete' onClick={() => rmFunc(beanie)}>Remove</button>
-          </td>
-        </tr>
-      );
-    }
-    return (
-      <table className='mylist'>
-        <thead>
-          <tr className='tableHeader'><td colSpan='2'>{want ? 'Want List' : 'My Beanies'}</td></tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    );
   }
 
   const addBeanieToWantList = async(beanie) => {
@@ -107,7 +83,10 @@ const User = () => {
         <div className='userData'>
           <h3>Username {userState.user ? userState.user.username : null}</h3>
           <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
-          {renderMyList(want ? userState.user.wantlist : userState.user.beanies, want ? handleRemoveFromWantList : handleRemoveFromMyBeanies)}
+          {want ?
+            <UserList beanies={userState.user.wantlist} setBeanie={setBeanie} rmFunc={handleRemoveFromWantList} /> :
+            <UserList beanies={userState.user.beanies} setBeanie={setBeanie} rmFunc={handleRemoveFromMyBeanies} />
+          }
         </div>
 
         <div className='all'>

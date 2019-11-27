@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const UserList = ({ beanies, want = false, rmFunc = null }) => {
-  const [beanie, setBeanie] = useState(null);
+const UserList = ({ beanies, want = false, setBeanie = null, rmFunc = null }) => {
 
   const renderMyList = () => {
     if (!beanies) return;

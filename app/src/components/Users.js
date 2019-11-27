@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../UserContext';
 import UserList from './UserList';
+import Beanie from './Beanie';
 import { users } from '../api';
 import '../css/users.css';
 
@@ -8,6 +9,7 @@ const Users = () => {
   const userState = useContext(UserContext);
   const [allUsers, setUsers] = useState([]);
   const [user, setUser] = useState(null);
+  const [beanie, setBeanie] = useState(null);
 
   useEffect(() => {
     const allUsers = async() => {
@@ -34,8 +36,12 @@ const Users = () => {
   return (
     <div className='users'>
       {renderUsers()}
-      {user ? <UserList beanies={user.beanies} /> : null}
-      {user ? <UserList beanies={user.wantlist} want={true} /> : null}
+      <h4>{user ? `Selected user: ${user.username}` : ''}</h4>
+      <div className='userData'>
+        {user ? <UserList beanies={user.beanies} setBeanie={setBeanie} /> : null}
+        {user ? <UserList beanies={user.wantlist} want={true} setBeanie={setBeanie} /> : null}
+        {beanie ? <Beanie beanie={beanie} /> : null}
+      </div>
     </div>
   )
 }

@@ -5,3 +5,14 @@
   background-color: #eee;
   cursor: pointer;
 }
+.userData {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 600px) {
+  .userData {
+    flex-direction: column;
+  }
+}
