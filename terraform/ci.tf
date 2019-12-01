@@ -90,18 +90,11 @@ resource "aws_codebuild_project" "app" {
     type = "NO_ARTIFACTS"
   }
 
-  # cache {
-  #   type     = "S3"
-  #   location = "${aws_s3_bucket.beanieboo.bucket}"
-  # }
-
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/standard:2.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-
-    # environment variables go here
   }
 
   source {
@@ -118,4 +111,15 @@ resource "aws_codebuild_project" "app" {
 
 resource "aws_codebuild_webhook" "app" {
   project_name = "${aws_codebuild_project.app.name}"
+  filter_group {
+    filter {
+      type = "EVENT"
+      pattern = "PUSH"
+    }
+
+    filter {
+      type = "HEAD_REF"
+      pattern = "master"
+    }
+  }
 }
