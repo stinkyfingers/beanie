@@ -74,6 +74,35 @@ module.exports = class Beanie {
     });
   }
 
+  // static async list(names) {
+  //   const params = {
+  //     TableName: tableName,
+  //   }
+  //   return new Promise((res, rej) => {
+  //     ddb.scan(params, async(err, data) => {
+  //       if (err) {
+  //         rej(err);
+  //       }
+  //       if (!data) {
+  //         rej('data is null');
+  //         return;
+  //       }
+  //       try {
+  //         let beanies = [];
+  //         await data.Items.forEach((item) => {
+  //           const b = AWS.DynamoDB.Converter.unmarshall(item);
+  //           if (!names.includes(b.name)) return;
+  //           beanies.push(b);;
+  //         });
+  //         res(beanies);
+  //       } catch (err) {
+  //         console.log('all() error: ', err)
+  //         rej(err);
+  //       }
+  //     });
+  //   });
+  // }
+
   static async all() {
     const params = {
       TableName: tableName,
@@ -116,6 +145,18 @@ module.exports = class Beanie {
         '#name': 'name',
         '#family': 'family',
         '#animal': 'animal',
+        '#number': 'number',
+        '#variety': 'variety',
+        '#animal': 'animal',
+        '#exclusiveTo': 'exclusiveTo',
+        '#birthday': 'birthday',
+        '#introDate': 'introDate',
+        '#retireDate': 'retireDate',
+        '#height': 'height',
+        '#length': 'length',
+        '#st': 'st',
+        '#tt': 'tt',
+        '#image': 'image'
       },
       ExpressionAttributeValues: {
         ':family': {
@@ -123,7 +164,7 @@ module.exports = class Beanie {
         }
       },
       KeyConditionExpression: `#family = :family`,
-      ProjectionExpression: '#name,#family,#animal'
+      ProjectionExpression: '#name,#family,#animal,#number,#variety,#exclusiveTo,#birthday,#introDate,#retireDate,#height,#length,#tt,#st,#image'
     }
     return new Promise((res, rej) => {
       ddb.query(params, async(err, data) => {

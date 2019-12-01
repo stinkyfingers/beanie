@@ -1,11 +1,15 @@
-div.lists {
+.user {
   display: flex;
+  flex-direction: row;
 }
 
-.userData {
+.lists {
+  display: flex;
+  flex-direction: column;
   background-color: #eee;
   overflow: scroll;
 }
+
 .beanie {
   width: 25%;
 }

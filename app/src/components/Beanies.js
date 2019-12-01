@@ -4,6 +4,8 @@ import UserContext from '../UserContext';
 import _ from 'lodash';
 import { deleteBeanie } from '../api';
 import '../css/beanies.css';
+import ReactPDF, { PDFDownloadLink } from '@react-pdf/renderer';
+import Pdf from './Pdf';
 
 const Beanies = ({addBeanie, setBeanie}) => {
   const beanieState = useContext(BeanieContext);
@@ -45,6 +47,10 @@ const Beanies = ({addBeanie, setBeanie}) => {
   return(
     <div className='beanies'>
       <div className='newBeanie'><button onClick={() => setBeanie({isNew: true})}>New Beanie</button></div>
+      <PDFDownloadLink document={<Pdf beanies={beanieState.beanies} title='Beanies' />} fileName="beanies.pdf">
+        {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+      </PDFDownloadLink>
+
       <table className='beanies'>
         <thead>
           <tr className='tableHeader'>
