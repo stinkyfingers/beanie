@@ -163,7 +163,7 @@ resource "aws_dynamodb_table" "beanieboos" {
     write_capacity = 5
     read_capacity = 5
     projection_type = "INCLUDE"
-    non_key_attributes = ["animal","number","variety","exclusiveTo","birthday","introDate","retireDate","height","length","tt","st","image"]
+    non_key_attributes = ["animal"]
   }
 }
 
