@@ -74,35 +74,6 @@ module.exports = class Beanie {
     });
   }
 
-  // static async list(names) {
-  //   const params = {
-  //     TableName: tableName,
-  //   }
-  //   return new Promise((res, rej) => {
-  //     ddb.scan(params, async(err, data) => {
-  //       if (err) {
-  //         rej(err);
-  //       }
-  //       if (!data) {
-  //         rej('data is null');
-  //         return;
-  //       }
-  //       try {
-  //         let beanies = [];
-  //         await data.Items.forEach((item) => {
-  //           const b = AWS.DynamoDB.Converter.unmarshall(item);
-  //           if (!names.includes(b.name)) return;
-  //           beanies.push(b);;
-  //         });
-  //         res(beanies);
-  //       } catch (err) {
-  //         console.log('all() error: ', err)
-  //         rej(err);
-  //       }
-  //     });
-  //   });
-  // }
-
   static async all() {
     const params = {
       TableName: tableName,
