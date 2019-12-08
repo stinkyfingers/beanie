@@ -25,7 +25,7 @@ const Beanies = ({addBeanie, setBeanie}) => {
     if (checked) {
       current.push(beanie);
     } else {
-      current = _.remove(current, (n) => n === beanie);
+      current = _.remove(current, (n) => n !== beanie);
     }
     setPdfBeanies(current);
     forceUpdate();
