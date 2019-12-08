@@ -80,19 +80,16 @@ const User = () => {
   return (
     <div className='user'>
       <div className='lists'>
-        <div className='userData'>
-          <h3>Username {userState.user ? userState.user.username : null}</h3>
-          <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
-          {want ?
-            <UserList beanies={userState.user.wantlist} setBeanie={setBeanie} rmFunc={handleRemoveFromWantList} /> :
-            <UserList beanies={userState.user.beanies} setBeanie={setBeanie} rmFunc={handleRemoveFromMyBeanies} />
-          }
+        <h3>Username {userState.user ? userState.user.username : null}</h3>
+        <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
+        {want ?
+          <UserList beanies={userState.user.wantlist} setBeanie={setBeanie} rmFunc={handleRemoveFromWantList} /> :
+          <UserList beanies={userState.user.beanies} setBeanie={setBeanie} rmFunc={handleRemoveFromMyBeanies} />
+        }
         </div>
-
-        <div className='all'>
+      <div className='all'>
         {beanie ? <Beanie beanie={beanie} /> : null}
         <Beanies addBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} setBeanie={setBeanie} />
-        </div>
       </div>
     </div>
   );
