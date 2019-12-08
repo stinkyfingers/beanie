@@ -8,6 +8,16 @@ div.all {
   flex-direction: row;
 }
 
+.checked {
+  background-color: #e4e;
+}
+.unchecked {
+  background-color: #e9e;
+}
+.newBeanie>button,.newBeanie>a {
+  margin: 1em;
+}
+
 @media screen and (max-width: 600px) {
   div.all {
     flex-direction: column;

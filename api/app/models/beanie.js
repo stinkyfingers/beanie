@@ -145,18 +145,6 @@ module.exports = class Beanie {
         '#name': 'name',
         '#family': 'family',
         '#animal': 'animal',
-        '#number': 'number',
-        '#variety': 'variety',
-        '#animal': 'animal',
-        '#exclusiveTo': 'exclusiveTo',
-        '#birthday': 'birthday',
-        '#introDate': 'introDate',
-        '#retireDate': 'retireDate',
-        '#height': 'height',
-        '#length': 'length',
-        '#st': 'st',
-        '#tt': 'tt',
-        '#image': 'image'
       },
       ExpressionAttributeValues: {
         ':family': {
@@ -164,7 +152,7 @@ module.exports = class Beanie {
         }
       },
       KeyConditionExpression: `#family = :family`,
-      ProjectionExpression: '#name,#family,#animal,#number,#variety,#exclusiveTo,#birthday,#introDate,#retireDate,#height,#length,#tt,#st,#image'
+      ProjectionExpression: '#name,#family,#animal'
     }
     return new Promise((res, rej) => {
       ddb.query(params, async(err, data) => {
