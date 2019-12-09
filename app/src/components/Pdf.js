@@ -36,17 +36,12 @@ const styles = StyleSheet.create({
 
 const Pdf = ({beanies, title, token}) => {
 
+
+
   const renderViews = () => {
     if (!beanies) return null;
     const views = [];
     for (const beanie of beanies) {
-
-      let src = beanie.image && beanie.image.includes('http') ? beanie.image : null;
-      if (beanie.image && beanie.image.includes('data:image/jpeg;base64')) {
-        const data =  Buffer.from(beanie.image.split('data:image/jpeg;base64,')[1], 'utf8');
-        src = {data, format: 'jpeg'}
-      }
-
       views.push(
         <View key={beanie.name} style={styles.view} wrap={false}>
           <Text wrap={true} style={styles.text}>
@@ -85,8 +80,8 @@ const Pdf = ({beanies, title, token}) => {
           <Text wrap={true} style={styles.text}>
             Sticker Text: <Text wrap={true} style={styles.field}>{beanie.st}</Text>
           </Text>
-          {src ?
-            <Image src={src} style={styles.image}/>: <Text>No Image</Text>
+          {beanie.image ?
+            <Image src={beanie.image} style={styles.image}/>: <Text>No Image</Text>
           }
         </View>
       )

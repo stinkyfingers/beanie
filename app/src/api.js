@@ -178,3 +178,7 @@ export const resetPassword = async (user) => {
     return {error: err};
   }
 };
+
+export const getProxyImage = async (url) => {
+  return `${apiHost}/image?url=${url}`
+}

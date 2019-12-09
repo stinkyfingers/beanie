@@ -8,6 +8,7 @@ const https = require('https');
 const cors = require('cors');
 const User = require('./models/user');
 const Beanie = require('./models/beanie');
+const request = require('request');
 
 const router = express.Router();
 // strips the /flashcards route set up for the target group
@@ -265,6 +266,19 @@ router.delete('/beanie/:name', auth, async (req, res, next) => {
     beanie.delete();
   } catch (err) {
     console.warn(err);
+    next(err);
+  }
+});
+
+router.get('/image', async(req, res, next) => {
+  const url = req.query.url;
+  try {
+    request({
+        url
+    }).on('error', function(e) {
+        res.end(e);
+    }).pipe(res);
+  } catch (err) {
     next(err);
   }
 });

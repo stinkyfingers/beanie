@@ -6,7 +6,7 @@ import { deleteBeanie } from '../api';
 import '../css/beanies.css';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import Pdf from './Pdf';
-import { get } from '../api';
+import { get, getProxyImage } from '../api';
 
 function useForceUpdate(beanie){
     const [value, setValue] = useState(0); // integer state
@@ -70,6 +70,9 @@ const Beanies = ({addBeanie, setBeanie}) => {
     let beanies = [];
     for (let p of pdfBeanies) {
       const b = await get(userState.user.token, p.name);
+      if (b.image && b.image.includes('http://')) {
+        b.image = await getProxyImage(b.image)
+      }
       beanies.push(b);
     }
     setPdfBeanies(beanies);
