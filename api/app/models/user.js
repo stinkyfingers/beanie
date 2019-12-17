@@ -37,8 +37,8 @@ module.exports = class User {
         if (err) {
           rej(err);
         }
-        if (!data) {
-          rej('data is null');
+        if (!data || !data.Item) {
+          rej(`user ${this.username} not found`);
           return;
         }
         try {
