@@ -1,18 +1,24 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from '../UserContext';
 import BeanieContext from '../BeanieContext';
+import FamilyContext from '../FamilyContext';
 import { get, upsert } from '../api';
 import '../css/beanie.css';
 
 const Beanie = ({beanie}) => {
   const userState = useContext(UserContext);
   const beanieState = useContext(BeanieContext);
+  const familyState = useContext(FamilyContext);
+
   const disabled = userState.user.admin ? false : true;
   const [beanieValue, setBeanieValue] = useState(beanie);
   const token = userState.user.token;
 
   useEffect(() => {
-    if (!beanie) return;
+    if (!beanie || beanie.isNew) {
+      setBeanieValue({...beanie, family: familyState.family});
+      return;
+    }
     const getBeanie = async() => {
       try {
         const b = await get(token, beanie.name);
@@ -52,11 +58,11 @@ const Beanie = ({beanie}) => {
 
   const submit = async() => {
     try {
-      await upsert(userState.user.token, beanieValue);
+      const res = await upsert(userState.user.token, beanieValue);
       if (beanieValue.isNew) {
         beanieValue.isNew = null;
         const updatedBeanies = beanieState.beanies;
-        updatedBeanies.push(beanieValue);
+        updatedBeanies.push(res);
         beanieState.setBeanies(updatedBeanies);
       }
     } catch (err) {
@@ -79,7 +85,7 @@ const Beanie = ({beanie}) => {
       <input type='text' name='exclusiveTo' defaultValue={beanieValue.exclusiveTo || ''} disabled={disabled} onChange={handleChange} />
 
       <label htmlFor='family'>Family:</label>
-      <select name='family' defaultValue={beanieValue.family} disabled={disabled} onChange={handleChange}>
+      <select name='family' defaultValue={familyState.family} disabled={disabled} onChange={handleChange}>
         <option value='Beanie Babies'>Beanie Babies</option>
         <option value='Beanie Babies 2.0'>Beanie Babies 2.0</option>
         <option value='Beanie Boos'>Beanie Boos</option>

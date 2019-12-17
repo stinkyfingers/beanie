@@ -17,13 +17,13 @@ function App() {
 
   const useBeanies = () => {
     const [beanies, setBeanies] = useState([]);
-    return {beanies, setBeanies}
+    return {beanies, setBeanies};
   }
   const beanieState = useBeanies();
 
   const useFamily = () => {
     const [family, setFamily] = useState(localStorage.getItem('family') || 'Beanie Babies');
-    return {family, setFamily}
+    return {family, setFamily};
   }
   const familyState = useFamily();
 

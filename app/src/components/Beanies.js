@@ -35,7 +35,7 @@ const Beanies = ({addBeanie, setBeanie}) => {
     let out = [];
     if (!beanieState.beanies) return out;
     const sorted = beanieState.beanies.sort((a, b) => {
-      return a.name < b.name ? -1 : 1;
+      return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
     sorted.map((beanie) => {
       const checked = _.some(pdfBeanies, ['name', beanie.name]);
