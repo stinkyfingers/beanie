@@ -12,6 +12,7 @@ const Beanie = ({beanie}) => {
 
   const disabled = userState.user.admin ? false : true;
   const [beanieValue, setBeanieValue] = useState(beanie);
+  const [savingState, setSavingState] = useState('');
   const token = userState.user.token;
 
   useEffect(() => {
@@ -58,6 +59,7 @@ const Beanie = ({beanie}) => {
 
   const submit = async() => {
     try {
+      setSavingState('Saving...');
       const res = await upsert(userState.user.token, beanieValue);
       if (beanieValue.isNew) {
         beanieValue.isNew = null;
@@ -65,6 +67,7 @@ const Beanie = ({beanie}) => {
         updatedBeanies.push(res);
         beanieState.setBeanies(updatedBeanies);
       }
+      setSavingState('Saving Complete');
     } catch (err) {
       console.warn(err) // TODO
     }
@@ -113,7 +116,12 @@ const Beanie = ({beanie}) => {
       <div className='image'>
         <img src={beanieValue.image} alt={beanieValue.name}/>
       </div>
-      {disabled ? null : <button className='add' onClick={submit}>Save</button>}
+      {disabled ? null :
+        <React.Fragment>
+          <button className='add' onClick={submit}>Save</button>
+          <div className='savingNotice'>{savingState}</div>
+        </React.Fragment>
+      }
     </div>
   )
 }
