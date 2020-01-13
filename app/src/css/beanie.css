@@ -13,7 +13,7 @@
 }
 
 .beanie>.image>img {
-  max-width: 30em
+  width:100%;
 }
 
 .savingNotice {

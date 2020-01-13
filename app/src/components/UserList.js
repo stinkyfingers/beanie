@@ -20,11 +20,6 @@ const UserList = ({ beanies, want = false, setBeanie = null, rmFunc = null }) =>
       <table className='mylist'>
         <thead>
           <tr className='tableHeader'><td colSpan='2'>{want ? 'Want List' : 'My Beanies'}</td></tr>
-          <tr className='tableHeader pdf'>
-            <td colSpan='2'>
-
-            </td>
-          </tr>
         </thead>
         <tbody>{rows}</tbody>
       </table>
