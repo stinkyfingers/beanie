@@ -282,7 +282,8 @@ router.get('/image', async(req, res, next) => {
   }
 });
 
-router.get('*', (req, res) => {
+router.all('*', (req, res) => {
+  console.log(req)
   res.send('I catch everything')
 });
 
