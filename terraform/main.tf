@@ -134,7 +134,7 @@ EOF
 resource "aws_dynamodb_table" "users" {
   name = "beaniebooUsers"
   billing_mode = "PROVISIONED"
-  write_capacity = 20
+  write_capacity = 10
   read_capacity = 10
   hash_key = "username"
   attribute {
@@ -146,7 +146,7 @@ resource "aws_dynamodb_table" "users" {
 resource "aws_dynamodb_table" "beanieboos" {
   name = "beanieboos"
   billing_mode = "PROVISIONED"
-  write_capacity = 20
+  write_capacity = 10
   read_capacity = 10
   hash_key = "name"
   attribute {
