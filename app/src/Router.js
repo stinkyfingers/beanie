@@ -4,7 +4,7 @@ import {
  Route,
  Link
 } from 'react-router-dom'
-import User from './components/User';
+import Dashboard from './components/Dashboard';
 import Users from './components/Users';
 import Password from './components/Password';
 
@@ -12,10 +12,10 @@ import Password from './components/Password';
 export const Nav = () =>
   <div className='nav'>
     <nav>
-      <Link to='/'>Main</Link>
+      <Link className='link' to='/'>Main</Link>
     </nav>
     <nav>
-      <Link to='/users'>Users</Link>
+      <Link className='link' to='/users'>Users</Link>
     </nav>
   </div>;
 
@@ -28,6 +28,6 @@ export const Router = () =>
       <Password />
     </Route>
     <Route path="/">
-      <User />
+      <Dashboard />
     </Route>
   </Switch>;

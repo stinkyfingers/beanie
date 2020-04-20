@@ -11,7 +11,10 @@ const tableName = 'beaniebooUsers';
 
 AWS.config.update({region: region});
 if (process.env.NODE_ENV === 'local') {
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'});
+  AWS.config.endpoint = 'http://localhost:8000';
+}
+if (process.env.NODE_ENV === 'live') {
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'}); // run locally with live db
 }
 
 const ddb = new AWS.DynamoDB();
@@ -170,6 +173,10 @@ module.exports = class User {
       ConditionExpression: 'attribute_exists(username)',
       ReturnValues: 'ALL_NEW'
     }
+    if (!this.beanies) {
+      params.UpdateExpression = 'remove #beanies';
+      params.ExpressionAttributeValues = null;
+    }
     return new Promise((res, rej) => {
       ddb.updateItem(params, (err, data) => {
         if (err) {
@@ -201,6 +208,10 @@ module.exports = class User {
       UpdateExpression: 'set #wantlist = :wantlist',
       ConditionExpression: 'attribute_exists(username)',
       ReturnValues: 'ALL_NEW'
+    }
+    if (!this.wantlist) {
+      params.UpdateExpression = 'remove #wantlist';
+      params.ExpressionAttributeValues = null;
     }
     return new Promise((res, rej) => {
       ddb.updateItem(params, (err, data) => {

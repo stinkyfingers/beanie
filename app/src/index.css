@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+:root {
+  --black :#000;
+  --white: #fff;
+  --red: #f66;
+  --green: #6f6;
+  --purple: #528;
+  --buttonRadius: 2px;
+  --buttonPadding: .4em;
+}

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Login from './components/Login';
 import UserContext from './UserContext';
 import BeanieContext from './BeanieContext';
+import BeaniesContext from './BeaniesContext';
 import FamilyContext from './FamilyContext';
-import { Router, Nav } from './Router';
+import { Router } from './Router';
 import { BrowserRouter } from 'react-router-dom';
 import { getFamily } from './api';
+import Header from './components/Header';
 import './App.css';
 
 function App() {
@@ -19,7 +20,14 @@ function App() {
     const [beanies, setBeanies] = useState([]);
     return {beanies, setBeanies};
   }
-  const beanieState = useBeanies();
+  const beaniesState = useBeanies();
+  const setBeanieState = beaniesState.setBeanies;
+
+  const useBeanie = () => {
+    const [beanie, setBeanie] = useState(null);
+    return {beanie, setBeanie};
+  }
+  const beanieState = useBeanie();
 
   const useFamily = () => {
     const [family, setFamily] = useState(localStorage.getItem('family') || 'Beanie Babies');
@@ -36,46 +44,28 @@ function App() {
           console.warn(b.error) // TODO
           return;
         }
-        beanieState.setBeanies(b);
+        setBeanieState(b);
       } catch (err) {
         console.log(err)// TODO
       }
     }
     allBeanies();
-    return beanieState.setBeanies(null);;
-  }, [userState.user, familyState.family]);
-
-  const renderFamilies = () => (
-    <div className='families'>
-      <select value={familyState.family} onChange={(e) => {localStorage.setItem('family', e.target.value); familyState.setFamily(e.target.value)}}>
-        <option value='Beanie Babies'>Beanie Babies</option>
-        <option value='Beanie Babies 2.0'>Beanies 2.0</option>
-        <option value='Beanie Boos'>Beanie Boos</option>
-        <option value='Beanie Fashion'>Beanie Fashion</option>
-      </select>
-    </div>
-  );
+    return setBeanieState(null);;
+  }, [userState.user, familyState.family, setBeanieState]);
 
 
   return (
     <div className="App">
       <BrowserRouter>
         <UserContext.Provider value={userState}>
-          <BeanieContext.Provider value={beanieState}>
-            <FamilyContext.Provider value={familyState}>
-              <header className="App-header">
-                {renderFamilies()}
-                <div className='name'>
-                  <h1>Beanie Central</h1>
-                  <Nav />
-                </div>
-                <div className='login'>
-                  <Login />
-                </div>
-              </header>
-              <Router />
-            </FamilyContext.Provider>
-          </BeanieContext.Provider>
+          <BeaniesContext.Provider value={beaniesState}>
+            <BeanieContext.Provider value={beanieState}>
+              <FamilyContext.Provider value={familyState}>
+                <Header />
+                <Router />
+              </FamilyContext.Provider>
+            </BeanieContext.Provider>
+          </BeaniesContext.Provider>
         </UserContext.Provider>
       </BrowserRouter>
     </div>

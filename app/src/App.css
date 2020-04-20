@@ -3,84 +3,26 @@
   font-family: "Roboto", "Arial", "Garamond"
 }
 
-.App-header {
-  background-color: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #528;
-}
-.name {
-  font-size: 2em;
-  margin: auto;
-}
-.name>h1 {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.App-link {
-  color: #09d3ac;
-}
-
-.families>select {
-  font-size: 1.4em
-}
-
-.login,.families {
-  margin: 0 1em
-}
-
 button.delete {
-  background-color: #f66;
-}
-button.delete:hover {
-  background-color: #e55;
+  background-color: var(--red);
 }
 
 button.add {
-  background-color: #6f6;
-}
-button.add:hover {
-  background-color: #6e6;
-}
-
-button.login {
-  background-color: #333;
-  color: #eee;
-}
-button.login:hover {
-  background-color: #222;
-  color: #eee;
+  background-color: var(--green);
 }
 
 button {
   border: none;
-  border-radius: 2px;
-  padding: .8em;
-  background-color: #333;
-  color: #eee;
+  border-radius: var(--buttonRadius);
+  padding: var(--buttonPadding);
+  background-color: var(--black);
+  color: var(--white);
+}
+
+button:hover {
+    opacity: .8;
 }
 
 button:hover {
   cursor: pointer;
-}
-
-.nav {
-  font-size: .4em;
-  margin: auto;
-}
-.nav > nav {
-  display: inline;
-  padding: 0 1em;
-}
-
-
-@media screen and (max-width: 600px) {
-  .families>select {
-    font-size: 1em;
-  }
-  .name {
-    font-size: 1em;;
-  }
 }

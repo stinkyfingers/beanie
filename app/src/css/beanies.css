@@ -17,6 +17,13 @@ div.all {
 .newBeanie>button,.newBeanie>a {
   margin: 1em;
 }
+.family {
+  background-color: var(--purple);
+  color: var(--white);
+}
+.beanies {
+  width: 100%;
+}
 
 @media screen and (max-width: 600px) {
   div.all {

@@ -8,10 +8,7 @@
   flex-direction: column;
   background-color: #eee;
   overflow: scroll;
-}
-
-.beanie {
-  width: 25%;
+  min-width: 8em;
 }
 .mylist {
   width: 100%;

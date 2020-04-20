@@ -7,7 +7,10 @@ const tableName = 'beanieboos';
 
 AWS.config.update({region: region});
 if (process.env.NODE_ENV === 'local') {
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'});
+  AWS.config.endpoint = 'http://localhost:8000';
+}
+if (process.env.NODE_ENV === 'live') {
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'}); // run locally with live db
 }
 
 const ddb = new AWS.DynamoDB();

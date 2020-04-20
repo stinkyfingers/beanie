@@ -1,5 +1,8 @@
 .allUsers {
   list-style-type: none;
+  width: 50%;
+  margin: auto;
+  padding: 0;
 }
 .allUsers > li:hover {
   background-color: #eee;
@@ -9,6 +12,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+.userHeader {
+  border-bottom: solid 1px var(--purple);
+  color: var(--purple);
+  width: 50%;
+  margin: auto;
 }
 
 @media screen and (max-width: 600px) {

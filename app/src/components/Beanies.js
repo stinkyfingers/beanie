@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
+import BeaniesContext from '../BeaniesContext';
 import BeanieContext from '../BeanieContext';
 import UserContext from '../UserContext';
+import FamilyContext from '../FamilyContext';
 import _ from 'lodash';
 import { deleteBeanie } from '../api';
 import '../css/beanies.css';
@@ -13,12 +15,15 @@ function useForceUpdate(beanie){
     return () => setValue(value => ++value); // update the state to force render
 }
 
-const Beanies = ({addBeanie, setBeanie}) => {
+const Beanies = ({addBeanie}) => {
   const beanieState = useContext(BeanieContext);
+  const beaniesState = useContext(BeaniesContext);
   const userState = useContext(UserContext);
+  const familyState = useContext(FamilyContext);
   const [pdfBeanies, setPdfBeanies] = useState([]);
   const [pdfReady, setPdfReady] = useState(false);
   const forceUpdate = useForceUpdate();
+  const setBeanie = beanieState.setBeanie;
 
   const handleCheck = (checked, beanie) => {
     let current = pdfBeanies;
@@ -33,8 +38,8 @@ const Beanies = ({addBeanie, setBeanie}) => {
 
   const renderBeanies = () => {
     let out = [];
-    if (!beanieState.beanies) return out;
-    const sorted = beanieState.beanies.sort((a, b) => {
+    if (!beaniesState.beanies) return out;
+    const sorted = beaniesState.beanies.sort((a, b) => {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
     sorted.map((beanie) => {
@@ -43,7 +48,6 @@ const Beanies = ({addBeanie, setBeanie}) => {
         <tr key={beanie.name}>
           <td><input type='checkbox' checked={checked} onChange={(e) => {handleCheck(e.target.checked, beanie)}} value={beanie.name} /></td>
           <td onClick={() => handleCheck(beanie.name)}>{beanie.name}</td>
-          <td>{beanie.family}</td>
           <td>{beanie.animal}</td>
           <td><button className='add' onClick={() => addBeanie(beanie)}>Add</button></td>
           <td><button className='show' onClick={() => setBeanie(beanie)}>Show</button></td>
@@ -59,8 +63,8 @@ const Beanies = ({addBeanie, setBeanie}) => {
     }
     try {
       deleteBeanie(userState.user.token, beanie.name);
-      const updatedBeanies = _.remove(beanieState.beanies, (b) => b.name !== beanie.name);
-      beanieState.setBeanies(updatedBeanies);
+      const updatedBeanies = _.remove(beaniesState.beanies, (b) => b.name !== beanie.name);
+      beaniesState.setBeanies(updatedBeanies);
     } catch (err) {
       console.warn(err);
     }
@@ -77,22 +81,34 @@ const Beanies = ({addBeanie, setBeanie}) => {
     }
     setPdfBeanies(beanies);
     setPdfReady(true);
+  };
+
+  const handleNewBeanieClick = () => {
+    if (beanieState.beanie) {
+      setBeanie(null);
+      return;
+    }
+    setBeanie({isNew: true});
   }
 
   return(
     <div className='beanies'>
       <div className='newBeanie'>
-        <button onClick={() => setBeanie({isNew: true})}>New Beanie</button>
+        <button onClick={handleNewBeanieClick}>{beanieState.beanie ? 'Cancel' : 'New Beanie'}</button>
         {pdfReady ? <React.Fragment><PDFDownloadLink document={<Pdf beanies={pdfBeanies} title='Beanies' token={userState.user.token}/>} fileName="beanies.pdf">
           {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
         </PDFDownloadLink><button onClick={() => setPdfReady(false)}>Cancel PDF</button></React.Fragment> : <button onClick={preparePDF}>Prepare PDF</button>}
       </div>
       <table className='beanies'>
         <thead>
+          <tr className='family'>
+            <td colSpan='6'>
+              {familyState.family}
+            </td>
+          </tr>
           <tr className='tableHeader'>
             <td>PDF</td>
             <td>Name</td>
-            <td>Family</td>
             <td>Animal</td>
             <td />
             <td />

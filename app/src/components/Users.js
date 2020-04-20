@@ -12,7 +12,7 @@ const Users = () => {
   const [beanie, setBeanie] = useState(null);
 
   useEffect(() => {
-    const allUsers = async() => {
+    const allUsersFunc = async() => {
       try {
         const resp = await users(userState.user.token);
         setUsers(resp);
@@ -20,7 +20,7 @@ const Users = () => {
         console.warn(err)
       }
     }
-    allUsers(userState.user.token);
+    allUsersFunc()
     return setUsers(null);
   }, []);
 
@@ -30,16 +30,23 @@ const Users = () => {
     for (const u of allUsers) {
       all.push(<li key={u.username} onClick={() => setUser(u)}>{u.username}</li>);
     }
-    return (<ul className='allUsers'>{all}</ul>)
-  }
+    return (
+      <React.Fragment>
+        <h5 className='userHeader'>
+        Users
+        </h5>
+        <ul className='allUsers'>{all}</ul>
+      </React.Fragment>
+    );
+  };
 
   return (
     <div className='users'>
       {renderUsers()}
       <h4>{user ? `Selected user: ${user.username}` : ''}</h4>
       <div className='userData'>
-        {user ? <UserList beanies={user.beanies} setBeanie={setBeanie} /> : null}
-        {user ? <UserList beanies={user.wantlist} want={true} setBeanie={setBeanie} /> : null}
+        {user ? <UserList beanies={user.beanies} setBeanie={setBeanie} /> : <UserList />}
+        {user ? <UserList beanies={user.wantlist} want={true} setBeanie={setBeanie} /> : <UserList want={true} />}
         {beanie ? <Beanie beanie={beanie} /> : null}
       </div>
     </div>

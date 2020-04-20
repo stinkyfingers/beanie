@@ -40,8 +40,9 @@ const Login = () => {
       case 'password':
         setUser({...user, password: e.target.value});
         break;
+      default:
     }
-  }
+  };
 
   const logoutElement = (<div><button  className='login' onClick={handleLogout}>Log Out</button></div>);
   const emailElement = (

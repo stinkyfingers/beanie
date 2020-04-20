@@ -1,19 +1,22 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from '../UserContext';
 import BeanieContext from '../BeanieContext';
+import BeaniesContext from '../BeaniesContext';
 import FamilyContext from '../FamilyContext';
 import { get, upsert } from '../api';
 import '../css/beanie.css';
 
-const Beanie = ({beanie}) => {
+const Beanie = () => {
   const userState = useContext(UserContext);
+  const beaniesState = useContext(BeaniesContext);
   const beanieState = useContext(BeanieContext);
   const familyState = useContext(FamilyContext);
+  const beanie = beanieState.beanie;
 
-  const disabled = userState.user.admin ? false : true;
+  const disabled = userState.user && userState.user.admin ? false : true;
   const [beanieValue, setBeanieValue] = useState(beanie);
   const [savingState, setSavingState] = useState('');
-  const token = userState.user.token;
+  const token = userState.user && userState.user.token;
 
   useEffect(() => {
     if (!beanie || beanie.isNew) {
@@ -63,15 +66,17 @@ const Beanie = ({beanie}) => {
       const res = await upsert(userState.user.token, beanieValue);
       if (beanieValue.isNew) {
         beanieValue.isNew = null;
-        const updatedBeanies = beanieState.beanies;
+        const updatedBeanies = beaniesState.beanies;
         updatedBeanies.push(res);
-        beanieState.setBeanies(updatedBeanies);
+        beaniesState.setBeanies(updatedBeanies);
       }
       setSavingState('Saving Complete');
     } catch (err) {
       console.warn(err) // TODO
     }
   };
+
+  if (!beanie) return null;
 
   return (
     <div className='beanie'>
