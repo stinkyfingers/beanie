@@ -7,8 +7,6 @@ import '../css/user.css';
 const User = ({ want, setShowWant }) => {
   const userState = useContext(UserContext);
 
-  const [beanie, setBeanie] = useState(null);
-
   if (!userState || !userState.user) return null;
 
 
@@ -53,8 +51,8 @@ const User = ({ want, setShowWant }) => {
       <div className='lists'>
         <button onClick={() => setShowWant(!want)}>{want ? 'Show My Beanies' : 'Show Want List'}</button>
         {want ?
-          <UserList beanies={userState.user.wantlist} setBeanie={setBeanie} rmFunc={handleRemoveFromWantList} want={want} /> :
-          <UserList beanies={userState.user.beanies} setBeanie={setBeanie} rmFunc={handleRemoveFromMyBeanies} want={want} />
+          <UserList beanies={userState.user.wantlist} rmFunc={handleRemoveFromWantList} want={want} /> :
+          <UserList beanies={userState.user.beanies} rmFunc={handleRemoveFromMyBeanies} want={want} />
         }
         </div>
     </div>

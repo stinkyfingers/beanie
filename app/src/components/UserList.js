@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import BeanieContext from '../BeanieContext';
 
-const UserList = ({ beanies = [], want = false, setBeanie = null, rmFunc = null }) => {
+const UserList = ({ beanies = [], want = false, rmFunc = null }) => {
+  const beanieState = useContext(BeanieContext);
 
   const renderMyList = () => {
     if (!beanies) return;
@@ -8,7 +10,7 @@ const UserList = ({ beanies = [], want = false, setBeanie = null, rmFunc = null 
     for (const b of beanies) {
       rows.push(
         <tr key={b}>
-          <td className='show' onClick={(e) => setBeanie({name: b})}>{b}</td>
+          <td className='show' onClick={(e) => beanieState.setBeanie({name: b})}>{b}</td>
           <td>
             {rmFunc ? <button className='delete' onClick={() => rmFunc(b)}>Remove</button> : null}
           </td>
