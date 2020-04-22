@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const config = require('../config');
+const Jimp = require('jimp');
 const converter = AWS.DynamoDB.Converter;
 
 const region = 'us-west-1';
@@ -16,7 +17,7 @@ if (process.env.NODE_ENV === 'live') {
 const ddb = new AWS.DynamoDB();
 
 module.exports = class Beanie {
-  constructor(name = '', image = '', family = '', number = '', variety = '', animal = '', exclusiveTo = '', birthday = '', introDate = '', retireDate = '', height = '', length = '', st = '', tt = '') {
+  constructor(name = '', image = '', family = '', number = '', variety = '', animal = '', exclusiveTo = '', birthday = '', introDate = '', retireDate = '', height = '', length = '', st = '', tt = '', thumbnail = '') {
     this.name = name,
     this.image = image,
     this.family = family,
@@ -30,7 +31,8 @@ module.exports = class Beanie {
     this.height = height,
     this.length = length,
     this.st = st,
-    this.tt = tt
+    this.tt = tt,
+    this.thumbnail = thumbnail
   }
 
   async create() {
@@ -185,5 +187,28 @@ module.exports = class Beanie {
         res(AWS.DynamoDB.Converter.unmarshall(data.Item));
       })
     })
+  }
+
+  async createThumbnail() {
+    const response = {};
+
+    const isLink = this.image.match(/^http:\/\/.*/);
+    if (isLink && isLink.length > 0) {
+      response.data = isLink[0];
+    }
+
+    const isData = this.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (isData && isData.length === 3) {
+      response.type = isData[1];
+      response.data = new Buffer(isData[2], 'base64');
+    }
+
+    const image = await Jimp.read(response.data);
+    await image.resize(60, Jimp.AUTO);
+		await image.quality(30);
+    const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
+    this.thumbnail = buffer.toString('base64');
+    await this.upsert();
+    // await fs.writeFileSync('test2.jpg', this.thumbnail, {encoding: 'base64'});
   }
 }
