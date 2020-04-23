@@ -45,15 +45,6 @@ passport.deserializeUser(function(user, done) {
 
 passport.use('authStrategy', strat);
 router.use(cors())
-// Add headers
-// router.use(function (req, res, next) {
-//   console.log('CORS', req.headers.referer)
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Accept,Authorization');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-//     next();
-// });
 router.options('*', cors())
 router.use(passport.initialize());
 router.use(passport.session());
@@ -183,7 +174,6 @@ router.post('/beanies', auth, async (req, res, next) => {
 });
 
 router.put('/beanies', auth, async (req, res, next) => {
-  console.log('PUT BEANIES CALLED')
   if (!req.user.admin) {
     next(notAuthorized)
   }
@@ -244,8 +234,6 @@ router.get('/beanies', auth, async (req, res, next) => {
 });
 
 router.post('/beanie', auth, async (req, res, next) => {
-  console.log('POST BEANIES CALLED')
-
   // TODO - a better way
   const beanie = new Beanie()
   beanie.name = req.body.name,
