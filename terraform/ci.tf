@@ -17,7 +17,7 @@ resource "aws_iam_role" "build" {
 EOF
 }
 resource "aws_iam_role_policy" "build" {
-  role = "${aws_iam_role.build.name}"
+  role = aws_iam_role.build.name
 
   policy = <<POLICY
 {
@@ -84,7 +84,7 @@ resource "aws_codebuild_project" "app" {
   name          = "beanieboo"
   description   = "beanieboo"
   build_timeout = "5"
-  service_role  = "${aws_iam_role.build.arn}"
+  service_role  = aws_iam_role.build.arn
 
   artifacts {
     type = "NO_ARTIFACTS"
@@ -110,7 +110,7 @@ resource "aws_codebuild_project" "app" {
 }
 
 resource "aws_codebuild_webhook" "app" {
-  project_name = "${aws_codebuild_project.app.name}"
+  project_name = aws_codebuild_project.app.name
   filter_group {
     filter {
       type = "EVENT"

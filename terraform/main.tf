@@ -26,9 +26,9 @@ EOF
 resource "aws_lambda_function" "beanieboo_server_lambda" {
   filename      = "lambda.zip"
   function_name = "beaniebooserverlambda"
-  role          = "${aws_iam_role.iam_for_lambda.arn}"
+  role          = aws_iam_role.iam_for_lambda.arn
   handler       = "serverlambda.handler"
-  source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   runtime = "nodejs10.x"
 
@@ -48,41 +48,41 @@ data "archive_file" "lambda_zip" {
 resource "aws_lambda_permission" "beanieboo_server_lambda" {
   statement_id  = "AllowExecutionFromApplicationLoadBalancer"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.beanieboo_server_lambda.arn}"
+  function_name = aws_lambda_function.beanieboo_server_lambda.arn
   principal     = "elasticloadbalancing.amazonaws.com"
-  source_arn = "${aws_lb_target_group.beanieboo_server_lambda.arn}"
+  source_arn = aws_lb_target_group.beanieboo_server_lambda.arn
 }
 
 resource "aws_lambda_permission" "beanieboo_server_lambda_live" {
   statement_id  = "AllowExecutionFromApplicationLoadBalancer"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_alias.beanieboo_server_lambda_live.arn}"
+  function_name = aws_lambda_alias.beanieboo_server_lambda_live.arn
   principal     = "elasticloadbalancing.amazonaws.com"
-  source_arn = "${aws_lb_target_group.beanieboo_server_lambda.arn}"
+  source_arn = aws_lb_target_group.beanieboo_server_lambda.arn
 }
 
 resource "aws_lambda_alias" "beanieboo_server_lambda_live" {
   name             = "live"
   description      = "set a live alias"
-  function_name    = "${aws_lambda_function.beanieboo_server_lambda.arn}"
-  function_version = "${aws_lambda_function.beanieboo_server_lambda.version}"
+  function_name    = aws_lambda_function.beanieboo_server_lambda.arn
+  function_version = aws_lambda_function.beanieboo_server_lambda.version
 }
 
 # IAM
 resource "aws_iam_role_policy_attachment" "cloudwatch-attach" {
-  role       = "${aws_iam_role.iam_for_lambda.name}"
+  role       = aws_iam_role.iam_for_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_iam_role_policy_attachment" "dynamo-attach" {
-  role       = "${aws_iam_role.iam_for_lambda.name}"
-  policy_arn = "${aws_iam_policy.dynamo_policy.arn}"
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.dynamo_policy.arn
 }
 
 
 resource "aws_iam_role_policy_attachment" "ssm-attach" {
-  role       = "${aws_iam_role.iam_for_lambda.name}"
-  policy_arn = "${aws_iam_policy.ssm_policy.arn}"
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.ssm_policy.arn
 }
 
 resource "aws_iam_policy" "dynamo_policy" {
@@ -163,7 +163,7 @@ resource "aws_dynamodb_table" "beanieboos" {
     write_capacity = 5
     read_capacity = 5
     projection_type = "INCLUDE"
-    non_key_attributes = ["animal"]
+    non_key_attributes = ["animal","thumbnail"]
   }
 }
 
@@ -175,23 +175,24 @@ resource "aws_lb_target_group" "beanieboo_server_lambda" {
 }
 
 resource "aws_lb_target_group_attachment" "beanieboo_server_lambda" {
-  target_group_arn  = "${aws_lb_target_group.beanieboo_server_lambda.arn}"
-  target_id         = "${aws_lambda_alias.beanieboo_server_lambda_live.arn}"
-  depends_on        = ["aws_lambda_permission.beanieboo_server_lambda_live"]
+  target_group_arn  = aws_lb_target_group.beanieboo_server_lambda.arn
+  target_id         = aws_lambda_alias.beanieboo_server_lambda_live.arn
+  depends_on        = [aws_lambda_permission.beanieboo_server_lambda_live]
 }
 
 resource "aws_lb_listener_rule" "beanieboo_server_lambda" {
-  listener_arn = "${data.terraform_remote_state.stinkyfingers.outputs.stinkyfingers_https_listener}"
+  listener_arn = data.terraform_remote_state.stinkyfingers.outputs.stinkyfingers_https_listener
   priority = 26
   action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.beanieboo_server_lambda.arn}"
+    target_group_arn = aws_lb_target_group.beanieboo_server_lambda.arn
   }
   condition {
-    field = "path-pattern"
-    values = ["/beanieboo/*"]
+    path_pattern {
+      values = ["/beanieboo/*"]
+    }
   }
-  depends_on = ["aws_lb_target_group.beanieboo_server_lambda"]
+  depends_on = [aws_lb_target_group.beanieboo_server_lambda]
 }
 
 # backend

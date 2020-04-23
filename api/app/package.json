@@ -9,6 +9,7 @@
     "master": "NODE_ENV=local node ./scripts/masterlist",
     "scrape": "node ./scripts/scrape",
     "start": "NODE_ENV=local node ./app",
+    "live": "NODE_ENV=live node ./app",
     "zip": "zip -r lambda.zip ."
   },
   "dependencies": {

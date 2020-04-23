@@ -21,7 +21,7 @@ EOF
 }
 
 resource "aws_s3_bucket_public_access_block" "beanie" {
-  bucket = "${aws_s3_bucket.beanie.id}"
+  bucket = aws_s3_bucket.beanie.id
   block_public_acls   = true
   block_public_policy = true
 }
@@ -36,10 +36,10 @@ locals {
 
 resource "aws_cloudfront_distribution" "beanie" {
   origin {
-    domain_name = "${aws_s3_bucket.beanie.bucket_domain_name}"
-    origin_id   = "${local.s3_origin_id}"
+    domain_name = aws_s3_bucket.beanie.bucket_domain_name
+    origin_id   = local.s3_origin_id
     s3_origin_config {
-      origin_access_identity = "${aws_cloudfront_origin_access_identity.beanie.cloudfront_access_identity_path}"
+      origin_access_identity = aws_cloudfront_origin_access_identity.beanie.cloudfront_access_identity_path
     }
   }
 
@@ -52,7 +52,7 @@ resource "aws_cloudfront_distribution" "beanie" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${local.s3_origin_id}"
+    target_origin_id = local.s3_origin_id
     trusted_signers = []
 
     forwarded_values {
@@ -92,7 +92,7 @@ resource "aws_route53_record" "beanie" {
   type    = "A"
 
   alias {
-    name                   = "${aws_cloudfront_distribution.beanie.domain_name}"
+    name                   = aws_cloudfront_distribution.beanie.domain_name
     zone_id                = "Z2FDTNDATAQYW2"
     evaluate_target_health = false
   }
