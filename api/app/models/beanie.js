@@ -204,10 +204,20 @@ module.exports = class Beanie {
       response.data = isLink[0];
     }
 
+    const isHTTPSLink = this.image.match(/^https:\/\/.*/);
+    if (isHTTPSLink && isHTTPSLink.length > 0) {
+      response.data = isHTTPSLink[0];
+    }
+
     const isData = this.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (isData && isData.length === 3) {
       response.type = isData[1];
-      response.data = new Buffer(isData[2], 'base64'); // TODO Buffer is deprecated
+      response.data = Buffer.from(isData[2], 'base64');
+    }
+
+    if (!response.data) {
+      return;
+      console.log('unknown image type: ', this.image);
     }
 
     const image = await Jimp.read(response.data);
