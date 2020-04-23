@@ -47,8 +47,11 @@ passport.use('authStrategy', strat);
 router.use(cors())
 // Add headers
 router.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://beanies.john-shenk.com');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  console.log('CORS', req)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Accept,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
 router.options('*', cors())
