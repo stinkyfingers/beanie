@@ -45,6 +45,12 @@ passport.deserializeUser(function(user, done) {
 
 passport.use('authStrategy', strat);
 router.use(cors())
+// Add headers
+router.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'https://beanies.john-shenk.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    next();
+});
 router.options('*', cors())
 router.use(passport.initialize());
 router.use(passport.session());
