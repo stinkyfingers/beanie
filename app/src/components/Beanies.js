@@ -47,8 +47,9 @@ const Beanies = ({addBeanie}) => {
       return out.push(
         <tr key={beanie.name}>
           <td><input type='checkbox' checked={checked} onChange={(e) => {handleCheck(e.target.checked, beanie)}} value={beanie.name} /></td>
-          <td onClick={() => handleCheck(beanie.name)}>{beanie.name}</td>
-          <td>{beanie.animal}</td>
+          <td>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} onClick={() => setBeanie(beanie)} className='clickable' /> : null}</td>
+          <td className='clickable' onClick={() => setBeanie(beanie)}>{beanie.name}</td>
+          <td className='clickable' onClick={() => setBeanie(beanie)}>{beanie.animal}</td>
           <td><button className='add' onClick={() => addBeanie(beanie)}>Add</button></td>
           <td><button className='show' onClick={() => setBeanie(beanie)}>Show</button></td>
           <td><button className='delete' onClick={() => handleDelete(beanie)}>Delete</button></td>
@@ -102,12 +103,13 @@ const Beanies = ({addBeanie}) => {
       <table className='beanies'>
         <thead>
           <tr className='family'>
-            <td colSpan='6'>
+            <td colSpan='7'>
               {familyState.family}
             </td>
           </tr>
           <tr className='tableHeader'>
             <td>PDF</td>
+            <td></td>
             <td>Name</td>
             <td>Animal</td>
             <td />

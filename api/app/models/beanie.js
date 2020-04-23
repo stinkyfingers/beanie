@@ -86,8 +86,9 @@ module.exports = class Beanie {
         '#name': 'name',
         '#family': 'family',
         '#animal': 'animal',
+        '#thumbnail': 'thumbnail'
       },
-      ProjectionExpression: '#name,#family,#animal'
+      ProjectionExpression: '#name,#family,#animal,#thumbnail'
     }
     return new Promise((res, rej) => {
       ddb.scan(params, async(err, data) => {
@@ -121,6 +122,7 @@ module.exports = class Beanie {
         '#name': 'name',
         '#family': 'family',
         '#animal': 'animal',
+        '#thumbnail': 'thumbnail'
       },
       ExpressionAttributeValues: {
         ':family': {
@@ -128,7 +130,7 @@ module.exports = class Beanie {
         }
       },
       KeyConditionExpression: `#family = :family`,
-      ProjectionExpression: '#name,#family,#animal'
+      ProjectionExpression: '#name,#family,#animal,#thumbnail'
     }
     return new Promise((res, rej) => {
       ddb.query(params, async(err, data) => {
@@ -154,7 +156,12 @@ module.exports = class Beanie {
     });
   }
 
-  upsert() {
+  async upsert() {
+    if (!this.thumbnail) {
+      await this.createThumbnail();
+    }
+    await this.getBase64ImageData();
+
     const params = {
       TableName: tableName,
       Item: converter.marshall(this, {convertEmptyValues: true}),
@@ -207,8 +214,19 @@ module.exports = class Beanie {
     await image.resize(60, Jimp.AUTO);
 		await image.quality(30);
     const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
-    this.thumbnail = buffer.toString('base64');
-    await this.upsert();
+    this.thumbnail = 'data:image/jpeg;base64,' + buffer.toString('base64');
     // await fs.writeFileSync('test2.jpg', this.thumbnail, {encoding: 'base64'});
+  }
+
+  async getBase64ImageData() {
+    const isLink = this.image.match(/^http:\/\/.*/);
+    if (!isLink || isLink.length === 0) {
+      return;
+    }
+    const response = {};
+    response.data = isLink[0];
+    const image = await Jimp.read(response.data);
+    const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
+    this.image = 'data:image/jpeg;base64,' + buffer.toString('base64');
   }
 }

@@ -24,6 +24,10 @@ div.all {
 .beanies {
   width: 100%;
 }
+.clickable:hover {
+  cursor:pointer;
+  opacity: .6;
+}
 
 @media screen and (max-width: 600px) {
   div.all {

@@ -121,6 +121,9 @@ const Beanie = () => {
       <div className='image'>
         <img src={beanieValue.image} alt={beanieValue.name}/>
       </div>
+      <div className='thumbnail'>
+        {beanieValue.thumbnail ? <img src={beanieValue.thumbnail} alt={beanieValue.name}/> : 'Thumbmail image not created'}
+      </div>
       {disabled ? null :
         <React.Fragment>
           <button className='add' onClick={submit}>Save</button>
