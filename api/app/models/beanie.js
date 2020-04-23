@@ -157,6 +157,7 @@ module.exports = class Beanie {
   }
 
   async upsert() {
+    console.log("UPSERT")
     if (!this.thumbnail) {
       await this.createThumbnail();
     }
@@ -166,13 +167,14 @@ module.exports = class Beanie {
       TableName: tableName,
       Item: converter.marshall(this, {convertEmptyValues: true}),
     }
-
+    console.log("PUTTING")
     return new Promise((res, rej) => {
       ddb.putItem(params, (err, data) => {
         if (err) {
           rej(err);
           return;
         }
+        console.log("PUTTED ", this)
         res(this)
       });
     });
