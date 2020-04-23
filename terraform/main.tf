@@ -31,6 +31,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   runtime = "nodejs10.x"
+  timeout = "30"
 
   environment {
     variables = {
@@ -163,7 +164,7 @@ resource "aws_dynamodb_table" "beanieboos" {
     write_capacity = 5
     read_capacity = 5
     projection_type = "INCLUDE"
-    non_key_attributes = ["animal","thumbnail"]
+    non_key_attributes = ["thumbnail","animal"]
   }
 }
 
