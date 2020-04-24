@@ -27,7 +27,7 @@ describe('Beanie', () => {
   });
 });
 
-describe.only('image conversion', () => {
+describe('image conversion', () => {
   let beanie = new Beanie('test');
   let b;
   it('gets', async () => {

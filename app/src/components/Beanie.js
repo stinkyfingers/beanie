@@ -33,7 +33,7 @@ const Beanie = () => {
     }
     getBeanie();
     return (setBeanieValue(null))
-  }, [beanie, token]);
+  }, [beanie, token, familyState.family]);
 
   if (!beanieValue) return null;
 

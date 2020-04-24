@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../UserContext';
+import BeanieContext from '../BeanieContext';
 import UserList from './UserList';
 import Beanie from './Beanie';
 import { users } from '../api';
@@ -7,9 +8,9 @@ import '../css/users.css';
 
 const Users = () => {
   const userState = useContext(UserContext);
+  const beanieContext = useContext(BeanieContext);
   const [allUsers, setUsers] = useState([]);
   const [user, setUser] = useState(null);
-  const [beanie, setBeanie] = useState(null);
 
   useEffect(() => {
     const allUsersFunc = async() => {
@@ -22,7 +23,7 @@ const Users = () => {
     }
     allUsersFunc()
     return setUsers(null);
-  }, []);
+  }, [userState.user.token]);
 
   const renderUsers = () => {
     if (!allUsers) return null;
@@ -45,9 +46,9 @@ const Users = () => {
       {renderUsers()}
       <h4>{user ? `Selected user: ${user.username}` : ''}</h4>
       <div className='userData'>
-        {user ? <UserList beanies={user.beanies} setBeanie={setBeanie} /> : <UserList />}
-        {user ? <UserList beanies={user.wantlist} want={true} setBeanie={setBeanie} /> : <UserList want={true} />}
-        {beanie ? <Beanie beanie={beanie} /> : null}
+        {user ? <UserList beanies={user.beanies} setBeanie={beanieContext.setBeanie} /> : <UserList />}
+        {user ? <UserList beanies={user.wantlist} want={true} setBeanie={beanieContext.setBeanie} /> : <UserList want={true} />}
+        {beanieContext.beanie ? <Beanie beanie={beanieContext.beanie} /> : null}
       </div>
     </div>
   )

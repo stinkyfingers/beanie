@@ -282,6 +282,18 @@ router.get('/image', async(req, res, next) => {
   }
 });
 
+router.post('/image', async(req, res, next) => {
+  const family = req.query.family;
+  try {
+    const ok = await Beanie.updateImages(family)
+    console.log(ok)
+    next(ok)
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 router.all('*', (req, res) => {
   console.log(req)
   res.send('I catch everything')

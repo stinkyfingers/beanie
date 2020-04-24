@@ -238,4 +238,38 @@ module.exports = class Beanie {
     const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
     this.image = 'data:image/jpeg;base64,' + buffer.toString('base64');
   }
+
+  static async updateImages(family) {
+    console.log(family)
+    const fam = await Beanie.family(family)
+    console.log(fam.length)
+    for (let i = 0; i < fam.length; i++) {
+      const e = fam[i];
+      if (e.thumbnail && e.thumbnail !== '') {
+        continue
+      }
+      console.log(e.name)
+      const bb = new Beanie(e.name)
+
+      const b = await bb.get()
+      const beanie = new Beanie(
+        b.name,
+        b.image,
+        b.family,
+        b.number,
+        b.variety,
+        b.animal,
+        b.exclusiveTo,
+        b.birthday,
+        b.introDate,
+        b.retireDate,
+        b.height,
+        b.length,
+        b.st,
+        b.tt
+      );
+      await beanie.upsert();
+    }
+    return 'ok'
+  }
 }

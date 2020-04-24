@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useContext } from 'react';
 import UserContext from '../UserContext';
 import UserList from './UserList';
 import { updateWantList, updateMyBeanies } from '../api';
