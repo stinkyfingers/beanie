@@ -38,8 +38,10 @@ const Beanies = ({addBeanie}) => {
 
   const renderBeanies = () => {
     let out = [];
-    if (!beaniesState.beanies) return out;
-    const sorted = beaniesState.beanies.sort((a, b) => {
+    if (!beaniesState.beanies || !beaniesState.beanies.beanies) return out;
+    // console.log(beaniesState.beanies.LastEvaluatedKey)
+
+    const sorted = beaniesState.beanies.beanies.sort((a, b) => {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
     sorted.map((beanie) => {
@@ -47,7 +49,7 @@ const Beanies = ({addBeanie}) => {
       return out.push(
         <tr key={beanie.name}>
           <td><input type='checkbox' checked={checked} onChange={(e) => {handleCheck(e.target.checked, beanie)}} value={beanie.name} /></td>
-          <td>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} onClick={() => setBeanie(beanie)} className='clickable' /> : null}</td>
+          <td>{beanie.thumbnail && beanie.family !== 'Beanie Babies' ? <img src={beanie.thumbnail} alt={beanie.name} onClick={() => setBeanie(beanie)} className='clickable' /> : null}</td>
           <td className='clickable' onClick={() => setBeanie(beanie)}>{beanie.name}</td>
           <td className='clickable' onClick={() => setBeanie(beanie)}>{beanie.animal}</td>
           <td><button className='add' onClick={() => addBeanie(beanie)}>Add</button></td>

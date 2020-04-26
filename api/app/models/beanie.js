@@ -114,7 +114,7 @@ module.exports = class Beanie {
     });
   }
 
-  static async family(family) {
+  static async family(family, exlusiveStartKey) {
     const params = {
       TableName: tableName,
       IndexName: 'family',
@@ -130,7 +130,11 @@ module.exports = class Beanie {
         }
       },
       KeyConditionExpression: `#family = :family`,
-      ProjectionExpression: '#name,#family,#animal,#thumbnail'
+      ProjectionExpression: '#name,#family,#animal,#thumbnail',
+      // Limit: 2
+    }
+    if (exlusiveStartKey) {
+      params.ExclusiveStartKey = exclusiveStartKey;
     }
     return new Promise((res, rej) => {
       ddb.query(params, async(err, data) => {
@@ -147,7 +151,7 @@ module.exports = class Beanie {
             const b = AWS.DynamoDB.Converter.unmarshall(item);
             beanies.push(b);;
           });
-          res(beanies);
+          res({beanies, LastEvaluatedKey: data.LastEvaluatedKey});
         } catch (err) {
           console.log('all() error: ', err)
           rej(err);
