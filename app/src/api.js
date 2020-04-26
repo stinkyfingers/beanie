@@ -67,7 +67,10 @@ export const getFamily = async (token, family) => {
       headers: {'token': token}
     });
     const u = await resp.json();
-    if (u.error) return {error: u.error};
+    if (u.error) {
+      console.log('JSON ERROR: ', u)
+      return {error: u.error};
+    };
     return u;
   } catch (err) {
     return {error: err};

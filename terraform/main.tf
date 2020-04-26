@@ -31,7 +31,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   runtime = "nodejs10.x"
-  timeout = "30"
+  timeout = "60"
 
   environment {
     variables = {
