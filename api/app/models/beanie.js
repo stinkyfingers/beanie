@@ -196,6 +196,7 @@ module.exports = class Beanie {
   }
 
   async createThumbnail() {
+    if (!this.image) return;
     const response = {};
 
     const isLink = this.image.match(/^http:\/\/.*/);
@@ -228,6 +229,7 @@ module.exports = class Beanie {
   }
 
   async getBase64ImageData() {
+    if (!this.image) return;
     const isLink = this.image.match(/^http:\/\/.*/);
     if (!isLink || isLink.length === 0) {
       return;
