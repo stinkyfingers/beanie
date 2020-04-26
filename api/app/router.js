@@ -215,7 +215,9 @@ router.get('/beanie/:name', auth, async (req, res, next) => {
 
 router.get('/beanies/:family', auth, async (req, res, next) => {
   try {
-    const beanies = await Beanie.family(req.params.family, req.params.exclusiveStartKey);
+    console.log('family: ', req.params.family)
+    const beanies = await Beanie.family(req.params.family);
+    console.log("length: ", beanies.length)
     res.json(beanies);
   } catch (err) {
     console.warn(err);
