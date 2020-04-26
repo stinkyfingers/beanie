@@ -132,6 +132,15 @@ module.exports = class Beanie {
       KeyConditionExpression: `#family = :family`,
       ProjectionExpression: '#name,#family,#animal,#thumbnail'
     }
+    // TODO response seems too large for lambda to handle
+    if (family === 'Beanie Babies') {
+      params.ProjectionExpression = '#name,#family,#animal'; // TODO
+      params.ExpressionAttributeNames = {
+        '#name': 'name',
+        '#family': 'family',
+        '#animal': 'animal',
+      }
+    };
     return new Promise((res, rej) => {
       ddb.query(params, async(err, data) => {
         if (err) {
