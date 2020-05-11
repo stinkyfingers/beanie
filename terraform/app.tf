@@ -79,7 +79,7 @@ resource "aws_cloudfront_distribution" "beanie" {
 }
 
   viewer_certificate {
-      acm_certificate_arn            = "arn:aws:acm:us-east-1:671958020402:certificate/daa73cdf-03b5-4f60-b416-71fe22a4523e"
+      acm_certificate_arn            = "arn:aws:acm:us-east-1:671958020402:certificate/fc7ab094-b641-4898-8aca-24739e555f73"
       cloudfront_default_certificate = false
       minimum_protocol_version       = "TLSv1.1_2016"
       ssl_support_method             = "sni-only"
