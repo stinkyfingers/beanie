@@ -1,10 +1,10 @@
 const AWS = require('aws-sdk');
-const config = require('../config');
 const Jimp = require('jimp');
 const converter = AWS.DynamoDB.Converter;
 
 const region = 'us-west-1';
-const tableName = 'beanieboos';
+const tableName = 'beanies';
+const bucket = 'beaniedata.john-shenk.com';
 
 AWS.config.update({region: region});
 if (process.env.NODE_ENV === 'local') {
@@ -15,9 +15,10 @@ if (process.env.NODE_ENV === 'live') {
 }
 
 const ddb = new AWS.DynamoDB();
+const s3 = new AWS.S3();
 
 module.exports = class Beanie {
-  constructor(name = '', image = '', family = '', number = '', variety = '', animal = '', exclusiveTo = '', birthday = '', introDate = '', retireDate = '', height = '', length = '', st = '', tt = '', thumbnail = '') {
+  constructor({name = '', image = '', family = '', number = '', variety = '', animal = '', exclusiveTo = '', birthday = '', introDate = '', retireDate = '', height = '', length = '', st = '', tt = '', thumbnail = ''}) {
     this.name = name,
     this.image = image,
     this.family = family,
@@ -32,92 +33,83 @@ module.exports = class Beanie {
     this.length = length,
     this.st = st,
     this.tt = tt,
-    this.thumbnail = thumbnail
+    this.thumbnail = thumbnail;
   }
 
   async create() {
-    const params = {
+    if (this.image) {
+      try {
+        await this.createThumbnail();
+        await this.getBase64ImageData();
+
+        const s3Params = {
+          Bucket: bucket,
+          Key: `${this.name}.${this.family}`,
+          Body: Buffer.from(this.image)
+        };
+        await s3.upload(s3Params).promise();
+      } catch (err) {
+        Object.assign(this, { error: err });
+      }
+    }
+    this.image = undefined;
+    const dbParams = {
       TableName: tableName,
       Item: converter.marshall(this, {convertEmptyValues: true}),
       ConditionExpression: 'attribute_not_exists(username)'
+    };
+    try {
+      const data = await ddb.putItem(dbParams).promise();
+      const resp = AWS.DynamoDB.Converter.unmarshall(data.Item);
+      Object.assign(this, resp);
+    } catch (err) {
+      console.error(err);
+      return {error: err};
     }
 
-    return new Promise((res, rej) => {
-      ddb.putItem(params, (err, data) => {
-        if (err) {
-          rej(err);
-          return;
-        }
-        res(AWS.DynamoDB.Converter.unmarshall(data.Item));
-      });
-    });
+
+    return this;
   }
 
   async get() {
+    // db data
     const params = {
       TableName: tableName,
       Key: {
-        'name': {S: this.name}
+        'name': {S: this.name},
+        'family': {S: this.family}
+      }
+    };
+    let u;
+    try {
+      const data = await ddb.getItem(params).promise();
+      u = AWS.DynamoDB.Converter.unmarshall(data.Item);
+      Object.assign(this, u);
+    } catch (err) {
+      console.error(err);
+      u.error = err;
+      return u;
+    }
+
+    // get image from S3
+    try {
+      const image = await s3.getObject({
+        Bucket: bucket,
+        Key: `${this.name}.${this.family}`
+      }).promise();
+      const buff = Buffer.from(image.Body);
+      this.image = buff.toString();
+    } catch (err) {
+      if (err.code === 'NoSuchKey') {
+        this.error = 'cannot find image';
       }
     }
-    return new Promise((res, rej) => {
-      ddb.getItem(params, async(err, data) => {
-        if (err) {
-          rej(err);
-        }
-        if (!data) {
-          rej('data is null');
-          return;
-        }
-        try {
-          const u = AWS.DynamoDB.Converter.unmarshall(data.Item)
-          res(u);
-        } catch (err) {
-          rej(err);
-        }
-      });
-    });
-  }
-
-  static async all() {
-    const params = {
-      TableName: tableName,
-      ExpressionAttributeNames: {
-        '#name': 'name',
-        '#family': 'family',
-        '#animal': 'animal',
-        '#thumbnail': 'thumbnail'
-      },
-      ProjectionExpression: '#name,#family,#animal,#thumbnail'
-    }
-    return new Promise((res, rej) => {
-      ddb.scan(params, async(err, data) => {
-        if (err) {
-          rej(err);
-        }
-        if (!data) {
-          rej('data is null');
-          return;
-        }
-        try {
-          let beanies = [];
-          await data.Items.forEach((item) => {
-            const b = AWS.DynamoDB.Converter.unmarshall(item);
-            beanies.push(b);;
-          });
-          res(beanies);
-        } catch (err) {
-          console.log('all() error: ', err)
-          rej(err);
-        }
-      });
-    });
+    return this;
   }
 
   static async family(family) {
     const params = {
       TableName: tableName,
-      IndexName: 'family',
       ExpressionAttributeNames: {
         '#name': 'name',
         '#family': 'family',
@@ -129,79 +121,46 @@ module.exports = class Beanie {
           S: family
         }
       },
-      KeyConditionExpression: `#family = :family`,
+      KeyConditionExpression: '#family = :family',
       ProjectionExpression: '#name,#family,#animal,#thumbnail'
-    }
-    // TODO response seems too large for lambda to handle
-    if (family === 'Beanie Babies') {
-      params.ProjectionExpression = '#name,#family,#animal'; // TODO
-      params.ExpressionAttributeNames = {
-        '#name': 'name',
-        '#family': 'family',
-        '#animal': 'animal',
-      }
     };
-    return new Promise((res, rej) => {
-      ddb.query(params, async(err, data) => {
-        if (err) {
-          rej(err);
-        }
-        if (!data) {
-          rej('data is null');
-          return;
-        }
-        try {
-          let beanies = [];
-          await data.Items.forEach((item) => {
-            const b = AWS.DynamoDB.Converter.unmarshall(item);
-            beanies.push(b);;
-          });
-          res(beanies);
-        } catch (err) {
-          console.log('all() error: ', err)
-          rej(err);
-        }
+    try {
+      const data = await ddb.query(params).promise();
+      let beanies = [];
+      await data.Items.forEach((item) => {
+        const b = AWS.DynamoDB.Converter.unmarshall(item);
+        beanies.push(b);
       });
-    });
+      return beanies;
+    } catch (err) {
+      console.error(err);
+      throw new Error(err);
+    }
   }
 
-  async upsert() {
-    if (!this.thumbnail) {
-      await this.createThumbnail();
-    }
-    await this.getBase64ImageData();
-
-    const params = {
-      TableName: tableName,
-      Item: converter.marshall(this, {convertEmptyValues: true}),
-    }
-    return new Promise((res, rej) => {
-      ddb.putItem(params, (err, data) => {
-        if (err) {
-          rej(err);
-          return;
-        }
-        res(this)
-      });
-    });
-  }
-
-  delete() {
-    const params = {
+  async delete () {
+    const dbParams = {
       TableName: tableName,
       Key: {
-        'name': { S: this.name }
+        'name': { S: this.name },
+        'family': { S: this.family }
       }
+    };
+    try {
+      const s3Params = {
+        Bucket: bucket,
+        Key: `${this.name}.${this.family}`
+      };
+      await s3.deleteObject(s3Params).promise();
+    } catch (err) {
+      return { error: err };
     }
-    return new Promise((res, rej) => {
-      ddb.deleteItem(params, (err, data) => {
-        if (err) {
-          rej(err);
-          return;
-        }
-        res(AWS.DynamoDB.Converter.unmarshall(data.Item));
-      })
-    })
+    try {
+      await ddb.deleteItem(dbParams).promise();
+    } catch(err) {
+      console.error(err);
+      return { error: err };
+    }
   }
 
   async createThumbnail() {
@@ -218,7 +177,7 @@ module.exports = class Beanie {
       response.data = isHTTPSLink[0];
     }
 
-    const isData = this.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    const isData = this.image.match(/^data:([A-Za-z-+]+);base64,(.+)$/);
     if (isData && isData.length === 3) {
       response.type = isData[1];
       response.data = Buffer.from(isData[2], 'base64');
@@ -226,43 +185,54 @@ module.exports = class Beanie {
 
     if (!response.data) {
       return;
-      console.log('unknown image type: ', this.image);
     }
 
     const image = await Jimp.read(response.data);
     await image.resize(60, Jimp.AUTO);
-		await image.quality(30);
+    await image.quality(30);
     const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
     this.thumbnail = 'data:image/jpeg;base64,' + buffer.toString('base64');
-    // await fs.writeFileSync('test2.jpg', this.thumbnail, {encoding: 'base64'});
   }
 
   async getBase64ImageData() {
     if (!this.image) return;
+    const isData = this.image.match(/^data:([A-Za-z-+]+);base64,(.+)$/);
+    if (isData && isData.length === 3) {
+      return Buffer.from(isData[2], 'base64');
+    }
+
+    const response = {};
+
     const isLink = this.image.match(/^http:\/\/.*/);
-    if (!isLink || isLink.length === 0) {
+    if (isLink && isLink.length > 0) {
+      response.data = isLink[0];
+    }
+    const isHTTPSLink = this.image.match(/^https:\/\/.*/);
+    if (isHTTPSLink && isHTTPSLink.length > 0) {
+      response.data = isHTTPSLink[0];
+    }
+    if (!isLink && !isHTTPSLink) {
       return;
     }
-    const response = {};
-    response.data = isLink[0];
-    const image = await Jimp.read(response.data);
-    const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
-    this.image = 'data:image/jpeg;base64,' + buffer.toString('base64');
+    try {
+      const image = await Jimp.read(response.data);
+      const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
+      this.image = 'data:image/jpeg;base64,' + buffer.toString('base64');
+    } catch (err) {
+      this.error = err;
+    }
   }
 
   static async updateImages(family) {
-    console.log(family)
-    const fam = await Beanie.family(family)
-    console.log(fam.length)
+    const fam = await Beanie.family(family);
     for (let i = 0; i < fam.length; i++) {
       const e = fam[i];
       if (e.thumbnail && e.thumbnail !== '') {
-        continue
+        continue;
       }
-      console.log(e.name)
-      const bb = new Beanie(e.name)
+      const bb = new Beanie(e.name);
 
-      const b = await bb.get()
+      const b = await bb.get();
       const beanie = new Beanie(
         b.name,
         b.image,
@@ -281,6 +251,6 @@ module.exports = class Beanie {
       );
       await beanie.upsert();
     }
-    return 'ok'
+    return 'ok';
   }
-}
+};

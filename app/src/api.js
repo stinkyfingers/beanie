@@ -46,20 +46,6 @@ export const users = async (token) => {
   }
 };
 
-export const all = async (token) => {
-  try {
-    const resp = await fetch(`${apiHost}/beanies`, {
-      method: 'GET',
-      headers: {'token': token}
-    });
-    const u = await resp.json();
-    if (u.error) return {error: u.error};
-    return u;
-  } catch (err) {
-    return {error: err};
-  }
-};
-
 export const getFamily = async (token, family) => {
   try {
     const resp = await fetch(`${apiHost}/beanies/${family}`, {
@@ -113,9 +99,9 @@ export const updateMyBeanies = async (user) => {
   }
 };
 
-export const get = async (token, name) => {
+export const get = async (token, name, family) => {
   try {
-    const resp = await fetch(`${apiHost}/beanie/${name}`, {
+    const resp = await fetch(`${apiHost}/beanie/${family}/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -123,7 +109,6 @@ export const get = async (token, name) => {
       }
     });
     const u = await resp.json();
-    if (u.error) return {error: u.error};
     return u;
   } catch (err) {
     return {error: err};
@@ -132,7 +117,7 @@ export const get = async (token, name) => {
 
 export const upsert = async (token, beanie) => {
   try {
-    const resp = await fetch(`${apiHost}/beanie`, {
+    const resp = await fetch(`${apiHost}/beanies`, {
       method: 'POST',
       body: JSON.stringify(beanie),
       headers: {
@@ -141,16 +126,15 @@ export const upsert = async (token, beanie) => {
       }
     });
     const u = await resp.json();
-    if (u.error) return {error: u.error};
     return u;
   } catch (err) {
     return {error: err};
   }
 };
 
-export const deleteBeanie = async (token, name) => {
+export const deleteBeanie = async (token, name, family) => {
   try {
-    const resp = await fetch(`${apiHost}/beanie/${name}`, {
+    const resp = await fetch(`${apiHost}/beanie/${family}/${name}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -158,7 +142,6 @@ export const deleteBeanie = async (token, name) => {
       }
     });
     const u = await resp.json();
-    if (u.error) return {error: u.error};
     return u;
   } catch (err) {
     return {error: err};

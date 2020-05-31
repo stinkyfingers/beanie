@@ -4,8 +4,8 @@ const AWS = require('aws-sdk');
 const getPrivateKey = () => {
   return new Promise((res, rej) => {
     if (process.env.NODE_ENV === 'local') {
-       res(fs.readFileSync('../../key/private.pem'));
-       return;
+      res(fs.readFileSync('../../key/private.pem'));
+      return;
     }
     if (process.env.NODE_ENV === 'fakelive') {
       AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'});
@@ -28,13 +28,13 @@ const getPrivateKey = () => {
       res(data.Parameter.Value);
     });
   });
-}
+};
 
 const getPublicKey = () => {
   return new Promise((res, rej) => {
     if (process.env.NODE_ENV === 'local') {
-       res(fs.readFileSync('../../key/public.pem'));
-       return;
+      res(fs.readFileSync('../../key/public.pem'));
+      return;
     }
     if (process.env.NODE_ENV === 'fakelive') {
       AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'});
@@ -57,7 +57,7 @@ const getPublicKey = () => {
       res(data.Parameter.Value);
     });
   });
-}
+};
 
 const getEmailPassword = () => {
   return new Promise((res, rej) => {
@@ -78,6 +78,6 @@ const getEmailPassword = () => {
       res(data.Parameter.Value);
     });
   });
-}
+};
 
 module.exports = { getPrivateKey, getPublicKey, getEmailPassword };

@@ -3,12 +3,14 @@ import Beanies from './Beanies';
 import Beanie from './Beanie';
 import User from './User';
 import UserContext from '../UserContext';
+import BeanieContext from '../BeanieContext';
 import '../css/dashboard.css';
 import { updateWantList, updateMyBeanies } from '../api';
 
 
 const Dashboard = () => {
   const userState = useContext(UserContext);
+  const beanieState = useContext(BeanieContext);
   const [want, setShowWant] = useState(false);
 
   const addBeanieToMyBeanies = async(beanie) => {
@@ -48,7 +50,7 @@ const Dashboard = () => {
       <User want={want} setShowWant={setShowWant} />
       <div className='all'>
         <Beanies addBeanie={want ? addBeanieToWantList : addBeanieToMyBeanies} />
-        <Beanie />
+        {beanieState.beanie ? <Beanie beanie={beanieState.beanie}/> : null}
       </div>
     </div>
   );
