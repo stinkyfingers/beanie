@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk');
 const config = require('../config');
 const crypto = require('crypto');
-const converter = AWS.DynamoDB.Converter;
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const nodemailer = require('nodemailer');
@@ -24,17 +23,17 @@ module.exports = class User {
     this.username = username;
     this.password = password;
     this.admin = false;
-  };
+  }
 
   async login() {
-    const key = await config.getPrivateKey()
+    const key = await config.getPrivateKey();
     const params = {
       TableName: tableName,
       Key: {
         'username': {S: this.username}
       },
       ProjectionExpression: 'username,password,beanies,wantlist,admin'
-    }
+    };
     return new Promise((res, rej) => {
       ddb.getItem(params, async(err, data) => {
         if (err) {
@@ -47,12 +46,12 @@ module.exports = class User {
         try {
           const u = AWS.DynamoDB.Converter.unmarshall(data.Item);
           const buf = new Buffer.from(u.password);
-          const dec = crypto.privateDecrypt(key.toString(), buf)
+          const dec = crypto.privateDecrypt(key.toString(), buf);
           this.beanies = _.get(u.beanies, 'values', []);
           this.wantlist = _.get(u.wantlist, 'values', []);
           this.admin = u.admin;
           if (this.password = dec.toString()) {
-            res(this)
+            res(this);
           }
           rej('authentication error');
         } catch (err) {
@@ -60,7 +59,7 @@ module.exports = class User {
         }
       });
     });
-  };
+  }
 
   async get() {
     const params = {
@@ -69,7 +68,7 @@ module.exports = class User {
         'username': {S: this.username}
       },
       ProjectionExpression: 'username,email,beanies,wantlist,admin'
-    }
+    };
     return new Promise((res, rej) => {
       ddb.getItem(params, async(err, data) => {
         if (err) {
@@ -92,13 +91,13 @@ module.exports = class User {
         }
       });
     });
-  };
+  }
 
   static async all() {
     const params = {
       TableName: tableName,
       ProjectionExpression: 'username,beanies,wantlist'
-    }
+    };
     return new Promise((res, rej) => {
       ddb.scan(params, async(err, data) => {
         if (err) {
@@ -119,11 +118,11 @@ module.exports = class User {
         }
       });
     });
-  };
+  }
 
   async create() {
     const buffer = Buffer.from(this.password);
-    const key = await config.getPublicKey()
+    const key = await config.getPublicKey();
     var encPassword = crypto.publicEncrypt(key.toString(), buffer);
     const params = {
       TableName: tableName,
@@ -134,26 +133,26 @@ module.exports = class User {
         'admin': { BOOL: false}
       },
       ConditionExpression: 'attribute_not_exists(username)'
-    }
+    };
     return new Promise((res, rej) => {
-      ddb.putItem(params, (err, data) => {
+      ddb.putItem(params, (err) => {
         if (err) {
           rej(err);
           return;
         }
         config.getPrivateKey()
-        .then(async(privateKey) => {
-          const options = {
-            algorithm: 'RS256'
-          };
-          const token = await jwt.sign(JSON.stringify({username: this.username, email: this.email, beanies: [], wantlist: []}), privateKey, options);
-          res({...this, token, password: null});
-        }).catch((err) => {
-          rej(err);
-        });
+          .then(async(privateKey) => {
+            const options = {
+              algorithm: 'RS256'
+            };
+            const token = await jwt.sign(JSON.stringify({username: this.username, email: this.email, beanies: [], wantlist: []}), privateKey, options);
+            res({...this, token, password: null});
+          }).catch((err) => {
+            rej(err);
+          });
       });
     });
-  };
+  }
 
   updateBeanies() {
     const params = {
@@ -172,7 +171,7 @@ module.exports = class User {
       UpdateExpression: 'set #beanies = :beanies',
       ConditionExpression: 'attribute_exists(username)',
       ReturnValues: 'ALL_NEW'
-    }
+    };
     if (!this.beanies) {
       params.UpdateExpression = 'remove #beanies';
       params.ExpressionAttributeValues = null;
@@ -189,7 +188,7 @@ module.exports = class User {
         res(this);
       });
     });
-  };
+  }
 
   updateWantlist() {
     const params = {
@@ -208,7 +207,7 @@ module.exports = class User {
       UpdateExpression: 'set #wantlist = :wantlist',
       ConditionExpression: 'attribute_exists(username)',
       ReturnValues: 'ALL_NEW'
-    }
+    };
     if (!this.wantlist) {
       params.UpdateExpression = 'remove #wantlist';
       params.ExpressionAttributeValues = null;
@@ -225,7 +224,7 @@ module.exports = class User {
         res(this);
       });
     });
-  };
+  }
 
   delete() {
     const params = {
@@ -233,7 +232,7 @@ module.exports = class User {
       Key: {
         'username': { S: this.username }
       }
-    }
+    };
     return new Promise((res, rej) => {
       ddb.deleteItem(params, (err, data) => {
         if (err) {
@@ -243,7 +242,7 @@ module.exports = class User {
         res(AWS.DynamoDB.Converter.unmarshall(data.Item));
       });
     });
-  };
+  }
 
   updatePassword() {
     const params = {
@@ -262,7 +261,7 @@ module.exports = class User {
       UpdateExpression: 'set #password = :password',
       ConditionExpression: 'attribute_exists(username)',
       ReturnValues: 'NONE'
-    }
+    };
     return new Promise((res, rej) => {
       ddb.updateItem(params, (err, data) => {
         if (err) {
@@ -272,7 +271,7 @@ module.exports = class User {
         res(this);
       });
     });
-  };
+  }
 
   async mailPassword() {
     const emailPassword = await config.getEmailPassword();
@@ -295,16 +294,16 @@ module.exports = class User {
         rej(err);
       });
     });
-  };
+  }
 
   async resetPassword() {
     return new Promise(async(res, rej) => {
       try {
-        await this.get()
+        await this.get();
         this.password = randomPassword();
 
         const buffer = Buffer.from(this.password);
-        const key = await config.getPublicKey()
+        const key = await config.getPublicKey();
         var encPassword = crypto.publicEncrypt(key.toString(), buffer);
         await this.updatePassword();
         await this.mailPassword();

@@ -36,6 +36,10 @@ const Beanies = ({addBeanie}) => {
     forceUpdate();
   }
 
+  const handleClick = (beanie) => {
+    setBeanie(beanie);
+  }
+
   const renderBeanies = () => {
     let out = [];
     if (!beaniesState.beanies) return out;
@@ -47,11 +51,11 @@ const Beanies = ({addBeanie}) => {
       return out.push(
         <tr key={beanie.name}>
           <td><input type='checkbox' checked={checked} onChange={(e) => {handleCheck(e.target.checked, beanie)}} value={beanie.name} /></td>
-          <td>{beanie.thumbnail && beanie.family !== 'Beanie Babies' ? <img src={beanie.thumbnail} alt={beanie.name} onClick={() => setBeanie(beanie)} className='clickable' /> : null}</td>
-          <td className='clickable' onClick={() => setBeanie(beanie)}>{beanie.name}</td>
-          <td className='clickable' onClick={() => setBeanie(beanie)}>{beanie.animal}</td>
+          <td>{beanie.thumbnail && beanie.family !== 'Beanie Babies' ? <img src={beanie.thumbnail} alt={beanie.name} onClick={handleClick} className='clickable' /> : null}</td>
+          <td className='clickable' onClick={() => handleClick(beanie)}>{beanie.name}</td>
+          <td className='clickable' onClick={handleClick}>{beanie.animal}</td>
           <td><button className='add' onClick={() => addBeanie(beanie)}>Add</button></td>
-          <td><button className='show' onClick={() => setBeanie(beanie)}>Show</button></td>
+          <td><button className='show' onClick={handleClick}>Show</button></td>
           <td><button className='delete' onClick={() => handleDelete(beanie)}>Delete</button></td>
         </tr>);
     });
@@ -63,7 +67,7 @@ const Beanies = ({addBeanie}) => {
       return;
     }
     try {
-      deleteBeanie(userState.user.token, beanie.name);
+      deleteBeanie(userState.user.token, beanie.name, beanie.family);
       const updatedBeanies = _.remove(beaniesState.beanies, (b) => b.name !== beanie.name);
       beaniesState.setBeanies(updatedBeanies);
     } catch (err) {

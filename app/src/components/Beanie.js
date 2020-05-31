@@ -3,6 +3,7 @@ import UserContext from '../UserContext';
 import BeanieContext from '../BeanieContext';
 import BeaniesContext from '../BeaniesContext';
 import FamilyContext from '../FamilyContext';
+import Error from './Error';
 import { get, upsert } from '../api';
 import '../css/beanie.css';
 
@@ -16,24 +17,28 @@ const Beanie = () => {
   const disabled = userState.user && userState.user.admin ? false : true;
   const [beanieValue, setBeanieValue] = useState(beanie);
   const [savingState, setSavingState] = useState('');
+  const [err, setError] = useState(undefined);
   const token = userState.user && userState.user.token;
 
   useEffect(() => {
+    setError(undefined);
+    setSavingState(undefined);
     if (!beanie || beanie.isNew) {
       setBeanieValue({...beanie, family: familyState.family});
       return;
     }
     const getBeanie = async() => {
       try {
-        const b = await get(token, beanie.name);
+        const b = await get(token, beanie.name, beanie.family);
         setBeanieValue(b);
+        if (b.error) setError(b.Error);
       } catch (err) {
         console.warn(err); // TODO
       }
     }
     getBeanie();
     return (setBeanieValue(null))
-  }, [beanie, token, familyState.family]);
+  }, [beanie, token, familyState.family, setError]);
 
   if (!beanieValue) return null;
 
@@ -62,6 +67,10 @@ const Beanie = () => {
 
   const submit = async() => {
     try {
+      if (beanieValue.image.includes('data:image/')) {
+        setError('image must be an http:// address');
+        return;
+      }
       setSavingState('Saving...');
       const res = await upsert(userState.user.token, beanieValue);
       if (beanieValue.isNew) {
@@ -80,6 +89,7 @@ const Beanie = () => {
 
   return (
     <div className='beanie'>
+      {err ? <Error msg={err} /> : null}
       <label htmlFor='name'>Name:</label>
       <input type='text' name='name' defaultValue={beanieValue.name || ''} disabled={disabled} onChange={handleChange} />
 
@@ -116,7 +126,7 @@ const Beanie = () => {
       <input type='date' name='retireDate' defaultValue={retireDate} disabled={disabled} onChange={handleChange} />
 
       <label htmlFor='image'>Image URL:</label>
-      <input type='text' name='image' defaultValue={beanieValue.image || ''} disabled={disabled} onChange={handleChange} />
+      <input type='text' name='image' disabled={disabled} onChange={handleChange} />
 
       <div className='image'>
         <img src={beanieValue.image} alt={beanieValue.name}/>

@@ -10,7 +10,8 @@
     "scrape": "node ./scripts/scrape",
     "start": "NODE_ENV=local node ./app",
     "live": "NODE_ENV=live node ./app",
-    "zip": "zip -r lambda.zip ."
+    "zip": "zip -r lambda.zip .",
+    "lint": "eslint ."
   },
   "dependencies": {
     "aws-sdk": "^2.559.0",
@@ -30,6 +31,7 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0"
+    "chai": "^4.2.0",
+    "eslint": "^7.1.0"
   }
 }
