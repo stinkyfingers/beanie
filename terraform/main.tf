@@ -103,7 +103,9 @@ resource "aws_iam_policy" "dynamo_policy" {
         "${aws_dynamodb_table.users.arn}",
         "${aws_dynamodb_table.users.arn}/*",
         "${aws_dynamodb_table.beanieboos.arn}",
-        "${aws_dynamodb_table.beanieboos.arn}/*"
+        "${aws_dynamodb_table.beanieboos.arn}/*",
+        "${aws_dynamodb_table.beanies.arn}",
+        "${aws_dynamodb_table.beanies.arn}/*"
       ]
     }
   ]
@@ -168,6 +170,22 @@ resource "aws_dynamodb_table" "beanieboos" {
   }
 }
 
+resource "aws_dynamodb_table" "beanies" {
+  name = "beanies"
+  billing_mode = "PROVISIONED"
+  write_capacity = 5
+  read_capacity = 10
+  hash_key = "family"
+  range_key = "name"
+  attribute {
+    name = "name"
+    type = "S"
+  }
+  attribute {
+    name = "family"
+    type = "S"
+  }
+}
 
 # ALB
 resource "aws_lb_target_group" "beanieboo_server_lambda" {
