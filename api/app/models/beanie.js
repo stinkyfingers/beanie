@@ -108,6 +108,7 @@ module.exports = class Beanie {
   }
 
   static async family(family) {
+    console.log(family)
     const params = {
       TableName: tableName,
       ExpressionAttributeNames: {
@@ -126,6 +127,7 @@ module.exports = class Beanie {
     };
     try {
       const data = await ddb.query(params).promise();
+      console.log(data)
       let beanies = [];
       await data.Items.forEach((item) => {
         const b = AWS.DynamoDB.Converter.unmarshall(item);

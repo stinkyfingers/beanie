@@ -185,7 +185,8 @@ router.get('/beanies/:family', auth, async (req, res, next) => {
     const beanies = await Beanie.family(req.params.family);
     res.json(beanies);
   } catch (err) {
-    console.warn(err);
+    console.log('FAMILY ERROR')
+    console.log(err);
     next(err);
   }
 });

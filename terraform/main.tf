@@ -214,6 +214,28 @@ resource "aws_lb_listener_rule" "beanieboo_server_lambda" {
   depends_on = [aws_lb_target_group.beanieboo_server_lambda]
 }
 
+# s3
+resource "aws_s3_bucket" "beaniedata" {
+  bucket = "beaniedata.john-shenk.com"
+  acl = "private"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Sid": "Lambda Read",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "${aws_iam_role.iam_for_lambda.arn}"
+          },
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::beaniedata.john-shenk.com/*"
+      }
+  ]
+}
+EOF
+}
+
 # backend
 terraform {
   backend "s3" {
