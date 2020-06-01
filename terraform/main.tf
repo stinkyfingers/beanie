@@ -228,7 +228,11 @@ resource "aws_s3_bucket" "beaniedata" {
           "Principal": {
               "AWS": "${aws_iam_role.iam_for_lambda.arn}"
           },
-          "Action": "s3:GetObject",
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+          ],
           "Resource": "arn:aws:s3:::beaniedata.john-shenk.com/*"
       }
   ]
