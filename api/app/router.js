@@ -185,13 +185,13 @@ router.get('/beanies/:family', auth, async (req, res, next) => {
     const beanies = await Beanie.family(req.params.family);
     res.json(beanies);
   } catch (err) {
-    console.log('FAMILY ERROR')
-    console.log(err);
+    console.warn(err);
     next(err);
   }
 });
 
 router.all('*', (req, res) => {
+  console.log('unsupported path', req)
   res.send('I catch everything')
 });
 

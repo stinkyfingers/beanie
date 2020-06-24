@@ -102,8 +102,6 @@ resource "aws_iam_policy" "dynamo_policy" {
       "Resource": [
         "${aws_dynamodb_table.users.arn}",
         "${aws_dynamodb_table.users.arn}/*",
-        "${aws_dynamodb_table.beanieboos.arn}",
-        "${aws_dynamodb_table.beanieboos.arn}/*",
         "${aws_dynamodb_table.beanies.arn}",
         "${aws_dynamodb_table.beanies.arn}/*"
       ]
@@ -143,30 +141,6 @@ resource "aws_dynamodb_table" "users" {
   attribute {
     name = "username"
     type = "S"
-  }
-}
-
-resource "aws_dynamodb_table" "beanieboos" {
-  name = "beanieboos"
-  billing_mode = "PROVISIONED"
-  write_capacity = 10
-  read_capacity = 10
-  hash_key = "name"
-  attribute {
-    name = "name"
-    type = "S"
-  }
-  attribute {
-    name = "family"
-    type = "S"
-  }
-  global_secondary_index {
-    name = "family"
-    hash_key = "family"
-    write_capacity = 5
-    read_capacity = 5
-    projection_type = "INCLUDE"
-    non_key_attributes = ["thumbnail","animal"]
   }
 }
 
