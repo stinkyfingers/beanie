@@ -51,11 +51,10 @@ const Beanies = ({addBeanie}) => {
       return out.push(
         <tr key={beanie.name}>
           <td><input type='checkbox' checked={checked} onChange={(e) => {handleCheck(e.target.checked, beanie)}} value={beanie.name} /></td>
-          <td>{beanie.thumbnail && beanie.family !== 'Beanie Babies' ? <img src={beanie.thumbnail} alt={beanie.name} onClick={handleClick} className='clickable' /> : null}</td>
+          <td>{beanie.thumbnail && beanie.family !== 'Beanie Babies' ? <img src={beanie.thumbnail} alt={beanie.name} onClick={() => handleClick(beanie)} className='clickable' /> : null}</td>
           <td className='clickable' onClick={() => handleClick(beanie)}>{beanie.name}</td>
           <td className='clickable' onClick={handleClick}>{beanie.animal}</td>
           <td><button className='add' onClick={() => addBeanie(beanie)}>Add</button></td>
-          <td><button className='show' onClick={handleClick}>Show</button></td>
           <td><button className='delete' onClick={() => handleDelete(beanie)}>Delete</button></td>
         </tr>);
     });

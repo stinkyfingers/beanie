@@ -180,7 +180,7 @@ router.delete('/beanie/:family/:name', auth, async (req, res, next) => {
   }
 });
 
-router.get('/beanies/:family', auth, async (req, res, next) => {
+router.get('/beanies/:family', async (req, res, next) => {
   try {
     const beanies = await Beanie.family(req.params.family);
     res.json(beanies);
