@@ -191,7 +191,7 @@ router.get('/beanies/:family', async (req, res, next) => {
 });
 
 router.all('*', (req, res) => {
-  console.log('unsupported path', req)
+  console.log('unsupported path', req.url)
   res.send('I catch everything')
 });
 
