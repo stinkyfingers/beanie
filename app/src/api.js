@@ -46,11 +46,15 @@ export const users = async (token) => {
   }
 };
 
-export const getFamily = async (token, family) => {
+export const getFamily = async (token, family, startKey) => {
   try {
+    const headers = {
+      token
+    };
+    if (startKey !== '') headers.startkey = startKey
     const resp = await fetch(`${apiHost}/beanies/${family}`, {
       method: 'GET',
-      headers: {'token': token}
+      headers
     });
     const u = await resp.json();
     if (u.error) {

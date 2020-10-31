@@ -67,7 +67,7 @@ const Beanie = () => {
 
   const submit = async() => {
     try {
-      if (beanieValue.image.includes('data:image/')) {
+      if (beanieValue.image && beanieValue.image.includes('data:image/')) {
         setError('image must be an http:// address');
         return;
       }
@@ -75,9 +75,9 @@ const Beanie = () => {
       const res = await upsert(userState.user.token, beanieValue);
       if (beanieValue.isNew) {
         beanieValue.isNew = null;
-        const updatedBeanies = beaniesState.beanies;
+        const updatedBeanies = beaniesState.beaniesData.beanies;
         updatedBeanies.push(res);
-        beaniesState.setBeanies(updatedBeanies);
+        beaniesState.setBeanies({ ...beaniesState.beaniesData, beanies: updatedBeanies });
       }
       setSavingState('Saving Complete');
     } catch (err) {

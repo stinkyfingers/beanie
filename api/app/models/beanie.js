@@ -107,7 +107,7 @@ module.exports = class Beanie {
     return this;
   }
 
-  static async family(family) {
+  static async family(family, startKeyName) {
     const params = {
       TableName: tableName,
       ExpressionAttributeNames: {
@@ -123,8 +123,21 @@ module.exports = class Beanie {
       },
       KeyConditionExpression: '#family = :family',
       ProjectionExpression: '#name,#family,#animal,#thumbnail',
-      Limit: 200 // TODO remove
+      Limit: 300, // TODO ponder
+
     };
+
+    if (startKeyName) {
+      params.ExclusiveStartKey = {
+        'family': {
+          S: family
+        },
+        'name': {
+          S: startKeyName
+        }
+      }
+    };
+
     try {
       const data = await ddb.query(params).promise();
       let beanies = [];
@@ -132,7 +145,7 @@ module.exports = class Beanie {
         const b = AWS.DynamoDB.Converter.unmarshall(item);
         beanies.push(b);
       });
-      return beanies;
+      return {beanies, lastEvaluatedKey: data.LastEvaluatedKey};
     } catch (err) {
       console.error(err);
       throw new Error(err);

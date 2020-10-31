@@ -180,11 +180,10 @@ router.delete('/beanie/:family/:name', auth, async (req, res, next) => {
 });
 
 router.get('/beanies/:family', async (req, res, next) => {
-  console.log({message: `params: ${req.params}`});
+  console.log(req.headers.startkey)
   try {
-    const beanies = await Beanie.family(req.params.family);
-    console.log('beanie family', beanies.length)
-    res.json(beanies);
+    const resp = await Beanie.family(req.params.family, req.headers.startkey);
+    res.json(resp);
   } catch (err) {
     console.warn({error: err});
     next(err);

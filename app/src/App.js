@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import UserContext from './UserContext';
 import BeanieContext from './BeanieContext';
 import BeaniesContext from './BeaniesContext';
@@ -17,8 +18,8 @@ function App() {
   const userState = useUser();
 
   const useBeanies = () => {
-    const [beanies, setBeanies] = useState([]);
-    return {beanies, setBeanies};
+    const [beaniesData, setBeanies] = useState({ beanies: [], startKey: ' '}); // TODO ugly startKey/useEffect hack
+    return {beaniesData, setBeanies};
   }
   const beaniesState = useBeanies();
   const setBeanieState = beaniesState.setBeanies;
@@ -35,23 +36,29 @@ function App() {
   }
   const familyState = useFamily();
 
+  const startKey = beaniesState.beaniesData?.startKey; // ugly startKey/useEffect hack
+
   useEffect(() => {
     const allBeanies = async () => {
       if (!userState.user) return;
+      if (!startKey) return; // ugly startKey/useEffect hack
       try {
-        const b = await getFamily(userState.user.token, familyState.family);
-        if (b.error) {
-          console.warn(b.error) // TODO
+        const resp = await getFamily(userState.user.token, familyState.family, beaniesState?.beaniesData?.startKey);
+        if (resp.error) {
+          console.warn(resp.error) // TODO
           return;
         }
-        setBeanieState(b);
+
+        const current = JSON.parse(JSON.stringify(beaniesState.beaniesData?.beanies || []));
+        const mergedBeanies = _.concat(current, resp.beanies);
+        setBeanieState({ ...resp, beanies: mergedBeanies });
       } catch (err) {
         console.log(err)// TODO
       }
     }
     allBeanies();
-    return setBeanieState(null);;
-  }, [userState.user, familyState.family, setBeanieState]);
+    return setBeanieState(null);
+  }, [userState.user, familyState.family, setBeanieState, startKey]);
 
 
   return (

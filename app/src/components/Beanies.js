@@ -42,8 +42,8 @@ const Beanies = ({addBeanie}) => {
 
   const renderBeanies = () => {
     let out = [];
-    if (!beaniesState.beanies) return out;
-    const sorted = beaniesState.beanies.sort((a, b) => {
+    if (!beaniesState.beaniesData?.beanies) return out;
+    const sorted = beaniesState.beaniesData.beanies.sort((a, b) => {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
     sorted.map((beanie) => {
@@ -67,8 +67,8 @@ const Beanies = ({addBeanie}) => {
     }
     try {
       deleteBeanie(userState.user.token, beanie.name, beanie.family);
-      const updatedBeanies = _.remove(beaniesState.beanies, (b) => b.name !== beanie.name);
-      beaniesState.setBeanies(updatedBeanies);
+      const updatedBeanies = _.remove(beaniesState.beaniesData.beanies, (b) => b.name !== beanie.name);
+      beaniesState.setBeanies({ ...beaniesState.beaniesData, beanies: updatedBeanies });
     } catch (err) {
       console.warn(err);
     }
@@ -94,6 +94,11 @@ const Beanies = ({addBeanie}) => {
     }
     setBeanie({isNew: true});
   }
+
+  const handleNextPage = () => {
+    const key = beaniesState.beaniesData.lastEvaluatedKey?.name?.S;
+    beaniesState.setBeanies({ ...beaniesState.beaniesData, startKey: key });
+  };
 
   return(
     <div className='beanies'>
@@ -124,6 +129,7 @@ const Beanies = ({addBeanie}) => {
           {renderBeanies()}
         </tbody>
       </table>
+      {beaniesState.beaniesData?.lastEvaluatedKey ? <button onClick={handleNextPage}>Show more...</button> : null}
     </div>
   );
 }
