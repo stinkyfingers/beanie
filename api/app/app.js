@@ -4,9 +4,11 @@ const router = require('./router');
 const app = express();
 
 app.use(router);
+const port = 3001
 
 if (process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'live') {
-  app.listen(3001);
+  console.log({ message: `running on port ${port}.`})
+  app.listen(port);
 }
 
 module.exports = app;

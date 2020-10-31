@@ -55,7 +55,7 @@ router.use(stripServer);
 const auth = passport.authenticate('authStrategy', { session: true });
 
 const errHandler = (err, req, res, next) => {
-  console.log(err)
+  console.log({error: err});
   res.status(500).json({error: err.toString()});
 }
 
@@ -116,7 +116,6 @@ router.get('/user/:username', auth, async (req, res, next) => {
 });
 
 router.get('/users', auth, async (req, res, next) => {
-
   try {
     const users = await User.all()
     res.json(users);
@@ -181,6 +180,7 @@ router.delete('/beanie/:family/:name', auth, async (req, res, next) => {
 });
 
 router.get('/beanies/:family', async (req, res, next) => {
+  console.log({message: `params: ${req.params}`});
   try {
     const beanies = await Beanie.family(req.params.family);
     console.log('beanie family', beanies.length)
