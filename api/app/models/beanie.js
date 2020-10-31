@@ -122,7 +122,8 @@ module.exports = class Beanie {
         }
       },
       KeyConditionExpression: '#family = :family',
-      ProjectionExpression: '#name,#family,#animal,#thumbnail'
+      ProjectionExpression: '#name,#family,#animal,#thumbnail',
+      Limit: 200 // TODO remove
     };
     try {
       const data = await ddb.query(params).promise();
