@@ -5,6 +5,7 @@ import {
  Link
 } from 'react-router-dom'
 import Dashboard from './components/Dashboard';
+import DashboardV2 from './components/Dashboard.v2';
 import Users from './components/Users';
 import Password from './components/Password';
 
@@ -21,6 +22,9 @@ export const Nav = () =>
 
 export const Router = () =>
   <Switch>
+    <Route path="/v2">
+      <DashboardV2 />
+    </Route>
     <Route path="/users">
       <Users />
     </Route>
