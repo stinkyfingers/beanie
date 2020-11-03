@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ReactQueryCacheProvider, QueryCache } from 'react-query';
 import Context from './Context';
 import Router from './Router';
-import Login from './components/Login'
+import Auth from './components/Auth'
 import Family from './components/Family';
 import './css/app.css';
 
@@ -21,7 +21,7 @@ const App = () => {
           <Context.Provider value={{ state, setState }}>
             <Family />
             <Router />
-            <Login />
+            <Auth />
           </Context.Provider>
         </BrowserRouter>
       </ReactQueryCacheProvider>

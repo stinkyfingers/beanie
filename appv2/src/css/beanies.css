@@ -1,0 +1,19 @@
+.beaniesSummary {
+  border-collapse: collapse;
+}
+
+.beaniesSummary>thead {
+  font-weight: 800;
+}
+
+.beaniesSummary>tbody>tr:nth-child(2n) {
+  background-color: var(--light-blue);
+}
+
+.beaniesSummary>tbody>tr>td {
+  padding: 0 1em;
+}
+.beanieSummary:hover {
+  cursor: pointer;
+  opacity: .6;
+}

@@ -4,6 +4,9 @@
 
   --grey: #ccc;
   --black: #000;
+  --error: red;
+  --link: #00a;
+  --light-blue: #eff;
   --font-size: 1.2em;
   --border-radius: 4px;
 }

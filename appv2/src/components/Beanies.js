@@ -3,6 +3,7 @@ import * as hooks from '../hooks';
 import Context from '../Context';
 import Loading from './Loading';
 import Error from './Error';
+import '../css/beanies.css';
 
 const BeanieSummary = ({ beanie, setBeanie }) => {
   return <tr className='beanieSummary' onClick={() => setBeanie(beanie)}>
