@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { login, register } from '../api';
 import Context from '../Context';
-// import '../css/login.css';
+import '../css/login.css';
 import { Link } from 'react-router-dom';
 import Error from './Error';
 

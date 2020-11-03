@@ -1,0 +1,38 @@
+.beanie {
+  display: flex;
+}
+
+.fields>label {
+  display: block;
+  text-align: left;
+}
+
+.fields>label, .fields>input, .fields>select {
+  width: 90%;
+}
+
+.fields>label {
+  margin: 1em 12em 0 0;
+  font-size: var(--font-size);
+}
+
+.fields>input,.fields>select{
+  margin-right: 10em
+}
+
+.fields>label>select  {
+  margin-left: .5em
+}
+
+.fields>.image>img {
+  width:100%;
+}
+
+.thumbnail>img,.add,.savingNotice {
+  display: block;
+  margin: 0 auto;
+}
+
+.savingNotice {
+  color: #f00;
+}

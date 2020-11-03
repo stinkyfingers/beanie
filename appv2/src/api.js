@@ -1,7 +1,6 @@
 import { apiHost } from './config'
 
 const family = (family, startKey) => {
-  console.log('family called')
   return fetch(`${apiHost}/v2/beanies/${family}/${startKey}`, {
     method: 'GET'
   })
@@ -19,7 +18,7 @@ const get = (token, family, name) => {
 const create = (token, beanie) => {
   return fetch(`${apiHost}/v2/beanie`, {
     method: 'POST',
-    headers: { token },
+    headers: { token, 'Content-Type': 'application/json' },
     body: JSON.stringify(beanie)
   })
     .then(resp => resp.json());

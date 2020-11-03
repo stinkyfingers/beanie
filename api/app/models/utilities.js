@@ -7,7 +7,7 @@ const Jimp = require('jimp');
   * the base64 encoded image and a base64 encoded thumbnail-sized image
 */
 const getBase64ImageDataAndThumbnail = (beanie) => {
-  if (!beanie || !beanie.image) return;
+  if (!beanie || !beanie.image) return Promise.resolve();
 
   const response = {};
 
@@ -21,11 +21,11 @@ const getBase64ImageDataAndThumbnail = (beanie) => {
     response.data = isHTTPSLink[0];
   }
 
-  const isData = beanie.image.match(/^data:([A-Za-z-+]+);base64,(.+)$/);
+  const isData = beanie.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
   if (isData && isData.length === 3) {
     response.type = isData[1];
     response.data = Buffer.from(isData[2], 'base64');
-    response.base64 = Buffer.from(isData[2], 'base64');
+    response.base64 = beanie.image;
   }
 
   return Jimp.read(response.data)

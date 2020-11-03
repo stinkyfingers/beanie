@@ -1,0 +1,26 @@
+.dashboard {
+  width: 100%
+}
+
+.logo>img {
+  margin: 0 auto;
+  display: block;
+}
+
+.controls {
+  border: var(--black) solid 1px;
+  border-radius: var(--border-radius);
+  padding: .2em;
+  margin: 1em 0;
+}
+
+.display {
+  display: flex;
+}
+
+.beanies {
+  min-width: 25%;
+}
+
+.workspace {
+}

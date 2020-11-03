@@ -1,0 +1,26 @@
+.app {
+  display: flex;
+  justify-content: space-between;
+
+  --grey: #ccc;
+  --black: #000;
+  --font-size: 1.2em;
+  --border-radius: 4px;
+}
+
+
+button {
+  border: 2px solid var(--black);
+  border-radius: var(--border-radius);
+  padding: .2em;
+  min-width: 10em;
+  font-size: var(--font-size);
+}
+
+input,select{
+  border: 2px solid var(--black);
+  border-radius: var(--border-radius);
+  padding: .2em 0;
+  font-size: var(--font-size);
+  /* margin: .2em 12em 0 0; */
+}

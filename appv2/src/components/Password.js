@@ -10,7 +10,8 @@ const Password = () => {
 
   const handleClick = async() => {
     return resetPassword({ username })
-      .catch(err => setError(err));
+      .catch(err => setError(err))
+      .finally(() => setSent(true));
   };
 
   if (error) return <Error msg={error} />;

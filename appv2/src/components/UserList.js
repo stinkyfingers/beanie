@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Context from '../Context';
 
 const UserList = ({ beanies = [], title, rmFunc = null }) => {
