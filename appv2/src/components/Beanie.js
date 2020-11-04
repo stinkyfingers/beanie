@@ -14,7 +14,7 @@ const Beanie = ({ beanie }) => {
   React.useEffect(() => {
     if(!beanie || !state.user) return null;
     if (beanie.isNew) {
-      setBeanieValue({});
+      setBeanieValue({ family: state.family });
       return;
     }
     const fetchBeanie = () => {
@@ -84,7 +84,7 @@ const Beanie = ({ beanie }) => {
         <input type='text' name='exclusiveTo' value={beanieValue.exclusiveTo || ''} disabled={disabled} onChange={handleChange} />
 
         <label htmlFor='family'>Family:</label>
-        <select name='family' disabled={disabled} onChange={handleChange}>
+        <select name='family' disabled={disabled} value={beanieValue.family}onChange={handleChange}>
           <option value='Beanie Babies'>Beanie Babies</option>
           <option value='Beanie Babies 2.0'>Beanie Babies 2.0</option>
           <option value='Beanie Boos'>Beanie Boos</option>

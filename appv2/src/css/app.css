@@ -2,13 +2,16 @@
   display: flex;
   justify-content: space-between;
 
+  --white: #fff;
   --grey: #ccc;
   --black: #000;
   --error: red;
   --link: #00a;
   --light-blue: #eff;
+  --blue: #0A4DFE;
   --font-size: 1.2em;
   --border-radius: 4px;
+  --hover: .6
 }
 
 
@@ -20,10 +23,14 @@ button {
   font-size: var(--font-size);
 }
 
+button:hover {
+  cursor: pointer;
+  opacity: var(--hover);
+}
+
 input,select{
   border: 2px solid var(--black);
   border-radius: var(--border-radius);
   padding: .2em 0;
   font-size: var(--font-size);
-  /* margin: .2em 12em 0 0; */
 }

@@ -2,10 +2,6 @@
   border-collapse: collapse;
 }
 
-.beaniesSummary>thead {
-  font-weight: 800;
-}
-
 .beaniesSummary>tbody>tr:nth-child(2n) {
   background-color: var(--light-blue);
 }

@@ -87,6 +87,14 @@ const resetPassword = async (user) => {
       .then(resp => resp.json());
 };
 
+const users = (token) => {
+  return fetch(`${apiHost}/users`, {
+      method: 'GET',
+      headers: {'token': token}
+    })
+      .then(resp => resp.json());
+};
+
 export {
   family,
   get,
@@ -96,5 +104,6 @@ export {
   register,
   updateWantList,
   updateMyBeanies,
-  resetPassword
+  resetPassword,
+  users
 };

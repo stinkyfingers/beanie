@@ -1,21 +1,33 @@
 import React from 'react';
-import Context from '../Context';
 
-const UserList = ({ beanies = [], title, rmFunc = null }) => {
-  const { state, setState } = React.useContext(Context);
+const UserList = ({ beanies = [], title, handleClick, setMode, rmFunc = null }) => {
+  const [over, setOver] = React.useState(false);
 
   const rows = () => {
     if (!beanies) return;
     return beanies.map(beanie => <tr key={beanie}>
-      <td className='show' onClick={(e) => setState({ ...state, beanie })}>{beanie}</td>
+      <td className='show' onClick={() => handleClick(beanie, 'beanie')}>{beanie}</td>
       <td>
-        {rmFunc ? <button className='delete' onClick={() => rmFunc(beanie)}>Remove</button> : null}
+        {rmFunc ? <div className='delete' onClick={() => rmFunc(beanie)}>X</div> : null}
       </td>
     </tr>);
   };
+
   const renderMyList = () => {
+    const handleDragOver = (e) => {
+      e.preventDefault();
+      if (!rmFunc) return;
+      setOver(true);
+    };
+
+    const onDrop = () => {
+      setOver(false);
+      if (!handleDrop) return;
+      handleDrop(title);
+    };
+
     return (
-      <table className='mylist'>
+      <table className={over ? 'mylist highlight' : 'mylist'} onDragOver={handleDragOver} onDrop={onDrop} onDragLeave={() => { setOver(false); }}>
         <thead>
           <tr className='tableHeader'><td colSpan='2'>{title}</td></tr>
         </thead>

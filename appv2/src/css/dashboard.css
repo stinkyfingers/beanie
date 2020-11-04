@@ -1,4 +1,4 @@
-.dashboard {
+div.dashboard {
   width: 100%
 }
 
@@ -8,10 +8,10 @@
 }
 
 .controls {
-  border: var(--black) solid 1px;
-  border-radius: var(--border-radius);
   padding: .2em;
   margin: 1em 0;
+  display: flex;
+  justify-content: space-around;
 }
 
 .display {
@@ -22,5 +22,61 @@
   min-width: 25%;
 }
 
-.workspace {
+button.dashboard {
+  background-color: var(--blue);
+  border: none;
+  color: var(--white);
+}
+
+table>thead {
+  font-weight: 800;
+  text-align: center;
+}
+
+/* UserList */
+.userBeanies {
+  display: flex;
+}
+
+.mylist {
+  margin: 0 2em;
+}
+
+.mylist>tbody>tr>td {
+  padding: .5em;
+}
+
+.mylist>tbody>tr:nth-child(2n) {
+    background-color: var(--light-blue);
+}
+
+.highlight {
+  color: var(--blue);
+}
+
+.delete {
+  color: var(--error);
+  font-weight: 800;
+  border: solid 2px var(--error);
+  border-radius: 1em;
+  padding: 0 .2em
+}
+
+.delete:hover {
+  opacity: var(--hover);
+  cursor: pointer;
+}
+
+/* Users */
+.username {
+  font-weight: 800;
+  text-align: center;
+  border-bottom: solid 1px var(--black);
+}
+.users>tbody>tr>td {
+  padding: .5em;
+}
+
+.users>tbody>tr:nth-child(2n) {
+    background-color: var(--light-blue);
 }
