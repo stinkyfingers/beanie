@@ -18,7 +18,7 @@
 .app {
   display: flex;
   justify-content: space-between;
-  min-height: calc(100vh - 5em);
+  min-height: calc(100vh - 50px);
 }
 
 .loading {
