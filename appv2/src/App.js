@@ -5,6 +5,7 @@ import Context from './Context';
 import Router from './Router';
 import Auth from './components/Auth'
 import Family from './components/Family';
+import Footer from './components/Footer';
 import './css/app.css';
 
 const App = () => {
@@ -15,13 +16,16 @@ const App = () => {
   const queryCache = new QueryCache();
 
   return (
-    <div className='app'>
+    <div className='master'>
       <ReactQueryCacheProvider queryCache={queryCache}>
         <BrowserRouter>
           <Context.Provider value={{ state, setState }}>
-            <Family />
-            <Router />
-            <Auth />
+            <div className='app'>
+              <Family />
+              <Router />
+              <Auth />
+            </div>
+            <Footer />
           </Context.Provider>
         </BrowserRouter>
       </ReactQueryCacheProvider>

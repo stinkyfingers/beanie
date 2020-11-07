@@ -1,12 +1,13 @@
 import React from 'react';
 
-const UserList = ({ beanies = [], title, handleClick, setMode, rmFunc = null }) => {
+const UserList = ({ beanies = [], title, setMode, handleDrop = null, rmFunc = null }) => {
   const [over, setOver] = React.useState(false);
 
   const rows = () => {
     if (!beanies) return;
-    return beanies.map(beanie => <tr key={beanie}>
-      <td className='show' onClick={() => handleClick(beanie, 'beanie')}>{beanie}</td>
+    return beanies.map(beanie => <tr key={beanie} key={beanie.name} className='userBeanie'>
+      <td className='show'>{beanie.name}<div className='subtext italic'>{beanie.family}</div></td>
+      <td className='show'>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} /> : null}</td>
       <td>
         {rmFunc ? <div className='delete' onClick={() => rmFunc(beanie)}>X</div> : null}
       </td>

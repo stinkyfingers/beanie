@@ -30,12 +30,13 @@ const imageKey = (family, name) => `${name}.${family}`;
   * family gets the 100 items after 'startAfter' from s3
 */
 const family = (family, startAfter) => {
-  return s3.listObjectsV2({
+  const params = {
     Bucket: dbBucket,
     MaxKeys: 100,
-    StartAfter: key(family, startAfter),
-    Prefix: family
-  })
+    StartAfter: startAfter !== 'undefined' ? key(family, startAfter) : null,
+    Prefix: `${family}/`
+  };
+  return s3.listObjectsV2(params)
     .promise()
     .then(res => Promise.all(res.Contents.map(obj => s3.getObject({
       Bucket: dbBucket,

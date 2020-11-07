@@ -1,6 +1,6 @@
-.app {
+.master {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 
   --white: #fff;
   --grey: #ccc;
@@ -9,11 +9,22 @@
   --link: #00a;
   --light-blue: #eff;
   --blue: #0A4DFE;
+  --red: #f00;
   --font-size: 1.2em;
   --border-radius: 4px;
   --hover: .6
 }
 
+.app {
+  display: flex;
+  justify-content: space-between;
+  min-height: calc(100vh - 5em);
+}
+
+.loading {
+  color: var(--blue);
+  text-align: center;
+}
 
 button {
   border: 2px solid var(--black);

@@ -9,6 +9,7 @@
 .beaniesSummary>tbody>tr>td {
   padding: 0 1em;
 }
+
 .beanieSummary:hover {
   cursor: pointer;
   opacity: .6;

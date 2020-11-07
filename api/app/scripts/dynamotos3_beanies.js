@@ -22,14 +22,23 @@ const s3 = new AWS.S3();
 const move = () => {
   const params = {
     TableName: tableName,
-    // Limit: 1
+    // Limit: 400,
+    // ExpressionAttributeValues: {
+    // ':family': {
+    //    S: 'Beanie Fashion'
+    //   }
+    // },
+    // ExpressionAttributeNames: {
+    //   '#family': 'family'
+    // },
+    // FilterExpression: '#family = :family'
   };
 
   return ddb.scan(params).promise()
   .then(resp => {
     return Promise.all(resp.Items.map(item => {
       const beanie = AWS.DynamoDB.Converter.unmarshall(item);
-      console.log(beanie.name)
+      console.log(beanie.name, beanie.family)
       return s3.putObject({
         Bucket: bucket,
         Key: `${beanie.family}/${beanie.name}.json`,

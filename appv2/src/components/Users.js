@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Context from '../Context';
 import Beanie from './Beanie';
+import Error from './Error';
 import { users } from '../api';
 
 const Users = ({ handleClick, setError }) => {
@@ -18,6 +19,7 @@ const Users = ({ handleClick, setError }) => {
   }, [state.user.token]);
 
   const renderUsers = () => {
+    if (!allUsers) return null;
     return <table className='users'>
         <thead>
           <tr>
@@ -27,7 +29,7 @@ const Users = ({ handleClick, setError }) => {
           </tr>
         </thead>
         <tbody>
-          {allUsers.map(user => <tr key={user.username}><td onClick={() => handleClick(user)}>{user.username}</td></tr>)}
+          {allUsers.map(user => <tr key={user}><td onClick={() => handleClick(user)}>{user}</td></tr>)}
         </tbody>
       </table>;
   };

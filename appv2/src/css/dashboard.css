@@ -11,7 +11,7 @@ div.dashboard {
   padding: .2em;
   margin: 1em 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .display {
@@ -26,6 +26,7 @@ button.dashboard {
   background-color: var(--blue);
   border: none;
   color: var(--white);
+  margin: 0 .2em;
 }
 
 table>thead {
@@ -67,7 +68,20 @@ table>thead {
   cursor: pointer;
 }
 
+.subtext {
+  font-size: .4em;
+}
+
+.italic {
+  font-style: italic;
+}
+
 /* Users */
+.users>tbody>tr:hover {
+  cursor: pointer;
+  opacity: var(--hover);
+}
+
 .username {
   font-weight: 800;
   text-align: center;
@@ -79,4 +93,13 @@ table>thead {
 
 .users>tbody>tr:nth-child(2n) {
     background-color: var(--light-blue);
+}
+
+/* User */
+.userLists {
+  display: flex;
+}
+
+.user>h3 {
+  text-align: center;
 }

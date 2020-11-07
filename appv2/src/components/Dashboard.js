@@ -6,11 +6,13 @@ import Beanie from './Beanie';
 import Context from '../Context';
 import UserList from './UserList';
 import Users from './Users';
+import User from './User';
+import Error from './Error';
 import * as api from '../api';
 import '../css/dashboard.css';
 
 const removeFromList = (state, setState, list, updateFunc, beanie) => {
-  _.remove(list, (name) => name === beanie)
+  _.remove(list, (b) => b.name === beanie.name);
   return updateFunc(state.user)
     .then(() => {
       localStorage.setItem('user', JSON.stringify(state.user));
@@ -18,16 +20,16 @@ const removeFromList = (state, setState, list, updateFunc, beanie) => {
     });
 };
 
-const UserWantList = ({ handleDrop, handleClick }) => {
+const UserWantList = ({ handleDrop }) => {
   const { state, setState } = React.useContext(Context);
   const rmFunc = _.partial(removeFromList, state, setState, state.user?.wantlist, updateWantList);
-  return <UserList beanies={state.user?.wantlist} title={'Want List'} rmFunc={rmFunc} handleDrop={handleDrop} handleClick={handleClick} />;
+  return <UserList beanies={state.user?.wantlist} title={'Want List'} rmFunc={rmFunc} handleDrop={handleDrop} />;
 };
 
-const UserHaveList = ({ handleDrop, handleClick }) => {
+const UserHaveList = ({ handleDrop }) => {
   const { state, setState } = React.useContext(Context);
   const rmFunc = _.partial(removeFromList, state, setState, state.user?.beanies, updateMyBeanies);
-  return <UserList beanies={state.user?.beanies} title={'Have List'} rmFunc={rmFunc} handleDrop={handleDrop} handleClick={handleClick} />;
+  return <UserList beanies={state.user?.beanies} title={'Have List'} rmFunc={rmFunc} handleDrop={handleDrop} />;
 };
 
 const Dashboard = () => {
@@ -39,8 +41,6 @@ const Dashboard = () => {
   const [user, setUser] = React.useState();
 
   const handleClick = (beanie, mode) => {
-    console.log(beanie, mode)
-    if (!beanie.family) return; //TODO user beanies do not have families
     setBeanie(beanie);
     setMode(mode);
   };
@@ -50,7 +50,7 @@ const Dashboard = () => {
     switch (title) {
       case 'Want List':
         if (user.wantlist.includes(userSelection.name)) return;
-        user.wantlist.push(userSelection.name);
+        user.wantlist.push(userSelection);
         return api.updateWantList(user)
           .then(() => {
             localStorage.setItem('user', JSON.stringify(user));
@@ -59,7 +59,7 @@ const Dashboard = () => {
         break;
       case 'Have List':
         if (user.beanies.includes(userSelection.name)) return;
-        user.beanies.push(userSelection.name);
+        user.beanies.push(userSelection);
         return api.updateMyBeanies(user)
           .then(() => {
             localStorage.setItem('user', JSON.stringify(user));
@@ -80,25 +80,19 @@ const Dashboard = () => {
 
 
   const workspace = () => {
+    if (error) return <Error error={error} />;
     switch (mode) {
       case 'userLists':
         return <div className='userBeanies'>
-          <UserWantList handleDrop={handleDrop} handleClick={handleClick} />
-          <UserHaveList handleDrop={handleDrop} handleClick={handleClick} />
+          <UserWantList handleDrop={handleDrop} />
+          <UserHaveList handleDrop={handleDrop} />
         </div>;
       case 'beanie':
-      console.log(beanie)
         return <Beanie beanie={beanie} />;
       case 'users':
         return <Users handleClick={handleClickUser} setError={setError} />;
       case 'user':
-        return <div>
-          <div className='username'>{user.username}</div>
-          <div className='userBeanies'>
-            <UserList beanies={user?.wantlist} title={'Want List'} handleClick={handleClick} />
-            <UserList beanies={user?.beanies} title={'Have List'} handleClick={handleClick} />
-          </div>
-        </div>;
+        return <User username={user} />;
       default:
         return null;
     }

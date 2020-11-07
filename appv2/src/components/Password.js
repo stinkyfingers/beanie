@@ -8,7 +8,7 @@ const Password = ({ handleBackToLogin }) => {
   const [error, setError] = useState();
 
   const handleClick = async() => {
-    return resetPassword({ username })
+    return resetPassword(username)
       .catch(err => setError(err))
       .finally(() => setSent(true));
   };

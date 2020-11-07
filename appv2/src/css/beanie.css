@@ -34,5 +34,5 @@
 }
 
 .savingNotice {
-  color: #f00;
+  color: var(--red);
 }

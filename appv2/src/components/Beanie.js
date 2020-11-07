@@ -24,7 +24,7 @@ const Beanie = ({ beanie }) => {
       });
     };
     fetchBeanie();
-    return setBeanieValue(null);
+    return () => setBeanieValue(null);
   }, [state.user, beanie]);
 
   if (!beanieValue) return null;

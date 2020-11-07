@@ -1,6 +1,10 @@
 'use strict';
 
 const Jimp = require('jimp');
+const nodemailer = require('nodemailer');
+const config = require('../config');
+const _ = require('lodash');
+const jwt = require('jsonwebtoken');
 
 /**
   * getBase64ImageDataAndThumbnail returns an object containing
@@ -45,6 +49,53 @@ const getBase64ImageDataAndThumbnail = (beanie) => {
     .then(thumbnail => ({ base64String: response.base64, thumbnail }));
 };
 
+/**
+  * randomPassword generates a 6-char password
+  */
+const randomPassword = () => {
+  let opts = 'qwertyuiopasdfghjklzxcvbnm'
+  let password = '';
+  for (let i = 0; i < 6; i++) {
+    password += opts[Math.floor(Math.random() * Math.floor(26))];
+  }
+  return password;
+};
+
+/**
+  * emailPassword sends a password to a user's email
+  */
+const emailPassword = (user) => {
+  return config.getEmailPassword()
+    .then(emailPassword => {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'johnshenk77@gmail.com',
+        pass: emailPassword
+      }
+    });
+    return transporter.sendMail({
+      from: '"Beanie Central" <johnshenk77@gmail.com>',
+      to: user.email,
+      subject: 'Beanie Central Password Reset',
+      text: `New password for ${user.username}: ${user.password}`
+    });
+  });
+};
+
+/**
+  * creates a token without private or large fields
+  */
+const createToken = (user, key) => {
+  const options = { algorithm: 'RS256', expiresIn: '24h' };
+  const signUser = _.clone(_.omit(user, ['beanies', 'wantlist', 'password']));
+  const token =  jwt.sign(signUser, key, options);
+  return token;
+};
+
 module.exports = {
-  getBase64ImageDataAndThumbnail
+  getBase64ImageDataAndThumbnail,
+  randomPassword,
+  emailPassword,
+  createToken
 };

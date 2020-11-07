@@ -35,62 +35,67 @@ const remove = (token, family, name) => {
 // user
 
 const login = (user) => {
-  return fetch(`${apiHost}/login`, {
+  return fetch(`${apiHost}/v2/login`, {
       method: 'POST',
       body: JSON.stringify(user),
-      headers: {'Content-Type': 'application/json'}
+      headers: { 'Content-Type': 'application/json' }
     })
       .then(resp => resp.json());
 };
 
 const register = (user) => {
-  return fetch(`${apiHost}/user`, {
+  return fetch(`${apiHost}/v2/user`, {
       method: 'POST',
       body: JSON.stringify(user),
-      headers: {'Content-Type': 'application/json'}
+      headers: { 'Content-Type': 'application/json' }
     })
       .then(resp => resp.json());
 };
 
 const updateWantList = (user) => {
-  return fetch(`${apiHost}/user/wantlist`, {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-        'token': user.token
-      }
-    })
-      .then(resp => resp.json());
-};
-
-const updateMyBeanies = (user) => {
-  return fetch(`${apiHost}/user/beanies`, {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-        'token': user.token
-      }
-    })
-      .then(resp => resp.json());
-};
-
-const resetPassword = async (user) => {
-  return fetch(`${apiHost}/password`, {
+  return fetch(`${apiHost}/v2/user`, {
       method: 'PUT',
       body: JSON.stringify(user),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'token': user.token
       }
+    })
+      .then(resp => resp.json());
+};
+// TODO de-dupe w/ above
+const updateMyBeanies = (user) => {
+  return fetch(`${apiHost}/v2/user`, {
+      method: 'PUT',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+        'token': user.token
+      }
+    })
+      .then(resp => resp.json());
+};
+
+const resetPassword = async (username) => {
+  console.log(username)
+  return fetch(`${apiHost}/v2/password/${username}`, {
+      method: 'GET'
     })
       .then(resp => resp.json());
 };
 
 const users = (token) => {
-  return fetch(`${apiHost}/users`, {
+  return fetch(`${apiHost}/v2/users`, {
       method: 'GET',
-      headers: {'token': token}
+      headers: { token }
+    })
+      .then(resp => resp.json());
+};
+
+const user = (token, username) => {
+  return fetch(`${apiHost}/v2/user/${username}`, {
+      method: 'GET',
+      headers: { token }
     })
       .then(resp => resp.json());
 };
@@ -105,5 +110,6 @@ export {
   updateWantList,
   updateMyBeanies,
   resetPassword,
-  users
+  users,
+  user
 };
