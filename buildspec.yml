@@ -12,7 +12,7 @@ phases:
   pre_build:
     commands:
       - cd api/app && yarn install
-      - cd ../../app && yarn install
+      - cd ../../appv2 && yarn install
   build:
     commands:
       - cd ../api/app && zip -r lambda.zip .
@@ -22,7 +22,6 @@ phases:
       - cd ../api/app
       - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
       - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
-      - ls ../../
       - cd ../../appv2
       - aws s3 sync build s3://beanies.john-shenk.com
       - aws cloudfront create-invalidation --distribution-id E13AP81F1I8QV9 --paths /index.html /static/*
