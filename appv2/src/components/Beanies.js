@@ -52,7 +52,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
     setPdf({ ready: false, beanies});
   };
 
-  const renderBeaniesSummary = () => data.map(group => group.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={handlePdfBeanieChange}/>));
+  const renderBeaniesSummary = () => data.map(group => !group ? null : group.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={handlePdfBeanieChange}/>));
 
   const createPdf = () => {
     return Promise.all(pdf.beanies.map(beanie => api.get(state.user.token, state.family, beanie)))
