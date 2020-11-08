@@ -68,6 +68,7 @@ export const getFamily = async (token, family, startKey) => {
 };
 
 export const updateWantList = async (user) => {
+  console.log(user)
   try {
     const resp = await fetch(`${apiHost}/user/wantlist`, {
       method: 'POST',

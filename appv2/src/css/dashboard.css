@@ -1,0 +1,105 @@
+div.dashboard {
+  width: 100%
+}
+
+.logo>img {
+  margin: 0 auto;
+  display: block;
+}
+
+.controls {
+  padding: .2em;
+  margin: 1em 0;
+  display: flex;
+  justify-content: center;
+}
+
+.display {
+  display: flex;
+}
+
+.beanies {
+  min-width: 25%;
+}
+
+button.dashboard {
+  background-color: var(--blue);
+  border: none;
+  color: var(--white);
+  margin: 0 .2em;
+}
+
+table>thead {
+  font-weight: 800;
+  text-align: center;
+}
+
+/* UserList */
+.userBeanies {
+  display: flex;
+}
+
+.mylist {
+  margin: 0 2em;
+}
+
+.mylist>tbody>tr>td {
+  padding: .5em;
+}
+
+.mylist>tbody>tr:nth-child(2n) {
+    background-color: var(--light-blue);
+}
+
+.highlight {
+  color: var(--blue);
+}
+
+.delete {
+  color: var(--error);
+  font-weight: 800;
+  border: solid 2px var(--error);
+  border-radius: 1em;
+  padding: 0 .2em
+}
+
+.delete:hover {
+  opacity: var(--hover);
+  cursor: pointer;
+}
+
+.subtext {
+  font-size: .4em;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Users */
+.users>tbody>tr:hover {
+  cursor: pointer;
+  opacity: var(--hover);
+}
+
+.username {
+  font-weight: 800;
+  text-align: center;
+  border-bottom: solid 1px var(--black);
+}
+.users>tbody>tr>td {
+  padding: .5em;
+}
+
+.users>tbody>tr:nth-child(2n) {
+    background-color: var(--light-blue);
+}
+
+/* User */
+.userLists {
+  display: flex;
+}
+
+.user>h3 {
+  text-align: center;
+}

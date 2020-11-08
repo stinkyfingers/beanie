@@ -1,0 +1,17 @@
+div.login {
+  text-align: right;
+}
+
+input {
+  width: 10em;
+}
+
+label {
+  display: block;
+  text-align: center;
+}
+
+.link {
+  text-align: center;
+  color: var(--link);
+}

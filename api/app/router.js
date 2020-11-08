@@ -8,6 +8,8 @@ const https = require('https');
 const cors = require('cors');
 const User = require('./models/user');
 const Beanie = require('./models/beanie');
+const BeanieV2 = require('./models/beanie.v2');
+const UserV2 = require('./models/user.v2');
 const request = require('request');
 
 const router = express.Router();
@@ -180,7 +182,6 @@ router.delete('/beanie/:family/:name', auth, async (req, res, next) => {
 });
 
 router.get('/beanies/:family', async (req, res, next) => {
-  console.log(req.headers.startkey)
   try {
     const resp = await Beanie.family(req.params.family, req.headers.startkey);
     res.json(resp);
@@ -190,9 +191,77 @@ router.get('/beanies/:family', async (req, res, next) => {
   }
 });
 
+// New - S3 based API endpoints
+router.get('/v2/beanies/:family/:page?', (req, res, next) => {
+  return BeanieV2.family(req.params.family, req.params.page)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.get('/v2/beanie/:family/:name', auth, (req, res, next) => {
+  return BeanieV2.get(req.params.family, req.params.name)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.post('/v2/beanie', auth, (req, res, next) => {
+  return BeanieV2.create(req.body)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.delete('/v2/beanie/:family/:name', auth, (req, res, next) => {
+  return BeanieV2.remove(req.params.family, req.params.name)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.get('/v2/users', auth, (req, res, next) => {
+  return UserV2.all()
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.get('/v2/user/:username', auth, (req, res, next) => {
+  return UserV2.get(req.params.username)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.post('/v2/login', (req, res, next) => {
+  return UserV2.login(req.body.username, req.body.password)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.post('/v2/user', (req, res, next) => {
+  return UserV2.create(req.body.username, req.body.password, req.body.email)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.put('/v2/user', auth, (req, res, next) => {
+  return UserV2.updateLists(req.body)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+})
+
+router.get('/v2/password/:username', (req, res, next) => {
+  return UserV2.resetPassword(req.params.username)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.put('/v2/password', auth, (req, res, next) => {
+  return UserV2.changePassword(req.body)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+// Boilerplate
 router.all('*', (req, res) => {
   console.log('unsupported path', req.url)
-  res.send('I catch everything')
+  res.status(404).json({ error: `endpoint not found: ${req.url}` });
 });
 
 router.use(errHandler);

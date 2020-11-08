@@ -1,0 +1,47 @@
+.master {
+  display: flex;
+  flex-direction: column;
+
+  --white: #fff;
+  --grey: #ccc;
+  --black: #000;
+  --error: red;
+  --link: #00a;
+  --light-blue: #eff;
+  --blue: #0A4DFE;
+  --red: #f00;
+  --font-size: 1.2em;
+  --border-radius: 4px;
+  --hover: .6
+}
+
+.app {
+  display: flex;
+  justify-content: space-between;
+  min-height: calc(100vh - 50px);
+}
+
+.loading {
+  color: var(--blue);
+  text-align: center;
+}
+
+button {
+  border: 2px solid var(--black);
+  border-radius: var(--border-radius);
+  padding: .2em;
+  min-width: 10em;
+  font-size: var(--font-size);
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: var(--hover);
+}
+
+input,select{
+  border: 2px solid var(--black);
+  border-radius: var(--border-radius);
+  padding: .2em 0;
+  font-size: var(--font-size);
+}
