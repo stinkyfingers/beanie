@@ -153,11 +153,30 @@ const resetPassword = (username) => {
       }));
 };
 
+/**
+  * changePassword
+*/
+const changePassword = (user) => {
+  return login(user.username, user.password)
+    .then((s3user) => config.getPublicKey()
+      .then(key => {
+        const encPassword = crypto.publicEncrypt(key.toString(), Buffer.from(user.newPassword));
+        _.set(s3user, ['password'], user.newPassword);
+        return [s3.upload({
+          Bucket: userBucket,
+          Key: filenameKey(user.username),
+          Body: JSON.stringify({ ...s3user, password: encPassword })
+        }).promise(), s3user]
+      })
+    .then(([resp, s3user]) => s3user));
+};
+
 module.exports = {
   get,
   login,
   create,
   all,
   updateLists,
-  resetPassword
+  resetPassword,
+  changePassword
 };

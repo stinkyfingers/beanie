@@ -1,0 +1,9 @@
+.settings>button {
+  display: block;
+}
+.settings>input {
+  margin-bottom: .2em;
+}
+.settings>h3,.settings>h5 {
+  text-align: center;
+}

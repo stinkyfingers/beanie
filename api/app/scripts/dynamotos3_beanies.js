@@ -22,7 +22,7 @@ const s3 = new AWS.S3();
 const move = () => {
   const params = {
     TableName: tableName,
-    // Limit: 400,
+    Limit: 200,
     // ExpressionAttributeValues: {
     // ':family': {
     //    S: 'Beanie Fashion'
@@ -34,17 +34,23 @@ const move = () => {
     // FilterExpression: '#family = :family'
   };
 
-  return ddb.scan(params).promise()
-  .then(resp => {
-    return Promise.all(resp.Items.map(item => {
-      const beanie = AWS.DynamoDB.Converter.unmarshall(item);
-      console.log(beanie.name, beanie.family)
-      return s3.putObject({
-        Bucket: bucket,
-        Key: `${beanie.family}/${beanie.name}.json`,
-        Body: Buffer.from(JSON.stringify(beanie))
-      }).promise()
-    }))
+  return new Promise((res, rej) => {
+    return ddb.scan(params).eachPage((err, data) => {
+      if (err) rej(err)
+      if (!data || !data.Items) {
+        res('done');
+        return;
+      }
+      return Promise.all(data.Items.map(item => {
+        const beanie = AWS.DynamoDB.Converter.unmarshall(item);
+        console.log('adding', beanie.name, beanie.family)
+        return s3.putObject({
+          Bucket: bucket,
+          Key: `${beanie.family}/${beanie.name}.json`,
+          Body: Buffer.from(JSON.stringify(beanie))
+        }).promise()
+      }));
+    })
   })
   .catch(console.log)
 };

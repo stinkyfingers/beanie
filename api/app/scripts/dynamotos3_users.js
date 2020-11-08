@@ -46,6 +46,14 @@ const findBeanie = (name) => {
               return AWS.DynamoDB.Converter.unmarshall(resp.Item)
             }
           })
+          .then(resp => {
+            return query('Beanie Babies 2.0').promise()
+              .then(resp => {
+                if (resp.Item) {
+                  return AWS.DynamoDB.Converter.unmarshall(resp.Item)
+                }
+              })
+          })
         })
         .catch(console.log)
 };

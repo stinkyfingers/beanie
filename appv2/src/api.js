@@ -77,9 +77,20 @@ const updateMyBeanies = (user) => {
 };
 
 const resetPassword = async (username) => {
-  console.log(username)
   return fetch(`${apiHost}/v2/password/${username}`, {
       method: 'GET'
+    })
+      .then(resp => resp.json());
+};
+
+const newPassword = async (token, user) => {
+  return fetch(`${apiHost}/v2/password`, {
+      method: 'PUT',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+        'token': user.token
+      }
     })
       .then(resp => resp.json());
 };
@@ -110,6 +121,7 @@ export {
   updateWantList,
   updateMyBeanies,
   resetPassword,
+  newPassword,
   users,
   user
 };

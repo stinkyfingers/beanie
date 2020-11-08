@@ -252,6 +252,12 @@ router.get('/v2/password/:username', (req, res, next) => {
     .catch(next);
 });
 
+router.put('/v2/password', auth, (req, res, next) => {
+  return UserV2.changePassword(req.body)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
 // Boilerplate
 router.all('*', (req, res) => {
   console.log('unsupported path', req.url)

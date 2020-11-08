@@ -8,6 +8,7 @@ import UserList from './UserList';
 import Users from './Users';
 import User from './User';
 import Error from './Error';
+import Settings from './Settings';
 import * as api from '../api';
 import '../css/dashboard.css';
 
@@ -78,23 +79,24 @@ const Dashboard = () => {
     setMode('user');
   };
 
-
   const workspace = () => {
     if (error) return <Error error={error} />;
     switch (mode) {
-      case 'userLists':
-        return <div className='userBeanies'>
-          <UserWantList handleDrop={handleDrop} />
-          <UserHaveList handleDrop={handleDrop} />
-        </div>;
+
       case 'beanie':
         return <Beanie beanie={beanie} />;
       case 'users':
         return <Users handleClick={handleClickUser} setError={setError} />;
       case 'user':
         return <User username={user} />;
+      case 'settings':
+        return <Settings />;
+      case 'userLists':
       default:
-        return null;
+        return <div className='userBeanies'>
+          <UserWantList handleDrop={handleDrop} />
+          <UserHaveList handleDrop={handleDrop} />
+        </div>;
     }
   };
 
@@ -107,6 +109,7 @@ const Dashboard = () => {
           <button className='dashboard' onClick={() => handleClick(null, 'userLists')} hidden={state?.user ? false : true}>My Beanies</button>
           <button className='dashboard' onClick={() => handleClick({isNew: true}, 'beanie')} hidden={state?.user?.admin ? false : true}>Create New Beanie</button>
           <button className='dashboard' onClick={() => handleClick(null, 'users')} hidden={state?.user ? false : true}>Show Users</button>
+          <button className='dashboard' onClick={() => handleClick(null, 'settings')} hidden={state?.user ? false : true}>Settings</button>
         </div>
         <div className='display'>
           <div className='beanies'>
