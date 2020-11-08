@@ -214,6 +214,56 @@ resource "aws_s3_bucket" "beaniedata" {
 EOF
 }
 
+resource "aws_s3_bucket" "beaniedb" {
+  bucket = "beaniedb.john-shenk.com"
+  acl = "private"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Sid": "Lambda Read",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "${aws_iam_role.iam_for_lambda.arn}"
+          },
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+          ],
+          "Resource": "arn:aws:s3:::beaniedb.john-shenk.com/*"
+      }
+  ]
+}
+EOF
+}
+
+resource "aws_s3_bucket" "beanieusers" {
+  bucket = "beanieusers.john-shenk.com"
+  acl = "private"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Sid": "Lambda Read",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "${aws_iam_role.iam_for_lambda.arn}"
+          },
+          "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+          ],
+          "Resource": "arn:aws:s3:::beanieusers.john-shenk.com/*"
+      }
+  ]
+}
+EOF
+}
+
 # backend
 terraform {
   backend "s3" {

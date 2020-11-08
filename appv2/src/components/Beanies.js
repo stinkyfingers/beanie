@@ -81,7 +81,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
       <table className='beaniesSummary'>
         <thead><tr><td colSpan={2}><div className='subtext'>Click to view or drag to add</div></td></tr></thead>
         <tbody>
-          {renderBeaniesSummary()}
+          {data ? renderBeaniesSummary() : null}
         </tbody>
       </table>
     </InfiniteScroll>
