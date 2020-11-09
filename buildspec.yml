@@ -15,11 +15,12 @@ phases:
       # - cd ../../appv2 && yarn install
   build:
     commands:
-      - cd ../api/app && zip -r lambda.zip .
+      - zip -r lambda.zip .
+      # - cd ../api/app && zip -r lambda.zip .
       # - cd ../../appv2 && yarn build
   post_build:
     commands:
-      - cd ../api/app
+      # - cd ../api/app
       - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
       - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
       # - cd ../../appv2
