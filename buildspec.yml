@@ -12,7 +12,8 @@ phases:
   pre_build:
     commands:
       # - cd api/app && yarn install
-      - cd ../../appv2 && yarn install
+      # - cd ../../appv2 && yarn install
+      - cd appv2 && yarn install
   build:
     commands:
       # - zip -r lambda.zip .
