@@ -76,6 +76,10 @@ table>thead {
   font-style: italic;
 }
 
+.tableSubHeader {
+  font-weight: 200;
+}
+
 /* Users */
 .users>tbody>tr:hover {
   cursor: pointer;

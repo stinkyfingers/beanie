@@ -76,7 +76,6 @@ const Beanies = ({ handleClick, handleDrag }) => {
       hasMore={canFetchMore}
       dataLength={dataLength}
       loader={<Loading />}
-      height={window.innerHeight * .75}
     >
       <table className='beaniesSummary'>
         <thead><tr><td colSpan={2}><div className='subtext'>Click to view or drag to add</div></td></tr></thead>

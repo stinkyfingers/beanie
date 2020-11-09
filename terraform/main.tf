@@ -233,6 +233,17 @@ resource "aws_s3_bucket" "beaniedb" {
             "s3:DeleteObject"
           ],
           "Resource": "arn:aws:s3:::beaniedb.john-shenk.com/*"
+      },
+      {
+          "Sid": "Lambda Read",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "${aws_iam_role.iam_for_lambda.arn}"
+          },
+          "Action": [
+            "s3:ListBucket"
+          ],
+          "Resource": "arn:aws:s3:::beaniedb.john-shenk.com"
       }
   ]
 }
@@ -258,6 +269,17 @@ resource "aws_s3_bucket" "beanieusers" {
             "s3:DeleteObject"
           ],
           "Resource": "arn:aws:s3:::beanieusers.john-shenk.com/*"
+      },
+      {
+          "Sid": "Lambda Read",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "${aws_iam_role.iam_for_lambda.arn}"
+          },
+          "Action": [
+            "s3:ListBucket"
+          ],
+          "Resource": "arn:aws:s3:::beanieusers.john-shenk.com"
       }
   ]
 }

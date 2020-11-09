@@ -31,6 +31,7 @@ const UserList = ({ beanies = [], title, setMode, handleDrop = null, rmFunc = nu
       <table className={over ? 'mylist highlight' : 'mylist'} onDragOver={handleDragOver} onDrop={onDrop} onDragLeave={() => { setOver(false); }}>
         <thead>
           <tr className='tableHeader'><td colSpan='2'>{title}</td></tr>
+          <tr className='tableSubHeader'><td colSpan='2'>{`Total: ${beanies.length}`}</td></tr>
         </thead>
         <tbody>{rows()}</tbody>
       </table>
