@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { updateWantList, updateMyBeanies } from '../api';
+import { addToList, removeFromList } from '../api';
 import Beanies from './Beanies';
 import Beanie from './Beanie';
 import Context from '../Context';
@@ -12,24 +12,23 @@ import Settings from './Settings';
 import * as api from '../api';
 import '../css/dashboard.css';
 
-const removeFromList = (state, setState, list, updateFunc, beanie) => {
-  _.remove(list, (b) => b.name === beanie.name);
-  return updateFunc(state.user)
-    .then(() => {
-      localStorage.setItem('user', JSON.stringify(state.user));
-      setState({ ...state, user: state.user });
+const removeFromListFunction = (state, setState, listType, updateFunc, beanie) => {
+  return updateFunc(state.user, listType, beanie.family, beanie.name)
+    .then(user => {
+      localStorage.setItem('user', JSON.stringify({ ...state.user, [listType]: user[listType] }));
+      setState({ ...state, user: { ...state.user, [listType]: user[listType] } });
     });
 };
 
 const UserWantList = ({ handleDrop }) => {
   const { state, setState } = React.useContext(Context);
-  const rmFunc = _.partial(removeFromList, state, setState, state.user?.wantlist, updateWantList);
+  const rmFunc = _.partial(removeFromListFunction, state, setState, 'wantlist', removeFromList);
   return <UserList beanies={state.user?.wantlist} title={'Want List'} rmFunc={rmFunc} handleDrop={handleDrop} />;
 };
 
 const UserHaveList = ({ handleDrop }) => {
   const { state, setState } = React.useContext(Context);
-  const rmFunc = _.partial(removeFromList, state, setState, state.user?.beanies, updateMyBeanies);
+  const rmFunc = _.partial(removeFromListFunction, state, setState, 'beanies', removeFromList);
   return <UserList beanies={state.user?.beanies} title={'Have List'} rmFunc={rmFunc} handleDrop={handleDrop} />;
 };
 
@@ -50,21 +49,29 @@ const Dashboard = () => {
     const user = state.user;
     switch (title) {
       case 'Want List':
-        if (user.wantlist.includes(userSelection.name)) return;
+        if (user.wantlist && user.wantlist.includes(userSelection.name)) return;
+        if (!user.wantlist) user.wantlist = [];
         user.wantlist.push(userSelection);
-        return api.updateWantList(user)
-          .then(() => {
-            localStorage.setItem('user', JSON.stringify(user));
+        return api.addToList(state.user, 'wantlist', userSelection.family, userSelection.name)
+          .then(user => {
+            localStorage.setItem('user', JSON.stringify({ ...state.user, wanlist: user.wantlist }));
             setUserSelection({ ...userSelection, beanie: null })
+          })
+          .catch(err => {
+            setError(err);
           });
         break;
       case 'Have List':
-        if (user.beanies.includes(userSelection.name)) return;
+        if (user.beanies && user.beanies.includes(userSelection.name)) return;
+        if (!user.beanies) user.beanies = [];
         user.beanies.push(userSelection);
-        return api.updateMyBeanies(user)
-          .then(() => {
-            localStorage.setItem('user', JSON.stringify(user));
+        return api.addToList(state.user, 'beanies', userSelection.family, userSelection.name)
+          .then(user => {
+            localStorage.setItem('user', JSON.stringify({ ...state.user, beanies: user.beanies }));
             setUserSelection({ ...userSelection, beanie: null })
+          })
+          .catch(err => {
+            setError(err);
           });
         break;
     }

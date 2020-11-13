@@ -107,8 +107,14 @@ router.post('/v2/user', (req, res, next) => {
     .catch(next);
 });
 
-router.put('/v2/user', auth, (req, res, next) => {
-  return UserV2.updateLists(req.body)
+router.put('/v2/user/:listType/:family/:beanie', auth, (req, res, next) => {
+  return UserV2.addToList(req.user, req.params.listType, req.params.family, req.params.beanie)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.delete('/v2/user/:listType/:family/:beanie', auth, (req, res, next) => {
+  return UserV2.removeFromList(req.user, req.params.listType, req.params.family, req.params.beanie)
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });

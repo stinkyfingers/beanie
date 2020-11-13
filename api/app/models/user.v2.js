@@ -6,6 +6,8 @@ const config = require('../config');
 const crypto = require('crypto');
 const _ = require('lodash');
 
+const Beanie = require('./beanie.v2');
+
 const region = 'us-west-1';
 const userBucket = 'beanieusers.john-shenk.com';
 
@@ -111,14 +113,33 @@ const all = () => {
 };
 
 /**
-  * updateLists gets a user from S3, then updates their beanies & wantlist
+  * addToList gets a user from S3, then adds a beanie to their beanies & wantlist
 */
-const updateLists = (user) => {
+const addToList = (user, listType, family, beanieName) => {
+  return get(user.username)
+    .then(s3user => Beanie.get(family, beanieName)
+      .then(beanie => {
+        _.set(beanie, ['image'], null);
+        s3user[listType].push(beanie);
+        return [s3user, s3.upload({
+          Bucket: userBucket,
+          Key: filenameKey(user.username),
+          Body: JSON.stringify(s3user)
+        }).promise()];
+      })
+      .then(([s3user]) => {
+        _.set(s3user, ['password'], null);
+        return s3user;
+      }));
+};
+
+/**
+  * removeFromList gets a user from S3, then removes a beanie from their beanies & wantlist
+*/
+const removeFromList = (user, listType, family, beanieName) => {
   return get(user.username)
     .then(s3user => {
-      _.set(s3user, ['beanies'], user.beanies);
-      _.set(s3user, ['wantlist'], user.wantlist);
-      _.set(s3user, ['token'], user.jwt);
+      _.set(s3user, listType, _.filter(s3user[listType], (beanie) => beanie.name !== beanieName));
       return [s3user, s3.upload({
         Bucket: userBucket,
         Key: filenameKey(user.username),
@@ -177,6 +198,8 @@ module.exports = {
   create,
   all,
   updateLists,
+  addToList,
+  removeFromList,
   resetPassword,
   changePassword
 };
