@@ -75,41 +75,10 @@ resource "aws_iam_role_policy_attachment" "cloudwatch-attach" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# resource "aws_iam_role_policy_attachment" "dynamo-attach" {
-#   role       = aws_iam_role.iam_for_lambda.name
-#   policy_arn = aws_iam_policy.dynamo_policy.arn
-# }
-
-
 resource "aws_iam_role_policy_attachment" "ssm-attach" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.ssm_policy.arn
 }
-
-# resource "aws_iam_policy" "dynamo_policy" {
-#   name        = "beanieboo_dynamo_policy"
-#   description = "dynamo policy"
-#
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Action": [
-#         "dynamodb:*"
-#       ],
-#       "Effect": "Allow",
-#       "Resource": [
-#         "${aws_dynamodb_table.users.arn}",
-#         "${aws_dynamodb_table.users.arn}/*",
-#         "${aws_dynamodb_table.beanies.arn}",
-#         "${aws_dynamodb_table.beanies.arn}/*"
-#       ]
-#     }
-#   ]
-# }
-# EOF
-# }
 
 resource "aws_iam_policy" "ssm_policy" {
   name        = "beanieboo_ssm_policy"
@@ -130,36 +99,6 @@ resource "aws_iam_policy" "ssm_policy" {
 }
 EOF
 }
-
-# # DB
-# resource "aws_dynamodb_table" "users" {
-#   name = "beaniebooUsers"
-#   billing_mode = "PROVISIONED"
-#   write_capacity = 10
-#   read_capacity = 10
-#   hash_key = "username"
-#   attribute {
-#     name = "username"
-#     type = "S"
-#   }
-# }
-#
-# resource "aws_dynamodb_table" "beanies" {
-#   name = "beanies"
-#   billing_mode = "PROVISIONED"
-#   write_capacity = 5
-#   read_capacity = 10
-#   hash_key = "family"
-#   range_key = "name"
-#   attribute {
-#     name = "name"
-#     type = "S"
-#   }
-#   attribute {
-#     name = "family"
-#     type = "S"
-#   }
-# }
 
 # ALB
 resource "aws_lb_target_group" "beanieboo_server_lambda" {
