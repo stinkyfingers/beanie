@@ -29,8 +29,8 @@ const get = (username) => {
     Bucket: userBucket,
     Key: filenameKey(username)
   })
-  .promise()
-  .then(object => JSON.parse(object.Body.toString()));
+    .promise()
+    .then(object => JSON.parse(object.Body.toString()));
 };
 
 /**
@@ -42,28 +42,28 @@ const login = (username, password) => {
     Bucket: userBucket,
     Key: filenameKey(username)
   })
-  .promise()
-  .then(object => JSON.parse(object.Body.toString()))
-  .then(user => {
-    const buf = new Buffer.from(user.password);
-    return config.getPrivateKey()
-      .then(key => {
-        const dec = crypto.privateDecrypt(key.toString(), buf);
-        if (dec.toString() !== password) {
-          throw Error('authentication error');
-        };
-        return key;
-      })
-      .then(key => {
-        const token = utilities.createToken(user, key);
-        _.set(user, ['token'], token);
-      })
-      .then(() => user);
+    .promise()
+    .then(object => JSON.parse(object.Body.toString()))
+    .then(user => {
+      const buf = new Buffer.from(user.password);
+      return config.getPrivateKey()
+        .then(key => {
+          const dec = crypto.privateDecrypt(key.toString(), buf);
+          if (dec.toString() !== password) {
+            throw Error('authentication error');
+          }
+          return key;
+        })
+        .then(key => {
+          const token = utilities.createToken(user, key);
+          _.set(user, ['token'], token);
+        })
+        .then(() => user);
     })
     .then(user => {
       _.set(user, ['password'], null);
       return user;
-  });
+    });
 };
 
 /**
@@ -89,13 +89,13 @@ const create = (username, password, email) => {
         Key: filenameKey(username),
         Body: JSON.stringify(user)
       })
-      .promise()
-      .then(() => {
-        const token = utilities.createToken(user, key);
-        _.set(user, ['token'], token);
-        _.set(user, ['password'], null);
-        return user;
-      });
+        .promise()
+        .then(() => {
+          const token = utilities.createToken(user, key);
+          _.set(user, ['token'], token);
+          _.set(user, ['password'], null);
+          return user;
+        });
     });
 };
 
@@ -104,8 +104,8 @@ const create = (username, password, email) => {
 */
 const all = () => {
   return s3.listObjectsV2({
-      Bucket: userBucket,
-    })
+    Bucket: userBucket,
+  })
     .promise()
     .then(res => res.Contents.map(object => _.replace(object.Key, '.json', '')));
 };
@@ -119,13 +119,13 @@ const updateLists = (user) => {
       _.set(s3user, ['beanies'], user.beanies);
       _.set(s3user, ['wantlist'], user.wantlist);
       _.set(s3user, ['token'], user.jwt);
-      return [s3.upload({
+      return [s3user, s3.upload({
         Bucket: userBucket,
         Key: filenameKey(user.username),
         Body: JSON.stringify(s3user)
-      }).promise(), s3user];
+      }).promise()];
     })
-    .then(([resp, s3user]) => {
+    .then(([s3user]) => {
       _.set(s3user, ['password'], null);
       return s3user;
     });
@@ -142,14 +142,14 @@ const resetPassword = (username) => {
         const buffer = Buffer.from(newPassword);
         const encPassword = crypto.publicEncrypt(key.toString(), buffer);
         _.set(s3user, ['password'], newPassword);
-        return [s3.upload({
+        return [s3user, s3.upload({
           Bucket: userBucket,
           Key: filenameKey(username),
           Body: JSON.stringify({ ...s3user, password: encPassword })
-        }).promise(), s3user];
+        }).promise()];
       })
-      .then(([resp, s3user]) => {
-        return utilities.emailPassword(s3user)
+      .then(([s3user]) => {
+        return utilities.emailPassword(s3user);
       }));
 };
 
@@ -162,13 +162,13 @@ const changePassword = (user) => {
       .then(key => {
         const encPassword = crypto.publicEncrypt(key.toString(), Buffer.from(user.newPassword));
         _.set(s3user, ['password'], user.newPassword);
-        return [s3.upload({
+        return [s3user, s3.upload({
           Bucket: userBucket,
           Key: filenameKey(user.username),
           Body: JSON.stringify({ ...s3user, password: encPassword })
-        }).promise(), s3user]
+        }).promise()];
       })
-    .then(([resp, s3user]) => s3user));
+      .then(([s3user]) => s3user));
 };
 
 module.exports = {

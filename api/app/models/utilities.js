@@ -25,7 +25,7 @@ const getBase64ImageDataAndThumbnail = (beanie) => {
     response.data = isHTTPSLink[0];
   }
 
-  const isData = beanie.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+  const isData = beanie.image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
   if (isData && isData.length === 3) {
     response.type = isData[1];
     response.data = Buffer.from(isData[2], 'base64');
@@ -53,7 +53,7 @@ const getBase64ImageDataAndThumbnail = (beanie) => {
   * randomPassword generates a 6-char password
   */
 const randomPassword = () => {
-  let opts = 'qwertyuiopasdfghjklzxcvbnm'
+  let opts = 'qwertyuiopasdfghjklzxcvbnm';
   let password = '';
   for (let i = 0; i < 6; i++) {
     password += opts[Math.floor(Math.random() * Math.floor(26))];
@@ -67,20 +67,20 @@ const randomPassword = () => {
 const emailPassword = (user) => {
   return config.getEmailPassword()
     .then(emailPassword => {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'johnshenk77@gmail.com',
-        pass: emailPassword
-      }
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'johnshenk77@gmail.com',
+          pass: emailPassword
+        }
+      });
+      return transporter.sendMail({
+        from: '"Beanie Central" <johnshenk77@gmail.com>',
+        to: user.email,
+        subject: 'Beanie Central Password Reset',
+        text: `New password for ${user.username}: ${user.password}`
+      });
     });
-    return transporter.sendMail({
-      from: '"Beanie Central" <johnshenk77@gmail.com>',
-      to: user.email,
-      subject: 'Beanie Central Password Reset',
-      text: `New password for ${user.username}: ${user.password}`
-    });
-  });
 };
 
 /**
