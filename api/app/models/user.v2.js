@@ -197,7 +197,6 @@ module.exports = {
   login,
   create,
   all,
-  updateLists,
   addToList,
   removeFromList,
   resetPassword,
