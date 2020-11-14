@@ -2,7 +2,7 @@ div.login {
   text-align: right;
 }
 
-input {
+.login input {
   width: 10em;
 }
 

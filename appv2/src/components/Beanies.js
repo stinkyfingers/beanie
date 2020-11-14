@@ -19,7 +19,7 @@ const PdfLink = ({ beanies, token }) => <React.Fragment>
 
 const BeanieSummary = ({ beanie, handleClick, handleDrag, pdfBeanieNames, handleChange }) => {
   return <tr className='beanieSummary' draggable={true} onDragStart={() => handleDrag(beanie)}>
-    <td><input type='checkbox' checked={pdfBeanieNames.includes(beanie.name) ? 'checked' : ''} onChange={handleChange} value={beanie.name}/></td>
+    <td className='checkbox'><input type='checkbox' checked={pdfBeanieNames.includes(beanie.name) ? 'checked' : ''} onChange={handleChange} value={beanie.name}/></td>
     <td onClick={() => handleClick(beanie, 'beanie')}>{beanie.name}<div className='subtext'>{beanie.animal}</div></td>
     <td onClick={() => handleClick(beanie, 'beanie')}>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} /> : null}</td>
   </tr>;
