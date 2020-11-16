@@ -14,7 +14,7 @@ const Beanie = ({ beanie }) => {
   React.useEffect(() => {
     if(!beanie || !state.user) return null;
     if (beanie.isNew) {
-      setBeanieValue({ family: state.family });
+      setBeanieValue(beanieValue => ({ ...beanieValue, family: state.family }));
       return;
     }
     const fetchBeanie = () => {
@@ -52,19 +52,20 @@ const Beanie = ({ beanie }) => {
   };
 
   const submit = () => {
-    setSavingState('Saving...');
-    return create(state.user.token, beanieValue)
-      .then(() => {
-        if (beanieValue.isNew) {
-          const updatedBeanies = state.beanies;
-          updatedBeanies.push(beanieValue);
-          setState({ ...state, beanies: updatedBeanies });
-        }
-        setSavingState('Saving Complete');
-      })
-      .catch(err => {
-        setError(err)
-      });
+    console.log(beanieValue)
+    // setSavingState('Saving...');
+    // return create(state.user.token, beanieValue)
+    //   .then(() => {
+    //     if (beanieValue.isNew) {
+    //       const updatedBeanies = state.beanies;
+    //       updatedBeanies.push(beanieValue);
+    //       setState({ ...state, beanies: updatedBeanies });
+    //     }
+    //     setSavingState('Saving Complete');
+    //   })
+    //   .catch(err => {
+    //     setError(err)
+    //   });
   };
 
   const handleRemove = () => {

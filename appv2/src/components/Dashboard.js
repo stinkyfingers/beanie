@@ -89,7 +89,6 @@ const Dashboard = () => {
   const workspace = () => {
     if (error) return <Error error={error} />;
     switch (mode) {
-
       case 'beanie':
         return <Beanie beanie={beanie} />;
       case 'users':
@@ -114,7 +113,7 @@ const Dashboard = () => {
         </div>
         <div className='controls'>
           <button className='dashboard' onClick={() => handleClick(null, 'userLists')} hidden={state?.user ? false : true}>My Beanies</button>
-          <button className='dashboard' onClick={() => handleClick({isNew: true}, 'beanie')} hidden={state?.user?.admin ? false : true}>Create New Beanie</button>
+          <button className='dashboard' onClick={() => handleClick({ isNew: true }, 'beanie')} hidden={state?.user?.admin ? false : true}>Create New Beanie</button>
           <button className='dashboard' onClick={() => handleClick(null, 'users')} hidden={state?.user ? false : true}>Show Users</button>
           <button className='dashboard' onClick={() => handleClick(null, 'settings')} hidden={state?.user ? false : true}>Settings</button>
         </div>

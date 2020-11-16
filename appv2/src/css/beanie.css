@@ -28,11 +28,15 @@
   width:100%;
 }
 
-.thumbnail>img,.add,.savingNotice {
+.thumbnail>img,.add,.remove,.savingNotice {
   display: block;
   margin: 0 auto;
 }
 
 .savingNotice {
+  color: var(--red);
+}
+
+.remove {
   color: var(--red);
 }
