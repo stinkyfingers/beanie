@@ -58,9 +58,13 @@ const get = (family, name) => {
       Bucket: imageBucket,
       Key: imageKey(family, name)
     }).promise()
+      .catch(err => {
+        console.log(`no image for ${name}: ${err}`);
+      })
       .then(image => {
         const beanie = JSON.parse(object.Body.toString());
-        return { ...beanie, image: Buffer.from(image.Body).toString() };
+        const img = image ? Buffer.from(image.Body).toString() : null;
+        return { ...beanie, image: img };
       }));
 };
 
@@ -70,14 +74,16 @@ const get = (family, name) => {
 const create = (beanie) => {
   return utilities.getBase64ImageDataAndThumbnail(beanie)
     .then(resp => {
-      beanie.thumbnail = resp.thumbnail;
-      return resp.base64String;
+      if (resp) {
+        beanie.thumbnail = resp.thumbnail;
+        return resp.base64String
+          .then(image => s3.upload({
+            Bucket: imageBucket,
+            Key: imageKey(beanie.family, beanie.name),
+            Body: Buffer.from(image)
+          }).promise());
+      }
     })
-    .then(image => s3.upload({
-      Bucket: imageBucket,
-      Key: imageKey(beanie.family, beanie.name),
-      Body: Buffer.from(image)
-    }).promise())
     .then(() => s3.upload({
       Bucket: dbBucket,
       Key: key(beanie.family, beanie.name),
