@@ -83,7 +83,7 @@ POLICY
 resource "aws_codebuild_project" "app" {
   name          = "beanieboo"
   description   = "beanieboo"
-  build_timeout = "5"
+  build_timeout = "20"
   service_role  = aws_iam_role.build.arn
 
   artifacts {
