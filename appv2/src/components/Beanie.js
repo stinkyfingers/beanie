@@ -1,11 +1,11 @@
 import React from 'react';
 import Context from '../Context';
 import Error from './Error';
-import { get, create } from '../api';
+import { get, create, remove } from '../api';
 import '../css/beanie.css';
 
 const Beanie = ({ beanie }) => {
-  const { state } = React.useContext(Context);
+  const { state, setState } = React.useContext(Context);
   const [beanieValue, setBeanieValue] = React.useState(beanie);
   const [savingState, setSavingState] = React.useState('');
   const [err, setError] = React.useState(undefined);
@@ -51,19 +51,30 @@ const Beanie = ({ beanie }) => {
     setBeanieValue({ ...beanieValue, [e.target.name]: e.target.value})
   };
 
-  const submit = async() => {
+  const submit = () => {
     setSavingState('Saving...');
     return create(state.user.token, beanieValue)
       .then(() => {
         if (beanieValue.isNew) {
-          const updatedBeanies = beanie;
+          const updatedBeanies = state.beanies;
           updatedBeanies.push(beanieValue);
-          state.set({ ...state, beanies: updatedBeanies });
+          setState({ ...state, beanies: updatedBeanies });
         }
         setSavingState('Saving Complete');
       })
       .catch(err => {
         setError(err)
+      });
+  };
+
+  const handleRemove = () => {
+    if (!window.confirm('Are you sure?')) return;
+    return remove(state.user.token, beanie.family, beanie.name)
+      .then(() => {
+        const beanies = state.beanies;
+        _.remove(beanies, b => b.name === beanie.name);
+        setState({ ...state, beanies });
+        setBeanieValue(null);
       });
   };
 
@@ -120,6 +131,7 @@ const Beanie = ({ beanie }) => {
         {disabled ? null :
           <React.Fragment>
             <button className='add' onClick={submit}>Save</button>
+            <button className='remove' onClick={handleRemove}>Delete</button>
             <div className='savingNotice'>{savingState}</div>
           </React.Fragment>
         }
