@@ -52,20 +52,19 @@ const Beanie = ({ beanie }) => {
   };
 
   const submit = () => {
-    console.log(beanieValue)
-    // setSavingState('Saving...');
-    // return create(state.user.token, beanieValue)
-    //   .then(() => {
-    //     if (beanieValue.isNew) {
-    //       const updatedBeanies = state.beanies;
-    //       updatedBeanies.push(beanieValue);
-    //       setState({ ...state, beanies: updatedBeanies });
-    //     }
-    //     setSavingState('Saving Complete');
-    //   })
-    //   .catch(err => {
-    //     setError(err)
-    //   });
+    setSavingState('Saving...');
+    return create(state.user.token, beanieValue)
+      .then(() => {
+        if (beanieValue.isNew) {
+          const updatedBeanies = state.beanies;
+          updatedBeanies.push(beanieValue);
+          setState({ ...state, beanies: updatedBeanies });
+        }
+        setSavingState('Saving Complete');
+      })
+      .catch(err => {
+        setError(err)
+      });
   };
 
   const handleRemove = () => {

@@ -8,6 +8,9 @@ const cors = require('cors');
 const BeanieV2 = require('./models/beanie.v2');
 const UserV2 = require('./models/user.v2');
 
+// TODO
+// JSON errors (like auth)
+
 const router = express.Router();
 // strips the /beanieboo route set up for the target group
 const stripServer = (req, res, next) => {
