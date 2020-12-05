@@ -74,15 +74,14 @@ const get = (family, name) => {
 const create = (beanie) => {
   return utilities.getBase64ImageDataAndThumbnail(beanie)
     .then(resp => {
-      if (resp) {
-        beanie.thumbnail = resp.thumbnail;
-        return resp.base64String
-          .then(image => s3.upload({
-            Bucket: imageBucket,
-            Key: imageKey(beanie.family, beanie.name),
-            Body: Buffer.from(image)
-          }).promise());
-      }
+      if (!resp) return null;
+      beanie.thumbnail = resp.thumbnail;
+      const image = resp.base64String
+      return s3.upload({
+        Bucket: imageBucket,
+        Key: imageKey(beanie.family, beanie.name),
+        Body: Buffer.from(image)
+      }).promise();
     })
     .then(() => s3.upload({
       Bucket: dbBucket,

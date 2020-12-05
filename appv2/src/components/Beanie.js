@@ -63,7 +63,8 @@ const Beanie = ({ beanie }) => {
         setSavingState('Saving Complete');
       })
       .catch(err => {
-        setError(err)
+        setError(err);
+        setSavingState(null);
       });
   };
 
