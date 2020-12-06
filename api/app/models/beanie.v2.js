@@ -7,9 +7,6 @@ const dbBucket = 'beaniedb.john-shenk.com';
 const imageBucket = 'beaniedata.john-shenk.com';
 
 AWS.config.update({region: region});
-if (process.env.NODE_ENV === 'local') {
-  AWS.config.endpoint = 'http://localhost:8000';
-}
 if (process.env.NODE_ENV === 'live') {
   AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'jds'}); // run locally with live db
 }

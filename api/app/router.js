@@ -28,38 +28,39 @@ const strat = new strategy(
         };
         jwt.verify(req.headers.token, publicKey, options, (err, res) => {
           if (err) {
-            return done(authenticationFailure, null);
+            return done(null, false, { message: err });
           }
           return done(null, res);
         });
       });
   }
 );
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
 
 passport.use('authStrategy', strat);
 router.use(cors());
 router.options('*', cors());
 router.use(passport.initialize());
-router.use(passport.session());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(stripServer);
 
-const auth = passport.authenticate('authStrategy', { session: true });
+const auth = passport.authenticate('authStrategy', { session: false, failureFlash: 'Authentication error' });
+
+const flash = (req, res, next) => {
+  req.flash = (t, message) => {
+    return res.status(401).json({ error: message });
+  }
+  next();
+};
 
 const errHandler = (err, req, res) => {
   console.log({error: err});
   res.status(500).json({error: err.toString()});
 };
 
-router.get('/authStatus', auth, errHandler, (req, res) => res.send('hey there, world'));
+router.get('/authStatus', flash, auth, errHandler, (req, res) => {
+  return res.send('hey there, world')
+});
 
 // S3 based API endpoints
 router.get('/v2/beanies/:family/:page?', (req, res, next) => {
@@ -68,31 +69,31 @@ router.get('/v2/beanies/:family/:page?', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/v2/beanie/:family/:name', auth, (req, res, next) => {
+router.get('/v2/beanie/:family/:name', flash, auth, (req, res, next) => {
   return BeanieV2.get(req.params.family, req.params.name)
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });
 
-router.post('/v2/beanie', auth, (req, res, next) => {
+router.post('/v2/beanie', flash, auth, (req, res, next) => {
   return BeanieV2.create(req.body)
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });
 
-router.delete('/v2/beanie/:family/:name', auth, (req, res, next) => {
+router.delete('/v2/beanie/:family/:name', flash, auth, (req, res, next) => {
   return BeanieV2.remove(req.params.family, req.params.name)
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });
 
-router.get('/v2/users', auth, (req, res, next) => {
+router.get('/v2/users', flash, auth, (req, res, next) => {
   return UserV2.all()
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });
 
-router.get('/v2/user/:username', auth, (req, res, next) => {
+router.get('/v2/user/:username', flash, auth, (req, res, next) => {
   return UserV2.get(req.params.username)
     .then(resp => res.status(200).json(resp))
     .catch(next);
@@ -110,13 +111,13 @@ router.post('/v2/user', (req, res, next) => {
     .catch(next);
 });
 
-router.put('/v2/user/:listType/:family/:beanie', auth, (req, res, next) => {
+router.put('/v2/user/:listType/:family/:beanie', flash, auth, (req, res, next) => {
   return UserV2.addToList(req.user, req.params.listType, req.params.family, req.params.beanie)
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });
 
-router.delete('/v2/user/:listType/:family/:beanie', auth, (req, res, next) => {
+router.delete('/v2/user/:listType/:family/:beanie', flash, auth, (req, res, next) => {
   return UserV2.removeFromList(req.user, req.params.listType, req.params.family, req.params.beanie)
     .then(resp => res.status(200).json(resp))
     .catch(next);
@@ -128,7 +129,7 @@ router.get('/v2/password/:username', (req, res, next) => {
     .catch(next);
 });
 
-router.put('/v2/password', auth, (req, res, next) => {
+router.put('/v2/password', flash, auth, (req, res, next) => {
   return UserV2.changePassword(req.body)
     .then(resp => res.status(200).json(resp))
     .catch(next);

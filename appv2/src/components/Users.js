@@ -7,19 +7,21 @@ import { users } from '../api';
 const Users = ({ handleClick, setError }) => {
   const { state, setState } = React.useContext(Context);
   const [allUsers, setUsers] = useState([]);
+  const token = state?.user?.token;
 
   useEffect(() => {
     const allUsersFunc = () => {
-      return users(state.user.token)
+      return users(token)
         .then(setUsers)
-        .catch(err => { setError(err)});
+        .catch(err => { setError(err) });
     };
     allUsersFunc();
     return setUsers([]);
-  }, [state.user.token]);
+  }, [token]);
 
   const renderUsers = () => {
-    if (!allUsers) return null;
+    if (allUsers.error) return <Error msg={allUsers.error} />
+    if (!allUsers || !allUsers.length) return null;
     return <table className='users'>
         <thead>
           <tr>

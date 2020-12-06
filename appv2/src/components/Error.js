@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/error.css';
 
 const Error = ({ msg }) => {
+  if (!msg) msg = 'unknown error';
   msg = typeof(msg) === 'string' ? msg : msg.toString();
   return (
     <div className='error'>

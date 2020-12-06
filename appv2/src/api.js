@@ -52,30 +52,6 @@ const register = (user) => {
       .then(resp => resp.json());
 };
 
-// const updateWantList = (user) => {
-//   return fetch(`${apiHost}/v2/user/wantList`, {
-//       method: 'PUT',
-//       body: JSON.stringify({ ...user, beanies: null }),
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'token': user.token
-//       }
-//     })
-//       .then(resp => resp.json());
-// };
-//
-// const updateMyBeanies = (user) => {
-//   return fetch(`${apiHost}/v2/user/beanies`, {
-//       method: 'PUT',
-//       body: JSON.stringify({ ...user, wantList: null }),
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'token': user.token
-//       }
-//     })
-//       .then(resp => resp.json());
-// };
-
 const addToList = (user, listType, family, beanieName) => {
   return fetch(`${apiHost}/v2/user/${listType}/${family}/${beanieName}`, {
       method: 'PUT',
