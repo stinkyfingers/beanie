@@ -1,4 +1,5 @@
 import React from 'react';
+import { decode } from 'jsonwebtoken';
 import Context from '../Context';
 import Login from './Login';
 import Logout from './Logout';
@@ -18,6 +19,10 @@ const Auth = () => {
         break;
       default:
         if (state.user) {
+          // jwt expired
+          if (!state?.user?.token || ((decode(state.user.token).exp) < (new Date() / 1000))) {
+            setState(state => ({ user: null }));
+          }
           setElement(<Logout />);
         } else {
           setElement(<Login handleForgotPassword={() => setMode('password')} />);
