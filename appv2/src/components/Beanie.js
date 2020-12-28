@@ -56,9 +56,7 @@ const Beanie = ({ beanie }) => {
     return create(state.user.token, beanieValue)
       .then(() => {
         if (beanieValue.isNew) {
-          const updatedBeanies = state.beanies;
-          updatedBeanies.push(beanieValue);
-          setState({ ...state, beanies: updatedBeanies });
+          // TODO add to "beanies"
         }
         setSavingState('Saving Complete');
       })
@@ -72,9 +70,7 @@ const Beanie = ({ beanie }) => {
     if (!window.confirm('Are you sure?')) return;
     return remove(state.user.token, beanie.family, beanie.name)
       .then(() => {
-        const beanies = state.beanies;
-        _.remove(beanies, b => b.name === beanie.name);
-        setState({ ...state, beanies });
+        // TODO remove from beanies
         setBeanieValue(null);
       });
   };
