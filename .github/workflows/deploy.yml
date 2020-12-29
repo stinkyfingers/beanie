@@ -11,12 +11,12 @@ jobs:
       - name: zip
         run: zip -r lambda.zip . -q
         working-directory: ./api/app
-    - id: archive-build
-      uses: actions/upload-artifact@v2
-      with:
-        name: build-output
-        path: lambda.zip
-        retention-days: 1
+      - id: archive-build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-output
+          path: lambda.zip
+          retention-days: 1
 
   terraform:
     needs: [lambda]
