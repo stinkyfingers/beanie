@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('./config');
 const cors = require('cors');
 const BeanieV2 = require('./models/beanie.v2');
+const BeanieV3 = require('./models/beanie.v3');
 const UserV2 = require('./models/user.v2');
 
 // TODO
@@ -49,7 +50,7 @@ const auth = passport.authenticate('authStrategy', { session: false, failureFlas
 const flash = (req, res, next) => {
   req.flash = (t, message) => {
     return res.status(401).json({ error: message });
-  }
+  };
   next();
 };
 
@@ -59,7 +60,7 @@ const errHandler = (err, req, res) => {
 };
 
 router.get('/authStatus', flash, auth, errHandler, (req, res) => {
-  return res.send('hey there, world')
+  return res.send('hey there, world');
 });
 
 // S3 based API endpoints
@@ -131,6 +132,31 @@ router.get('/v2/password/:username', (req, res, next) => {
 
 router.put('/v2/password', flash, auth, (req, res, next) => {
   return UserV2.changePassword(req.body)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+// redis based endpoints
+router.post('/v3/beanie', flash, auth, (req, res, next) => {
+  return BeanieV3.create(req.body)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.get('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
+  return BeanieV3.get(req.params.family, req.params.name)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.get('/v3/beanies/:family', (req, res, next) => {
+  return BeanieV3.family(req.params.family)
+    .then(resp => res.status(200).json(resp))
+    .catch(next);
+});
+
+router.delete('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
+  return BeanieV3.remove(req.params.family, req.params.name)
     .then(resp => res.status(200).json(resp))
     .catch(next);
 });

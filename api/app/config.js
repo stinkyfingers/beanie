@@ -1,6 +1,10 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
 
+const redisUrl = (db) => {
+  return process.env.NODE_ENV !== 'local' ? `redis://:${process.env.REDIS_PASSWORD}@redis-19395.c60.us-west-1-2.ec2.cloud.redislabs.com:19395/${db}` : null;
+};
+
 const getPrivateKey = () => {
   return new Promise((res, rej) => {
     if (process.env.NODE_ENV === 'local') {
@@ -80,4 +84,9 @@ const getEmailPassword = () => {
   });
 };
 
-module.exports = { getPrivateKey, getPublicKey, getEmailPassword };
+module.exports = {
+  redisUrl,
+  getPrivateKey,
+  getPublicKey,
+  getEmailPassword
+ };

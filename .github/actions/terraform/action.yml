@@ -1,0 +1,26 @@
+name: 'terraform'
+description: 'Execute Terraform for a given environment'
+inputs:
+  path:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - id: sops
+      run: wget -O /tmp/sops.deb https://github.com/mozilla/sops/releases/download/v3.6.1/sops_3.6.1_amd64.deb && sudo dpkg -i /tmp/sops.deb
+      shell: bash
+    - id: decrypt
+      run: sops -d ${{ inputs.path }}/secrets.tfvars.json > ${{ inputs.path }}/.tfvars.json
+      shell: bash
+    - id: init
+      run: terraform init -input=false -backend-config="bucket=remotebackend" ${{ inputs.path }}
+      shell: bash
+    - id: validate
+      run: terraform validate ${{ inputs.path }}
+      shell: bash
+    - id: plan
+      run: terraform plan -input=false -var-file=${{ inputs.path }}/tfvars.json -out terraform.plan ${{ inputs.path }}
+      shell: bash
+    - id: apply
+      run: terraform apply -input=false terraform.plan
+      shell: bash

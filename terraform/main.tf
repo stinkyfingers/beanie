@@ -35,7 +35,7 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
 
   environment {
     variables = {
-      foo = "bar"
+      REDIS_PASSWORD = var.redis_password
     }
   }
 }

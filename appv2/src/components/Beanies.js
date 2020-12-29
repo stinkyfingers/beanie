@@ -40,6 +40,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
   if (isLoading) return <Loading />;
   if (error) return <Error msg={error} />;
   const dataLength = data ? _.sum(_.map(data, group => group.length)) : 0;
+  console.log(data)
 
   const handlePdfBeanieChange = (e) => {
     const name = e.target.value;
