@@ -152,8 +152,15 @@ router.get('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
 router.get('/v3/beanies/:family', (req, res, next) => {
   console.log("no flash")
   return BeanieV3.family(req.params.family)
+    .then(resp => {
+      console.log(resp)
+      return resp;
+    })
     .then(resp => res.status(200).json(resp))
-    .catch(next);
+    .catch(err => {
+      console.log("ERROR", err)
+      next(err)
+    });
 });
 
 router.delete('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
