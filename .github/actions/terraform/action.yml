@@ -9,15 +9,8 @@ runs:
     - id: sops
       run: wget -O /tmp/sops.deb https://github.com/mozilla/sops/releases/download/v3.6.1/sops_3.6.1_amd64.deb && sudo dpkg -i /tmp/sops.deb
       shell: bash
-    - id: version
-      run: sops --version
-      shell: bash
     - id: decrypt
-      run: sops -d ${{ inputs.path }}/secrets.tfvars.json > ${{ inputs.path }}/.tfvars.json
-      shell: bash
-    - run: ls ${{ inputs.path }}
-      shell: bash
-    - run: cat ${{ inputs.path }}/.tfvars.json
+      run: sops -d ${{ inputs.path }}/secrets.tfvars.json > ${{ inputs.path }}/tfvars.json
       shell: bash
     - id: init
       run: terraform init -input=false -backend-config="bucket=remotebackend" ${{ inputs.path }}
