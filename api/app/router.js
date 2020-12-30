@@ -136,39 +136,6 @@ router.put('/v2/password', flash, auth, (req, res, next) => {
     .catch(next);
 });
 
-// redis based endpoints
-router.post('/v3/beanie', flash, auth, (req, res, next) => {
-  return BeanieV3.create(req.body)
-    .then(resp => res.status(200).json(resp))
-    .catch(next);
-});
-
-router.get('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
-  return BeanieV3.get(req.params.family, req.params.name)
-    .then(resp => res.status(200).json(resp))
-    .catch(next);
-});
-
-router.get('/v3/beanies/:family', (req, res, next) => {
-  console.log("no flash")
-  return BeanieV3.family(req.params.family)
-    .then(resp => {
-      console.log(resp)
-      return resp;
-    })
-    .then(resp => res.status(200).json(resp))
-    .catch(err => {
-      console.log("ERROR", err)
-      next(err)
-    });
-});
-
-router.delete('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
-  return BeanieV3.remove(req.params.family, req.params.name)
-    .then(resp => res.status(200).json(resp))
-    .catch(next);
-});
-
 // Boilerplate
 router.all('*', (req, res) => {
   console.log('unsupported path', req.url);

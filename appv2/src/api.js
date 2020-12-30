@@ -2,19 +2,17 @@ import { apiHost } from './config'
 
 const family = (family, startKey) => {
   return fetch(`${apiHost}/v2/beanies/${family}/${startKey}`, {
-  // return fetch(`${apiHost}/v3/beanies/${family}`, {
     method: 'GET'
   })
-    .then(resp => resp.json());
+    .then(resp => resp.json())
 };
 
 const get = (token, family, name) => {
   return fetch(`${apiHost}/v2/beanie/${family}/${name}`, {
-  // return fetch(`${apiHost}/v3/beanie/${family}/${name}`, {
     method: 'GET',
     headers: { token }
   })
-    .then(resp => resp.json());
+    .then(resp => resp.json())
 };
 
 const create = (token, beanie) => {

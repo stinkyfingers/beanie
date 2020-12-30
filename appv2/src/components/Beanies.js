@@ -27,20 +27,32 @@ const BeanieSummary = ({ beanie, handleClick, handleDrag, pdfBeanieNames, handle
 
 const Beanies = ({ handleClick, handleDrag }) => {
   const { state } = React.useContext(Context);
+  const [family] = React.useState(state.family);
   const [pdf, setPdf] = React.useState({ ready: false, beanies: [] });
-  const getFamily = (family, startKey) => api.family(state.family, startKey);
+  const [data, setData] = React.useState({ beanies: [] });
+  const [error, setError] = React.useState();
 
-  const { isLoading, error, data, fetchMore, canFetchMore } = useInfiniteQuery('family', getFamily, {
-    getFetchMore: (lastGroup) => {
-      if (!lastGroup || lastGroup.length < numberOfResponsesFromAPI) return false;
-      return lastGroup[lastGroup.length - 1] ? lastGroup[lastGroup.length - 1].name : null;
-    }
-  });
+  const fetchBeanies = (startKey) => {
+    return api.family(family, startKey)
+      .then(resp => {
+        const canFetchMore = resp.length === numberOfResponsesFromAPI;
+        const next = resp?.length ? resp[resp.length - 1].name : null;
+        const beanies = data.beanies.concat(resp);
+        setData(data => ({...data, beanies, next, canFetchMore }))
+      })
+      .catch(setError)
+  };
 
-  if (isLoading) return <Loading />;
-  if (error) return <Error msg={error} />;
-  const dataLength = data ? _.sum(_.map(data, group => group.length)) : 0;
-  console.log(data)
+  React.useEffect(() => {
+    fetchBeanies(data.next)
+    return () => setData({});
+  }, []);
+
+  const fetchMore = () => {
+    setError(null);
+    fetchBeanies(data.next);
+  };
+
 
   const handlePdfBeanieChange = (e) => {
     const name = e.target.value;
@@ -53,7 +65,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
     setPdf({ ready: false, beanies});
   };
 
-  const renderBeaniesSummary = () => data.map(group => !group ? null : group.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={handlePdfBeanieChange}/>));
+  const renderBeaniesSummary = () => data?.beanies?.length ? data.beanies.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={handlePdfBeanieChange}/>) : null;
 
   const createPdf = () => {
     return Promise.all(pdf.beanies.map(beanie => api.get(state.user.token, state.family, beanie)))
@@ -70,14 +82,16 @@ const Beanies = ({ handleClick, handleDrag }) => {
     </React.Fragment>;
   };
 
+  if (error) return <Error error={error} />;
+
   return <div className='beaniesTable'>
     {renderPdf()}
     <InfiniteScroll
-      next={() => fetchMore()}
-      hasMore={canFetchMore}
-      dataLength={dataLength}
+      next={fetchMore}
+      hasMore={data.canFetchMore}
+      dataLength={data?.beanies?.length || 0}
       loader={<Loading />}
-      height={600}
+      height={window.innerHeight}
     >
       <table className='beaniesSummary'>
         <thead><tr><td colSpan={2}><div className='subtext'>Click to view or drag to add</div></td></tr></thead>
