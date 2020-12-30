@@ -150,6 +150,7 @@ router.get('/v3/beanie/:family/:name', flash, auth, (req, res, next) => {
 });
 
 router.get('/v3/beanies/:family', (req, res, next) => {
+  console.log("no flash")
   return BeanieV3.family(req.params.family)
     .then(resp => res.status(200).json(resp))
     .catch(next);
