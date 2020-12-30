@@ -40,3 +40,7 @@
 .remove {
   color: var(--red);
 }
+
+.image {
+  width: 30%;
+}

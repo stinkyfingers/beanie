@@ -1,27 +1,27 @@
 version: 0.2
 
-# phases:
-#   install:
-#     runtime-versions:
-#       nodejs: latest
-#     commands:
-#       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-#       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-#       - apt-get update -y
-#       - apt-get install -y yarn
-#       - pwd
-#   pre_build:
-#     commands:
-#       - cd api/app && yarn install --production
-#       - cd ../../appv2 && yarn install --production
-#   build:
-#     commands:
-#       - yarn build
-#       - cd ../api/app && zip -r lambda.zip . -q
-#   post_build:
-#     commands:
-#       - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
-#       - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
-#       - cd ../../appv2
-#       - aws s3 sync build s3://beanies.john-shenk.com
-#       - aws cloudfront create-invalidation --distribution-id E13AP81F1I8QV9 --paths /index.html /static/*
+phases:
+  install:
+    runtime-versions:
+      nodejs: latest
+    commands:
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt-get update -y
+      - apt-get install -y yarn
+      - pwd
+  pre_build:
+    commands:
+      # - cd api/app && yarn install --production
+      - cd ../../appv2 && yarn install --production
+  build:
+    commands:
+      - yarn build
+      # - cd ../api/app && zip -r lambda.zip . -q
+  post_build:
+    commands:
+      # - aws lambda update-function-code --function-name beaniebooserverlambda --zip-file fileb://lambda.zip
+      # - aws lambda update-alias  --function-name beaniebooserverlambda --function-version '$LATEST' --name live
+      # - cd ../../appv2
+      - aws s3 sync build s3://beanies.john-shenk.com
+      - aws cloudfront create-invalidation --distribution-id E13AP81F1I8QV9 --paths /index.html /static/*

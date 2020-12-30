@@ -1,8 +1,6 @@
 import { apiHost } from './config'
 
-const family = (family, startKey) => {
-  console.log(apiHost)
-  // return fetch(`${apiHost}/v2/beanies/${family}/${startKey}`, {
+const family = (family) => {
   return fetch(`${apiHost}/v3/beanies/${family}`, {
     method: 'GET'
   })
@@ -10,7 +8,6 @@ const family = (family, startKey) => {
 };
 
 const get = (token, family, name) => {
-  // return fetch(`${apiHost}/v2/beanie/${family}/${name}`, {
   return fetch(`${apiHost}/v3/beanie/${family}/${name}`, {
     method: 'GET',
     headers: { token }

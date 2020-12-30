@@ -53,9 +53,11 @@ const Beanie = ({ beanie }) => {
 
   const submit = () => {
     setSavingState('Saving...');
+    const isNew = beanie.isNew;
+    beanie.isNew = null;
     return create(state.user.token, beanieValue)
       .then(() => {
-        if (beanieValue.isNew) {
+        if (isNew) {
           // TODO add to "beanies"
         }
         setSavingState('Saving Complete');
@@ -120,7 +122,7 @@ const Beanie = ({ beanie }) => {
 
       <div className='images'>
         <div className='image'>
-          <img src={beanieValue.image} alt={beanieValue.name}/>
+          <img src={beanieValue.image} alt={beanieValue.name} width="400"/>
         </div>
         <div className='thumbnail'>
           {beanieValue.thumbnail ? <img src={beanieValue.thumbnail} alt={beanieValue.name}/> : 'Thumbmail image not created'}
