@@ -1,7 +1,7 @@
 name: deploy
 on: push
 jobs:
-  lambda:
+  api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,18 +11,6 @@ jobs:
       - name: zip
         run: zip -r lambda.zip . -q
         working-directory: ./api/app
-      - id: archive-build
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-output
-          path: ./api/app
-          retention-days: 1
-
-  terraform:
-    needs: [lambda]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.12.12
@@ -33,10 +21,6 @@ jobs:
           aws-region: us-west-1
           role-duration-seconds: 3600
           role-skip-session-tagging: true
-      - id: download-artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: build-output
       - uses: ./.github/actions/terraform
         with:
           path: terraform
