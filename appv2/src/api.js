@@ -1,14 +1,16 @@
 import { apiHost } from './config'
 
-const family = (family) => {
-  return fetch(`${apiHost}/v3/beanies/${family}`, {
+const family = (family, startKey) => {
+  return fetch(`${apiHost}/v2/beanies/${family}/${startKey}`, {
+  // return fetch(`${apiHost}/v3/beanies/${family}`, {
     method: 'GET'
   })
     .then(resp => resp.json());
 };
 
 const get = (token, family, name) => {
-  return fetch(`${apiHost}/v3/beanie/${family}/${name}`, {
+  return fetch(`${apiHost}/v2/beanie/${family}/${name}`, {
+  // return fetch(`${apiHost}/v3/beanie/${family}/${name}`, {
     method: 'GET',
     headers: { token }
   })
@@ -16,7 +18,7 @@ const get = (token, family, name) => {
 };
 
 const create = (token, beanie) => {
-  return fetch(`${apiHost}/v3/beanie`, {
+  return fetch(`${apiHost}/v2/beanie`, {
     method: 'POST',
     headers: { token, 'Content-Type': 'application/json' },
     body: JSON.stringify(beanie)
@@ -25,7 +27,7 @@ const create = (token, beanie) => {
 };
 
 const remove = (token, family, name) => {
-  return fetch(`${apiHost}/v3/beanie/${family}/${name}`, {
+  return fetch(`${apiHost}/v2/beanie/${family}/${name}`, {
     method: 'DELETE',
     headers: { token }
   })
