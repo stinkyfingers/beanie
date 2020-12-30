@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const config = require('./config');
 const cors = require('cors');
 const BeanieV2 = require('./models/beanie.v2');
-const BeanieV3 = require('./models/beanie.v3');
 const UserV2 = require('./models/user.v2');
 
 // TODO
@@ -18,7 +17,6 @@ const stripServer = (req, res, next) => {
   req.url = req.originalUrl.replace('/beanieboo', '');
   next();
 };
-const authenticationFailure = 'authentication failure';
 
 const strat = new strategy(
   (req, done) => {

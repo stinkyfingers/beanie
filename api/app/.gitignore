@@ -4,3 +4,4 @@ notes.txt
 */g_list.txt
 api/app/scripts/s3_to_redis.js
 .yarnclean
+scripts/deploy.sh

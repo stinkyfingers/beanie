@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import * as api from '../api';
 import Pdf from './Pdf';
+import Checklist from './Checklist';
 import Context from '../Context';
 import Loading from './Loading';
 import Error from './Error';
@@ -14,6 +15,12 @@ const numberOfResponsesFromAPI = 100;
 const PdfLink = ({ beanies, token }) => <React.Fragment>
     <PDFDownloadLink document={<Pdf beanies={beanies} title='Beanies' token={token}/>} fileName="beanies.pdf">
     {({ blob, url, loading, error }) => (loading ? 'Loading pdf...' : <button>Download pdf</button>)}
+    </PDFDownloadLink>
+  </React.Fragment>;
+
+const ChecklistLink = ({ beanies, family, loading}) => <React.Fragment>
+    <PDFDownloadLink document={<Checklist family={family} title='Checklist' beanies={beanies}/>} fileName="beanies_checklist.pdf">
+    {loading ? 'Loading checklist...' : <button>Download Checklist</button>}
     </PDFDownloadLink>
   </React.Fragment>;
 
@@ -29,6 +36,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
   const { state } = React.useContext(Context);
   const [family] = React.useState(state.family);
   const [pdf, setPdf] = React.useState({ ready: false, beanies: [] });
+  const [checklist, setChecklist] = React.useState({ ready: false, beanies: [], loading: false });
   const [data, setData] = React.useState({ beanies: [] });
   const [error, setError] = React.useState();
 
@@ -82,10 +90,44 @@ const Beanies = ({ handleClick, handleDrag }) => {
     </React.Fragment>;
   };
 
+  const createChecklist = () => {
+    setChecklist({ ...checklist, loading: true });
+    const beanies = [];
+    const fetchFamily = (family, startKey) => {
+      return api.family(family, startKey)
+        .then(resp => {
+          beanies.push(...resp);
+          if (resp.length === numberOfResponsesFromAPI) {
+            return fetchFamily(family, resp[resp.length - 1].name);
+          }
+        })
+        .catch(setError);
+    };
+    fetchFamily(state.family)
+      .then(() => {
+        setChecklist({ ready: true, beanies, loading: false });
+      });
+  };
+
+  const renderChecklist = () => {
+    if (checklist.ready || checklist.loading) return <React.Fragment>
+      <ChecklistLink family={state.family} beanies={checklist.beanies} loading={checklist.loading}/>
+      <button onClick={() => setChecklist({ ready: false, beanies: [], laoding: false })}>Cancel Checklist</button>
+    </React.Fragment>;
+    return <React.Fragment>
+      <button onClick={createChecklist}>Create Checklist</button>
+    </React.Fragment>;
+  };
+
   if (error) return <Error error={error} />;
 
   return <div className='beaniesTable'>
-    {renderPdf()}
+    <div className='pdfs'>
+      {renderPdf()}
+    </div>
+    <div className='pdfs'>
+      {renderChecklist()}
+    </div>
     <InfiniteScroll
       next={fetchMore}
       hasMore={data.canFetchMore}

@@ -89,4 +89,4 @@ module.exports = {
   getPrivateKey,
   getPublicKey,
   getEmailPassword
- };
+};

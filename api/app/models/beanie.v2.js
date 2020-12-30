@@ -46,14 +46,14 @@ const family = (family, startAfter) => {
             return beanie;
           } else {
             return s3.getObject({
-            Bucket: dbBucket,
-            Key: obj.Key
-          }).promise()
-            .then(res => JSON.parse(res.Body.toString()))
-            .then(toCache);
-          };
+              Bucket: dbBucket,
+              Key: obj.Key
+            }).promise()
+              .then(res => JSON.parse(res.Body.toString()))
+              .then(toCache);
+            };
         })
-        .then(beanie => beanie)
+        .then(beanie => beanie);
     })));
 };
 
@@ -68,8 +68,8 @@ const get = (family, name) => {
         Bucket: dbBucket,
         Key: key(family, name)
       }).promise()
-      .then(object => JSON.parse(object.Body.toString()))
-      .then(toCache)
+        .then(object => JSON.parse(object.Body.toString()))
+        .then(toCache);
     })
     .then(beanie => s3.getObject({
       Bucket: imageBucket,
@@ -84,7 +84,7 @@ const get = (family, name) => {
       }))
     .catch(err => {
       if (err.code === 'NoSuchKey') return null;
-    })
+    });
 };
 
 /**
@@ -95,7 +95,7 @@ const create = (beanie) => {
     .then(resp => {
       if (!resp) return null;
       beanie.thumbnail = resp.thumbnail;
-      const image = resp.base64String
+      const image = resp.base64String;
       return s3.upload({
         Bucket: imageBucket,
         Key: imageKey(beanie.family, beanie.name),
@@ -144,7 +144,7 @@ const fromCache = (family, name) => {
 */
 const toCache = (beanie) => {
   return new Promise((res, rej) => {
-    return client.set(`${beanie.family}:${beanie.name}`, JSON.stringify(beanie), (err, resp) => {
+    return client.set(`${beanie.family}:${beanie.name}`, JSON.stringify(beanie), (err) => {
       if (err) rej(err);
       res(beanie);
     });
@@ -156,7 +156,7 @@ const toCache = (beanie) => {
 */
 const unCache = (family, name) => {
   return new Promise((res, rej) => {
-    return client.del(`${family}:${name}`, (err, resp) => {
+    return client.del(`${family}:${name}`, (err) => {
       if (err) rej(err);
       res();
     });
