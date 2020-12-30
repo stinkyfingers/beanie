@@ -13,10 +13,9 @@ jobs:
         working-directory: ./api/app
       - id: archive-build
         uses: actions/upload-artifact@v2
-        working-directory: ./api/app
         with:
           name: build-output
-          path: lambda.zip
+          path: ./api/app
           retention-days: 1
 
   terraform:
