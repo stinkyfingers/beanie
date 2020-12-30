@@ -12,6 +12,8 @@ runs:
     - id: decrypt
       run: sops -d ${{ inputs.path }}/secrets.tfvars.json > ${{ inputs.path }}/.tfvars.json
       shell: bash
+    - run: ls terraform
+      shell: bash
     - id: init
       run: terraform init -input=false -backend-config="bucket=remotebackend" ${{ inputs.path }}
       shell: bash
