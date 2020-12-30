@@ -8,11 +8,6 @@ jobs:
       - name: install
         run: yarn install
         working-directory: ./api/app
-      - name: zip
-        run: zip -r lambda.zip . -q -x scripts
-        working-directory: ./api/app
-      - run: ls -l
-        working-directory: ./api/app
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.12.24
