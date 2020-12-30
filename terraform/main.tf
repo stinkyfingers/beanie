@@ -54,20 +54,20 @@ resource "aws_lambda_permission" "beanieboo_server_lambda" {
   source_arn = aws_lb_target_group.beanieboo_server_lambda.arn
 }
 
-# resource "aws_lambda_permission" "beanieboo_server_lambda_live" {
-#   statement_id  = "AllowExecutionFromApplicationLoadBalancer"
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_alias.beanieboo_server_lambda_live.arn
-#   principal     = "elasticloadbalancing.amazonaws.com"
-#   source_arn    = aws_lb_target_group.beanieboo_server_lambda.arn
-# }
-#
-# resource "aws_lambda_alias" "beanieboo_server_lambda_live" {
-#   name             = "live"
-#   description      = "set a live alias"
-#   function_name    = aws_lambda_function.beanieboo_server_lambda.arn
-#   function_version = aws_lambda_function.beanieboo_server_lambda.version
-# }
+resource "aws_lambda_permission" "beanieboo_server_lambda_live" {
+  statement_id  = "AllowExecutionFromApplicationLoadBalancer"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_alias.beanieboo_server_lambda_live.arn
+  principal     = "elasticloadbalancing.amazonaws.com"
+  source_arn = aws_lb_target_group.beanieboo_server_lambda.arn
+}
+
+resource "aws_lambda_alias" "beanieboo_server_lambda_live" {
+  name             = "live"
+  description      = "set a live alias"
+  function_name    = aws_lambda_function.beanieboo_server_lambda.arn
+  function_version = aws_lambda_function.beanieboo_server_lambda.version
+}
 
 # IAM
 resource "aws_iam_role_policy_attachment" "cloudwatch-attach" {
@@ -108,8 +108,8 @@ resource "aws_lb_target_group" "beanieboo_server_lambda" {
 
 resource "aws_lb_target_group_attachment" "beanieboo_server_lambda" {
   target_group_arn  = aws_lb_target_group.beanieboo_server_lambda.arn
-  target_id         = aws_lambda_function.beanieboo_server_lambda.arn
-  depends_on        = [aws_lambda_permission.beanieboo_server_lambda]
+  target_id         = aws_lambda_alias.beanieboo_server_lambda_live.arn
+  depends_on        = [aws_lambda_permission.beanieboo_server_lambda_live]
 }
 
 resource "aws_lb_listener_rule" "beanieboo_server_lambda" {
