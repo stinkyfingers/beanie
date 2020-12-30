@@ -40,11 +40,11 @@ resource "aws_lambda_function" "beanieboo_server_lambda" {
   }
 }
 
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_dir = "./api/app"
-  output_path = "lambda.zip"
-}
+# data "archive_file" "lambda_zip" {
+#   type        = "zip"
+#   source_dir = "./api/app"
+#   output_path = "lambda.zip"
+# }
 
 resource "aws_lambda_permission" "beanieboo_server_lambda" {
   statement_id  = "AllowExecutionFromApplicationLoadBalancer"
