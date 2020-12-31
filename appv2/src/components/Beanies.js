@@ -12,9 +12,9 @@ import '../css/beanies.css';
 
 const numberOfResponsesFromAPI = 100;
 
-const PdfLink = ({ beanies, token }) => <React.Fragment>
+const PdfLink = ({ beanies, token, loading }) => <React.Fragment>
     <PDFDownloadLink document={<Pdf beanies={beanies} title='Beanies' token={token}/>} fileName="beanies.pdf">
-    {({ blob, url, loading, error }) => (loading ? 'Loading pdf...' : <button>Download pdf</button>)}
+    {loading ? 'Loading pdf...' : <button>Download pdf</button>}
     </PDFDownloadLink>
   </React.Fragment>;
 
@@ -64,25 +64,26 @@ const Beanies = ({ handleClick, handleDrag }) => {
 
   const handlePdfBeanieChange = (e) => {
     const name = e.target.value;
-    const beanies = pdf.beanies;
-    if (beanies.includes(name)) {
-      _.remove(pdf.beanies, name);
+    if (!e.target.checked) {
+      const beanies = pdf.beanies;
+      _.remove(beanies, beanie => beanie === name);
+      setPdf(pdf => ({ beanies }));
     } else {
-      beanies.push(name);
+      setPdf(pdf => ({ beanies: _.union(pdf.beanies, [name]) }));
     }
-    setPdf({ ready: false, beanies});
   };
 
   const renderBeaniesSummary = () => data?.beanies?.length ? data.beanies.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={handlePdfBeanieChange}/>) : null;
 
   const createPdf = () => {
+    setPdf({ ...pdf, loading: true });
     return Promise.all(pdf.beanies.map(beanie => api.get(state.user.token, state.family, beanie)))
       .then(pdfBeanies => setPdf({ ready: true, beanies: pdfBeanies }));
   };
 
   const renderPdf = () => {
-    if (pdf.ready) return <React.Fragment>
-      <PdfLink token={state.user.token} beanies={pdf.beanies} />
+    if (pdf.ready || pdf.loading) return <React.Fragment>
+      <PdfLink token={state.user.token} beanies={pdf.beanies} loading={pdf.loading} />
       <button onClick={() => setPdf({ ready: false, beanies: [] })}>Cancel pdf</button>
     </React.Fragment>;
     return <React.Fragment>
