@@ -33,7 +33,7 @@ const family = (family, startAfter) => {
   const params = {
     Bucket: dbBucket,
     MaxKeys: 100,
-    StartAfter: startAfter !== 'undefined' || !startAfter ? key(family, startAfter) : null, // TODO
+    StartAfter: startAfter !== 'undefined' && startAfter ? key(family, startAfter) : null,
     Prefix: `${family}/`
   };
 

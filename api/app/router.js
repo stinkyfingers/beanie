@@ -5,7 +5,7 @@ const strategy = require('passport-custom').Strategy;
 const jwt = require('jsonwebtoken');
 const config = require('./config');
 const cors = require('cors');
-// const compression = require('compression');
+const compression = require('compression');
 const BeanieV2 = require('./models/beanie.v2');
 const UserV2 = require('./models/user.v2');
 
@@ -43,7 +43,7 @@ router.use(passport.initialize());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(stripServer);
-// router.use(compression);
+// router.use(compression());
 
 const auth = passport.authenticate('authStrategy', { session: false, failureFlash: 'Authentication error' });
 
@@ -64,15 +64,17 @@ router.get('/authStatus', flash, auth, errHandler, (req, res) => {
 });
 
 // S3 based API endpoints
-router.get('/v2/beanies/:family/:page?', (req, res, next) => {
+router.get('/v2/beanies/:family/:page?', compression(), (req, res, next) => {
   return BeanieV2.family(req.params.family, req.params.page)
     .then(resp => res.status(200).json(resp))
+    .then(res.flush())
     .catch(next);
 });
 
-router.get('/v2/beanie/:family/:name', (req, res, next) => {
+router.get('/v2/beanie/:family/:name', compression(), (req, res, next) => {
   return BeanieV2.get(req.params.family, req.params.name)
     .then(resp => res.status(200).json(resp))
+    .then(res.flush())
     .catch(next);
 });
 
