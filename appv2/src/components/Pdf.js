@@ -5,7 +5,6 @@ import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/render
 // Create styles
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#E4E4E4',
     fontSize: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -16,25 +15,30 @@ const styles = StyleSheet.create({
     padding: 20,
     textAlign: 'left',
     width: 200,
-    height: 300,
     borderStyle: 'solid',
-    borderColor: '#000',
-    borderWidth: '1px'
+    borderColor: '#aaa',
+    borderWidth: '1',
+    margin: '4'
   },
   image: {
-    width: 150,
-    height: 150
+    width: 50,
+    height: 50
+  },
+  noimage: {
+    width: 50,
+    height: 50,
+    color: '#aaa'
   },
   text: {
-    backgroundColor: '#ddd',
     marginVertical: '2px',
+    color: '#aaa'
   },
   field: {
-    fontSize: 11
+    color: '#000'
   }
 });
 
-const Pdf = ({beanies, title, token}) => {
+const Pdf = ({ beanies, title }) => {
   const renderViews = () => {
     if (!beanies) return null;
     const views = [];
@@ -78,7 +82,7 @@ const Pdf = ({beanies, title, token}) => {
             Sticker Text: <Text wrap={true} style={styles.field}>{beanie.st}</Text>
           </Text>
           {beanie.image ?
-            <Image src={beanie.image} style={styles.image}/>: <Text>No Image</Text>
+            <Image src={beanie.image} style={styles.image}/>: <Text style={styles.noimage}/>
           }
         </View>
       )

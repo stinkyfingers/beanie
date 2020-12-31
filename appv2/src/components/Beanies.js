@@ -12,21 +12,24 @@ import '../css/beanies.css';
 
 const numberOfResponsesFromAPI = 100;
 
-const PdfLink = ({ beanies, token, loading }) => <React.Fragment>
-    <PDFDownloadLink document={<Pdf beanies={beanies} title='Beanies' token={token}/>} fileName="beanies.pdf">
-    {loading ? 'Loading pdf...' : <button>Download pdf</button>}
+const PdfLink = ({ beanies, loading }) => <React.Fragment>
+    <PDFDownloadLink document={<Pdf beanies={beanies} title='Beanies' />} fileName="beanies.pdf">
+    {loading ? <div className='loadingPdf'>Loading PDF...</div> : <button>Download pdf</button>}
     </PDFDownloadLink>
   </React.Fragment>;
 
 const ChecklistLink = ({ beanies, family, loading}) => <React.Fragment>
     <PDFDownloadLink document={<Checklist family={family} title='Checklist' beanies={beanies}/>} fileName="beanies_checklist.pdf">
-    {loading ? 'Loading checklist...' : <button>Download Checklist</button>}
+    {loading ? <div className='loadingChecklist'>Loading Checklist...</div> : <button>Download Checklist</button>}
     </PDFDownloadLink>
   </React.Fragment>;
 
 const BeanieSummary = ({ beanie, handleClick, handleDrag, pdfBeanieNames, handleChange }) => {
   return <tr className='beanieSummary' draggable={true} onDragStart={() => handleDrag(beanie)}>
-    <td className='checkbox'><input type='checkbox' checked={pdfBeanieNames.includes(beanie.name) ? 'checked' : ''} onChange={handleChange} value={beanie.name}/></td>
+    <td className='checkbox'>
+      <small className='addToPdf'>Add To PDF</small>
+      <input className='addToPdf' type='checkbox' checked={pdfBeanieNames.includes(beanie.name) ? 'checked' : ''} onChange={handleChange} value={beanie.name}/>
+    </td>
     <td onClick={() => handleClick(beanie, 'beanie')}>{beanie.name}<div className='subtext'>{beanie.animal}</div></td>
     <td onClick={() => handleClick(beanie, 'beanie')}>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} /> : null}</td>
   </tr>;
@@ -76,18 +79,18 @@ const Beanies = ({ handleClick, handleDrag }) => {
   const renderBeaniesSummary = () => data?.beanies?.length ? data.beanies.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={handlePdfBeanieChange}/>) : null;
 
   const createPdf = () => {
-    setPdf({ ...pdf, loading: true });
-    return Promise.all(pdf.beanies.map(beanie => api.get(state.user.token, state.family, beanie)))
+    setPdf(pdf => ({ ...pdf, loading: true }));
+    return Promise.all(pdf.beanies.map(beanie => api.get(family, beanie)))
       .then(pdfBeanies => setPdf({ ready: true, beanies: pdfBeanies }));
   };
 
   const renderPdf = () => {
     if (pdf.ready || pdf.loading) return <React.Fragment>
-      <PdfLink token={state.user.token} beanies={pdf.beanies} loading={pdf.loading} />
-      <button onClick={() => setPdf({ ready: false, beanies: [] })}>Cancel pdf</button>
+      <PdfLink beanies={pdf.beanies} loading={pdf.loading} />
+      <button onClick={() => setPdf({ ready: false, beanies: [] })}>Cancel PDF</button>
     </React.Fragment>;
     return <React.Fragment>
-      <button onClick={createPdf}>Create pdf</button>
+      <button onClick={createPdf}>Create PDF <small className='addToPdf'>of selected Beanies</small></button>
     </React.Fragment>;
   };
 
@@ -104,7 +107,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
         })
         .catch(setError);
     };
-    fetchFamily(state.family)
+    fetchFamily(family)
       .then(() => {
         setChecklist({ ready: true, beanies, loading: false });
       });
@@ -116,7 +119,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
       <button onClick={() => setChecklist({ ready: false, beanies: [], laoding: false })}>Cancel Checklist</button>
     </React.Fragment>;
     return <React.Fragment>
-      <button onClick={createChecklist}>Create Checklist</button>
+      <button onClick={createChecklist}>Create Checklist<small className='addToPdf'>of all Beanies</small></button>
     </React.Fragment>;
   };
 
