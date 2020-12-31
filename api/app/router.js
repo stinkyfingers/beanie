@@ -5,6 +5,7 @@ const strategy = require('passport-custom').Strategy;
 const jwt = require('jsonwebtoken');
 const config = require('./config');
 const cors = require('cors');
+// const compression = require('compression');
 const BeanieV2 = require('./models/beanie.v2');
 const UserV2 = require('./models/user.v2');
 
@@ -42,6 +43,7 @@ router.use(passport.initialize());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(stripServer);
+// router.use(compression);
 
 const auth = passport.authenticate('authStrategy', { session: false, failureFlash: 'Authentication error' });
 
@@ -68,7 +70,7 @@ router.get('/v2/beanies/:family/:page?', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/v2/beanie/:family/:name', flash, auth, (req, res, next) => {
+router.get('/v2/beanie/:family/:name', (req, res, next) => {
   return BeanieV2.get(req.params.family, req.params.name)
     .then(resp => res.status(200).json(resp))
     .catch(next);

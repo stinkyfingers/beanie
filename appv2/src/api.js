@@ -7,12 +7,11 @@ const family = (family, startKey) => {
     .then(resp => resp.json())
 };
 
-const get = (token, family, name) => {
+const get = (family, name) => {
   return fetch(`${apiHost}/v2/beanie/${family}/${name}`, {
-    method: 'GET',
-    headers: { token }
+    method: 'GET'
   })
-    .then(resp => resp.json())
+    .then(resp => resp.json());
 };
 
 const create = (token, beanie) => {

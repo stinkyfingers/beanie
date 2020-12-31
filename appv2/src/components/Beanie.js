@@ -12,13 +12,13 @@ const Beanie = ({ beanie }) => {
   const disabled = state.user && state.user.admin ? false : true;
 
   React.useEffect(() => {
-    if(!beanie || !state.user) return null;
+    if(!beanie) return null;
     if (beanie.isNew) {
       setBeanieValue(beanieValue => ({ ...beanieValue, family: state.family }));
       return;
     }
     const fetchBeanie = () => {
-      return get(state.user.token, beanie.family, beanie.name)
+      return get(beanie.family, beanie.name)
       .then(resp => {
         setBeanieValue({ ...resp, isNew: false });
       });
