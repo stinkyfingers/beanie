@@ -41,53 +41,49 @@ const styles = StyleSheet.create({
 const Pdf = ({ beanies, title }) => {
   const renderViews = () => {
     if (!beanies) return null;
-    const views = [];
-    for (const beanie of beanies) {
-      views.push(
-        <View key={beanie.name} style={styles.view} wrap={false}>
-          <Text wrap={true} style={styles.text}>
-            Name: <Text wrap={true} style={styles.field}>{beanie.name}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Animal: <Text wrap={true} style={styles.field}>{beanie.animal}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Family: <Text wrap={true} style={styles.field}>{beanie.family}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Variety: <Text wrap={true} style={styles.field}>{beanie.variety}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Exclusive To: <Text wrap={true} style={styles.field}>{beanie.exclusiveTo}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Birthday: <Text wrap={true} style={styles.field}>{beanie.birthday}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Intro Date: <Text wrap={true} style={styles.field}>{beanie.introDate}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Retire Date: <Text wrap={true} style={styles.field}>{beanie.retireDate}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Height: <Text wrap={true} style={styles.field}>{beanie.height}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Length: <Text wrap={true} style={styles.field}>{beanie.length}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Tag Text: <Text wrap={true} style={styles.field}>{beanie.tt}</Text>
-          </Text>
-          <Text wrap={true} style={styles.text}>
-            Sticker Text: <Text wrap={true} style={styles.field}>{beanie.st}</Text>
-          </Text>
-          {beanie.image ?
-            <Image src={beanie.image} style={styles.image}/>: <Text style={styles.noimage}/>
-          }
-        </View>
-      )
-    }
-    return views;
+    return beanies.map(beanie =>
+      <View key={beanie.name} style={styles.view} wrap={false}>
+        <Text wrap={true} style={styles.text}>
+          Name: <Text wrap={true} style={styles.field}>{beanie.name}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Animal: <Text wrap={true} style={styles.field}>{beanie.animal}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Family: <Text wrap={true} style={styles.field}>{beanie.family}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Variety: <Text wrap={true} style={styles.field}>{beanie.variety}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Exclusive To: <Text wrap={true} style={styles.field}>{beanie.exclusiveTo}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Birthday: <Text wrap={true} style={styles.field}>{beanie.birthday}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Intro Date: <Text wrap={true} style={styles.field}>{beanie.introDate}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Retire Date: <Text wrap={true} style={styles.field}>{beanie.retireDate}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Height: <Text wrap={true} style={styles.field}>{beanie.height}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Length: <Text wrap={true} style={styles.field}>{beanie.length}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Tag Text: <Text wrap={true} style={styles.field}>{beanie.tt}</Text>
+        </Text>
+        <Text wrap={true} style={styles.text}>
+          Sticker Text: <Text wrap={true} style={styles.field}>{beanie.st}</Text>
+        </Text>
+        {beanie.thumbnail ?
+          <Image src={beanie.thumbnail} style={styles.image}/>: <Text style={styles.noimage}/>
+        }
+      </View>
+    );
   }
   return (
     <Document title={title}>

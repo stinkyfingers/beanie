@@ -36,3 +36,12 @@ small.addToPdf {
 input.addToPdf {
   margin-left: 30%;
 }
+
+.selectAll {
+  text-align: left;
+  margin-left: 30%
+}
+
+.selectAllLabel {
+  text-align: left
+}
