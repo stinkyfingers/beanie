@@ -41,6 +41,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
   const [pdf, setPdf] = React.useState({ ready: false, beanies: [] });
   const [checklist, setChecklist] = React.useState({ ready: false, beanies: [], loading: false });
   const [data, setData] = React.useState({ beanies: [] });
+  const [displayedBeanies, setDisplayedBeanies] = React.useState([]);
   const [error, setError] = React.useState();
 
   const fetchBeanies = (startKey) => {
@@ -49,7 +50,8 @@ const Beanies = ({ handleClick, handleDrag }) => {
         const canFetchMore = resp.length === numberOfResponsesFromAPI;
         const next = resp?.length ? resp[resp.length - 1].name : null;
         const beanies = data.beanies.concat(resp);
-        setData(data => ({...data, beanies, next, canFetchMore }))
+        setData(data => ({...data, beanies, next, canFetchMore }));
+        setDisplayedBeanies(resp);
       })
       .catch(setError)
   };
@@ -83,7 +85,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
     }
   };
 
-  const renderBeaniesSummary = () => data?.beanies?.length ? data.beanies.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={(e) => handlePdfBeanieChange(e, beanie)}/>) : null;
+  const renderBeaniesSummary = () => displayedBeanies?.length ? displayedBeanies.map(beanie => <BeanieSummary key={beanie.name} beanie={beanie} handleClick={handleClick} handleDrag={handleDrag} pdfBeanieNames={pdf.beanies} handleChange={(e) => handlePdfBeanieChange(e, beanie)}/>) : null;
 
   const createPdf = () => {
     setPdf(pdf => ({ ...pdf, ready: true }));
@@ -128,6 +130,14 @@ const Beanies = ({ handleClick, handleDrag }) => {
     </React.Fragment>;
   };
 
+  const handleSearch = (e) => {
+    const arr = [];
+    data.beanies.forEach(beanie => {
+      if (_.startsWith(_.lowerCase(beanie.name), _.lowerCase(e.target.value))) arr.push(beanie);
+    });
+    setDisplayedBeanies(arr);
+  };
+
   if (error) return <Error error={error} />;
 
   return <div className='beaniesTable'>
@@ -146,6 +156,7 @@ const Beanies = ({ handleClick, handleDrag }) => {
     >
       <table className='beaniesSummary'>
         <thead>
+          <tr><td colSpan={2} className='searchCol'><div className='search'><input type='text' onChange={handleSearch} placeholder='Search...' /></div></td></tr>
           <tr><td colSpan={2}><div className='subtext'>Click to view or drag to add</div></td></tr>
           <tr><td><div className='selectAll'><input type='checkbox' onClick={handleSelectAll} /></div></td><td><div className='selectAllLabel'>Select All</div></td></tr>
         </thead>
