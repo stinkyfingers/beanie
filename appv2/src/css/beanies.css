@@ -43,5 +43,12 @@ input.addToPdf {
 }
 
 .selectAllLabel {
-  text-align: left
+  text-align: left;
+}
+
+.searchCol {
+  width: 100%;
+}
+.search {
+  margin: auto;
 }
