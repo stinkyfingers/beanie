@@ -3,6 +3,7 @@ import Context from '../Context';
 import Beanie from './Beanie';
 import Error from './Error';
 import { users } from '../api';
+import '../css/users.css';
 
 const Users = ({ handleClick, setError }) => {
   const { state, setState } = React.useContext(Context);

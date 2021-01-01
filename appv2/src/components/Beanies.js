@@ -1,16 +1,10 @@
 import React from 'react';
-import { useQuery, useInfiniteQuery } from 'react-query';
-import InfiniteScroll from 'react-infinite-scroll-component';
-// import { PDFDownloadLink } from '@react-pdf/renderer';
+import { useQuery } from 'react-query';
 import * as api from '../api';
-// import Pdf from './Pdf';
-// import Checklist from './Checklist';
 import Context from '../Context';
 import Loading from './Loading';
 import Error from './Error';
 import '../css/beanies.css';
-
-const numberOfResponsesFromAPI = 100;
 
 const BeanieSummary = ({ beanie, handleClick, handleDrag, pdfBeanieNames, handleChange }) => {
   return <tr className='beanieSummary' draggable={true} onDragStart={() => handleDrag(beanie)}>
@@ -25,34 +19,27 @@ const BeanieSummary = ({ beanie, handleClick, handleDrag, pdfBeanieNames, handle
 
 const Beanies = ({ handleClick, handleDrag, handlePdfCheckbox }) => {
   const { state } = React.useContext(Context);
-  const [family] = React.useState(state.family);
   const [pdf, setPdf] = React.useState({ beanies: [] }); // maintains a list parallel to handlePdfCheckbox to assert when items are checked
   const [data, setData] = React.useState({ beanies: [] });
   const [displayedBeanies, setDisplayedBeanies] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState();
 
-  const fetchBeanies = (startKey) => {
+  const fetchBeanies = (family, startKey = null) => {
     return api.family(family, startKey)
       .then(resp => {
-        const canFetchMore = resp.length === numberOfResponsesFromAPI;
-        const next = resp?.length ? resp[resp.length - 1].name : null;
-        const beanies = data.beanies.concat(resp);
-        setData(data => ({...data, beanies, next, canFetchMore }));
+        setData(data => ({...data, beanies: resp }));
         setDisplayedBeanies(resp);
+        setLoading(false);
       })
       .catch(setError)
   };
 
   React.useEffect(() => {
-    fetchBeanies(data.next)
+    setLoading(true);
+    fetchBeanies(state.family);
     return () => setData({});
-  }, []);
-
-  const fetchMore = () => {
-    setError(null);
-    fetchBeanies(data.next);
-  };
-
+  }, [state.family]);
 
   const handlePdfBeanieChange = (e, beanie) => {
     if (!e.target.checked) {
@@ -95,26 +82,19 @@ const Beanies = ({ handleClick, handleDrag, handlePdfCheckbox }) => {
   };
 
   if (error) return <Error msg={error} />;
+  if (loading) return <Loading />;
 
   return <div className='beaniesTable'>
-    <InfiniteScroll
-      next={fetchMore}
-      hasMore={data.canFetchMore}
-      dataLength={data?.beanies?.length || 0}
-      loader={<Loading />}
-      height={window.innerHeight}
-    >
-      <table className='beaniesSummary'>
-        <thead>
-          <tr><td colSpan={2} className='searchCol'><div className='search'><input type='text' onChange={handleSearch} placeholder='Search...' /></div></td></tr>
-          <tr><td colSpan={2}><div className='subtext'>Click to view or drag to add</div></td></tr>
-          <tr><td><div className='selectAll'><input type='checkbox' onClick={handleSelectAll} /></div></td><td><div className='selectAllLabel'>Select All</div></td></tr>
-        </thead>
-        <tbody>
-          {data ? renderBeaniesSummary() : null}
-        </tbody>
-      </table>
-    </InfiniteScroll>
+    <table className='beaniesSummary'>
+      <thead>
+        <tr><td colSpan={2} className='searchCol'><div className='search'><input type='text' onChange={handleSearch} placeholder='Search...' /></div></td></tr>
+        <tr><td colSpan={2}><div className='subtext'>Click to view or drag to add</div></td></tr>
+        <tr><td><div className='selectAll'><input type='checkbox' onClick={handleSelectAll} /></div></td><td><div className='selectAllLabel'>Select All</div></td></tr>
+      </thead>
+      <tbody>
+        {data ? renderBeaniesSummary() : null}
+      </tbody>
+    </table>
   </div>;
 }
 

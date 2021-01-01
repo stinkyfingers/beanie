@@ -7,8 +7,6 @@ import Error from './Error';
 import * as api from '../api';
 import '../css/downloads.css';
 
-const numberOfResponsesFromAPI = 100; // TODO deprecate
-
 const PdfLink = ({ beanies }) => <React.Fragment>
     <PDFDownloadLink document={<Pdf beanies={beanies} title='Beanies' />} fileName="beanies.pdf">
     <button>Download pdf</button>
@@ -43,21 +41,11 @@ const Downloads = ({ pdfBeanies }) => {
 
   const createChecklist = () => {
     setChecklist({ ...checklist, loading: true });
-    const beanies = [];
-    const fetchFamily = (family, startKey) => {
-      return api.family(family, startKey)
-        .then(resp => {
-          beanies.push(...resp);
-          if (resp.length === numberOfResponsesFromAPI) {
-            return fetchFamily(family, resp[resp.length - 1].name);
-          }
-        })
-        .catch(setError);
-    };
-    fetchFamily(state.family)
-      .then(() => {
-        setChecklist({ ready: true, beanies, loading: false });
-      });
+    return api.family(state.family)
+      .then(resp => {
+        setChecklist({ ready: true, beanies: resp, loading: false });
+      })
+      .catch(setError);
   };
 
   const renderChecklist = () => {

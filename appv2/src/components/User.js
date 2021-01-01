@@ -20,8 +20,8 @@ const User = ({ username }) => {
   return <div className='user'>
     <h3>{user.username}</h3>
     <div className='userLists'>
-      <UserList beanies={user.beanies} title={'Have List'} />
       <UserList beanies={user.wantlist} title={'Want List'} />
+      <UserList beanies={user.beanies} title={'Have List'} />
     </div>
   </div>;
 };

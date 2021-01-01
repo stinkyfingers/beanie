@@ -1,7 +1,7 @@
 import { apiHost } from './config'
 
 const family = (family, startKey) => {
-  return fetch(`${apiHost}/v2/beanies/${family}/${startKey}`, {
+  return fetch(`${apiHost}/v2/beanies/${family}/${startKey ? startKey : ''}`, {
     method: 'GET'
   })
     .then(resp => resp.json())
