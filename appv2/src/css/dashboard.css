@@ -5,6 +5,7 @@ div.dashboard {
 .logo>img {
   margin: 0 auto;
   display: block;
+  max-width: 100%;
 }
 
 .controls {
@@ -16,10 +17,11 @@ div.dashboard {
 
 .display {
   display: flex;
+  max-width: 100%;
 }
 
 .beanies {
-  min-width: 25%;
+  /* min-width: 25%; */
 }
 
 button.dashboard {
@@ -32,6 +34,10 @@ button.dashboard {
 table>thead {
   font-weight: 800;
   text-align: center;
+}
+
+.selected {
+  opacity: .8;
 }
 
 /* workspace */
@@ -111,4 +117,20 @@ table>thead {
 
 .user>h3 {
   text-align: center;
+}
+
+
+@media screen and (max-width: 600px) {
+  .logo>img {
+    /* max-width: 100%; */
+  }
+  .userBeanies {
+    flex-direction: column;
+  }
+  .controls {
+    flex-wrap: wrap;
+  }
+  .display {
+    flex-direction: column;
+  }
 }

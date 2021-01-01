@@ -42,9 +42,9 @@ const Dashboard = () => {
   const [error, setError] = React.useState();// TODO
   const [user, setUser] = React.useState();
 
-  const handleClick = (beanie, mode) => {
+  const handleClick = (beanie, e) => {
     setBeanie(beanie);
-    setMode(mode);
+    setMode(e.target.name);
   };
 
   const handleDrop = (title) => {
@@ -120,11 +120,11 @@ const Dashboard = () => {
           <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt='Beanie Central' />
         </div>
         <div className='controls'>
-          <button className='dashboard' onClick={() => handleClick(null, 'downloads')}>Downloads</button>
-          <button className='dashboard' onClick={() => handleClick(null, 'userLists')} hidden={state?.user ? false : true}>My Beanies</button>
-          <button className='dashboard' onClick={() => handleClick({ isNew: true }, 'beanie')} hidden={state?.user?.admin ? false : true}>Create New Beanie</button>
-          <button className='dashboard' onClick={() => handleClick(null, 'users')} hidden={state?.user ? false : true}>Show Users</button>
-          <button className='dashboard' onClick={() => handleClick(null, 'settings')} hidden={state?.user ? false : true}>Settings</button>
+          <button className={ `dashboard ${mode === 'downloads' ? ' selected' : null}` } name='downloads' onClick={(e) => handleClick(null, e)}>Downloads</button>
+          <button className={ `dashboard ${mode === 'userLists' ? ' selected' : null}` } name='userLists' onClick={(e) => handleClick(null, e)} hidden={state?.user ? false : true}>My Beanies</button>
+          <button className={ `dashboard ${mode === 'beanie' ? ' selected' : null}` } name='beanie' onClick={(e) => handleClick({ isNew: true }, e)} hidden={state?.user?.admin ? false : true}>Create New Beanie</button>
+          <button className={ `dashboard ${mode === 'users' ? ' selected' : null}` } name='users' onClick={(e) => handleClick(null, e)} hidden={state?.user ? false : true}>Show Users</button>
+          <button className={ `dashboard ${mode === 'settings' ? ' selected' : null}` } name='settings' onClick={(e) => handleClick(null, e)} hidden={state?.user ? false : true}>Settings</button>
         </div>
         <div className='display'>
           <div className='beanies'>
