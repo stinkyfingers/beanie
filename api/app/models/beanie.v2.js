@@ -32,7 +32,7 @@ const imageKey = (family, name) => `${name}.${family}`;
 const family = (family, startAfter) => {
   const params = {
     Bucket: dbBucket,
-    MaxKeys: 100,
+    // MaxKeys: 100,
     StartAfter: startAfter !== 'undefined' && startAfter ? key(family, startAfter) : null,
     Prefix: `${family}/`
   };
