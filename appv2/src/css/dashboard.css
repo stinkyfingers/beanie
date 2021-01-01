@@ -34,6 +34,11 @@ table>thead {
   text-align: center;
 }
 
+/* workspace */
+.workspace {
+  flex-grow: 100;
+}
+
 /* UserList */
 .userBeanies {
   display: flex;

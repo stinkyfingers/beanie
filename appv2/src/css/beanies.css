@@ -15,19 +15,6 @@
   opacity: .6;
 }
 
-.pdfs {
-  text-align: center;
-}
-
-a {
-  text-decoration: none;
-}
-
-.loadingPdf,.loadingChecklist {
-  color: var(--black);
-  text-align: center;
-}
-
 small.addToPdf {
   font-size: .2em;
   display: block;

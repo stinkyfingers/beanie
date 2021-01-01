@@ -9,6 +9,7 @@ import Users from './Users';
 import User from './User';
 import Error from './Error';
 import Settings from './Settings';
+import Downloads from './Downloads';
 import * as api from '../api';
 import '../css/dashboard.css';
 
@@ -37,6 +38,7 @@ const Dashboard = () => {
   const [beanie, setBeanie] = React.useState(null);
   const [mode, setMode] = React.useState();
   const [userSelection, setUserSelection] = React.useState();
+  const [pdfBeanies, setPdfBeanies] = React.useState([]);
   const [error, setError] = React.useState();// TODO
   const [user, setUser] = React.useState();
 
@@ -86,6 +88,10 @@ const Dashboard = () => {
     setMode('user');
   };
 
+  const handlePdfCheckbox = (data) => {
+    setPdfBeanies(data)
+  }
+
   const workspace = () => {
     if (error) return <Error error={error} />;
     switch (mode) {
@@ -97,6 +103,8 @@ const Dashboard = () => {
         return <User username={user} />;
       case 'settings':
         return <Settings />;
+      case 'downloads':
+        return <Downloads pdfBeanies={pdfBeanies} />;
       case 'userLists':
       default:
         return <div className='userBeanies'>
@@ -112,6 +120,7 @@ const Dashboard = () => {
           <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt='Beanie Central' />
         </div>
         <div className='controls'>
+          <button className='dashboard' onClick={() => handleClick(null, 'downloads')}>Downloads</button>
           <button className='dashboard' onClick={() => handleClick(null, 'userLists')} hidden={state?.user ? false : true}>My Beanies</button>
           <button className='dashboard' onClick={() => handleClick({ isNew: true }, 'beanie')} hidden={state?.user?.admin ? false : true}>Create New Beanie</button>
           <button className='dashboard' onClick={() => handleClick(null, 'users')} hidden={state?.user ? false : true}>Show Users</button>
@@ -119,7 +128,7 @@ const Dashboard = () => {
         </div>
         <div className='display'>
           <div className='beanies'>
-            <Beanies handleClick={handleClick} handleDrag={handleDrag} />
+            <Beanies handleClick={handleClick} handleDrag={handleDrag} handlePdfCheckbox={handlePdfCheckbox} />
           </div>
           <div className='workspace'>
             {workspace()}

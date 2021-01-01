@@ -1,0 +1,29 @@
+.downloads {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdfs {
+  text-align: center;
+  padding-bottom: 2em;
+  border-bottom: 1px solid var(--black);
+}
+
+.header {
+  color: var(--blue);
+}
+
+a {
+  text-decoration: none;
+}
+
+.loadingPdf,.loadingChecklist {
+  color: var(--black);
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
