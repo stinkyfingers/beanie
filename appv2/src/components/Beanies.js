@@ -12,8 +12,8 @@ const BeanieSummary = ({ beanie, handleClick, handleDrag, pdfBeanieNames, handle
       <small className='addToPdf'>Add To PDF</small>
       <input className='addToPdf' type='checkbox' checked={pdfBeanieNames.includes(beanie) ? 'checked' : ''} onChange={handleChange} value={beanie.name}/>
     </td>
-    <td onClick={() => handleClick(beanie, 'beanie')}>{beanie.name}<div className='subtext'>{beanie.animal}</div></td>
-    <td onClick={() => handleClick(beanie, 'beanie')}>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} /> : null}</td>
+    <td onClick={(e) => handleClick(beanie, 'beanie')}>{beanie.name}<div className='subtext'>{beanie.animal}</div></td>
+    <td onClick={(e) => handleClick(beanie, 'beanie')}>{beanie.thumbnail ? <img src={beanie.thumbnail} alt={beanie.name} /> : null}</td>
   </tr>;
 };
 
